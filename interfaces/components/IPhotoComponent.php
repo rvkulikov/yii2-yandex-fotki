@@ -49,26 +49,26 @@ interface IPhotoComponent extends ICrudComponent
      *
      * @return IPhoto[]
      */
-    public function multiGet($identities);
+    public function batchGet($identities);
 
     /**
      * @param $data
      *
      * @return IPhoto[]
      */
-    public function multiCreate($data);
+    public function batchCreate($data);
 
     /**
      * @param $data
      *
      * @return IPhoto[]
      */
-    public function multiUpdate($data);
+    public function batchUpdate($data);
 
     /**
      * @param $data
      *
      * @return IPhoto[]
      */
-    public function multiDelete($data);
+    public function batchDelete($data);
 }

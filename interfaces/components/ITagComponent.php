@@ -49,26 +49,26 @@ interface ITagComponent extends ICrudComponent
      *
      * @return ITag[]
      */
-    public function multiGet($identities);
+    public function batchGet($identities);
 
     /**
      * @param $data
      *
      * @return ITag[]
      */
-    public function multiCreate($data);
+    public function batchCreate($data);
 
     /**
      * @param $data
      *
      * @return ITag[]
      */
-    public function multiUpdate($data);
+    public function batchUpdate($data);
 
     /**
      * @param $data
      *
      * @return ITag[]
      */
-    public function multiDelete($data);
+    public function batchDelete($data);
 }

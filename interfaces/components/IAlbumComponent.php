@@ -56,27 +56,27 @@ interface IAlbumComponent extends ICrudComponent
      *
      * @return IAlbum[]
      */
-    public function multiGet($identities);
+    public function batchGet($identities);
 
     /**
      * @param $data
      *
      * @return IAlbum[]
      */
-    public function multiCreate($data);
+    public function batchCreate($data);
 
     /**
      * @param $data
      *
      * @return IAlbum[]
      */
-    public function multiUpdate($data);
+    public function batchUpdate($data);
 
     /**
      * @param $data
      *
      * @return IAlbum[]
      */
-    public function multiDelete($data);
+    public function batchDelete($data);
 
 }

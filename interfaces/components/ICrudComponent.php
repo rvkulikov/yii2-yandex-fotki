@@ -46,26 +46,26 @@ interface ICrudComponent extends IModuleAccess
      *
      * @return mixed
      */
-    public function multiGet($identities);
+    public function batchGet($identities);
 
     /**
      * @param $data
      *
      * @return mixed
      */
-    public function multiCreate($data);
+    public function batchCreate($data);
 
     /**
      * @param $data
      *
      * @return mixed
      */
-    public function multiUpdate($data);
+    public function batchUpdate($data);
 
     /**
      * @param $data
      *
      * @return mixed
      */
-    public function multiDelete($data);
+    public function batchDelete($data);
 }

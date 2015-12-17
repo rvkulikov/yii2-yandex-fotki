@@ -37,5 +37,5 @@ use romkaChev\yandexFotki\interfaces\IModuleAccess;
  */
 interface IAlbum extends IModuleAccess
 {
-
+    public static function loadRemote($id);
 }
