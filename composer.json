@@ -1,0 +1,16 @@
+{
+  "type": "yii2-extension",
+  "name": "romka-chev/yii2-yandex-fotki",
+  "description": "Yandex.Fotki API based upon yii2 framework",
+  "minimum-stability": "dev",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Roman Kulikov",
+      "email": "flinnraider@yandex.ru"
+    }
+  ],
+  "require": {
+    "yiisoft/yii2": "*"
+  }
+}
