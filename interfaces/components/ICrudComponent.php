@@ -40,4 +40,32 @@ interface ICrudComponent extends IModuleAccess
      * @return mixed
      */
     public function delete($data);
+
+    /**
+     * @param $identities
+     *
+     * @return mixed
+     */
+    public function multiGet($identities);
+
+    /**
+     * @param $data
+     *
+     * @return mixed
+     */
+    public function multiCreate($data);
+
+    /**
+     * @param $data
+     *
+     * @return mixed
+     */
+    public function multiUpdate($data);
+
+    /**
+     * @param $data
+     *
+     * @return mixed
+     */
+    public function multiDelete($data);
 }

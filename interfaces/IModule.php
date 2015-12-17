@@ -8,9 +8,11 @@
 
 namespace romkaChev\yandexFotki\interfaces;
 
+use InvalidArgumentException;
 use romkaChev\yandexFotki\interfaces\components\IAlbumComponent;
 use romkaChev\yandexFotki\interfaces\components\IPhotoComponent;
 use romkaChev\yandexFotki\interfaces\components\ITagComponent;
+use yii\base\InvalidConfigException;
 use yii\caching\Cache;
 
 /**
@@ -18,19 +20,17 @@ use yii\caching\Cache;
  *
  * @package romkaChev\yandexFotki\interfaces
  *
- * @property IAlbumComponent albums
- * @property IPhotoComponent photos
- * @property ITagComponent   tags
- *
- * @property string          oauthToken
- * @property Cache           cache
+ * @property string oauthToken
  */
 interface IModule
 {
     /**
      * @param Cache|string|array|callable $value
      *
-     * @return mixed
+     * @throws InvalidConfigException
+     * @throws InvalidArgumentException
+     *
+     * @return static
      */
     public function setCache($value);
 
@@ -38,4 +38,56 @@ interface IModule
      * @return Cache
      */
     public function getCache();
+
+    /**
+     * @param IAlbumComponent|string|array|callable $value
+     *
+     * @throws InvalidConfigException
+     * @throws InvalidArgumentException
+     *
+     * @return static
+     */
+    public function setAlbums($value);
+
+    /**
+     * @throws InvalidConfigException
+     *
+     * @return IAlbumComponent
+     */
+    public function getAlbums();
+
+    /**
+     * @param IPhotoComponent|string|array|callable $value
+     *
+     * @throws InvalidConfigException
+     * @throws InvalidArgumentException
+     *
+     * @return static
+     */
+    public function setPhotos($value);
+
+    /**
+     * @throws InvalidConfigException
+     *
+     * @return IPhotoComponent
+     */
+    public function getPhotos();
+
+    /**
+     * @param ITagComponent|string|array|callable $value
+     *
+     * @throws InvalidConfigException
+     * @throws InvalidArgumentException
+     *
+     * @return static
+     */
+    public function setTags($value);
+
+    /**
+     * @throws InvalidConfigException
+     *
+     * @return ITagComponent
+     */
+    public function getTags();
+
 }
