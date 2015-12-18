@@ -11,11 +11,19 @@ namespace romkaChev\yandexFotki\tests\unit\yandexFotki\components;
 
 use romkaChev\yandexFotki\tests\unit\BaseTestCase;
 
+/**
+ * Class AlbumComponentTest
+ *
+ * @package romkaChev\yandexFotki\tests\unit\yandexFotki\components
+ *
+ * todo magic album ids
+ */
 class AlbumComponentTest extends BaseTestCase
 {
 
     public function testGet()
     {
-        $this->assertEquals(true, false);
+        $album = $this->getModule()->albums->get(487438);
+        $this->assertEquals(487438, $album->id);
     }
 }

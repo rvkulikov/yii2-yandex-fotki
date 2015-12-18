@@ -9,20 +9,20 @@
 namespace romkaChev\yandexFotki\traits;
 
 
-use romkaChev\yandexFotki\interfaces\IModule;
 use romkaChev\yandexFotki\Module;
 
 /**
  * Class ModuleAccess
  *
  * @package romkaChev\yandexFotki\traits
+ * @property Module module
  */
 trait ModuleAccess
 {
     /**
-     * @return IModule
+     * @return Module
      */
-    public function getModule()
+    public static function getModule()
     {
         return Module::getInstance();
     }

@@ -14,11 +14,11 @@ use romkaChev\yandexFotki\interfaces\IModuleAccess;
 interface ICrudComponent extends IModuleAccess
 {
     /**
-     * @param mixed $identity
+     * @param mixed $id
      *
      * @return mixed
      */
-    public function get($identity);
+    public function get($id);
 
     /**
      * @param mixed $data

@@ -18,5 +18,5 @@ interface IModuleAccess
     /**
      * @return IModule
      */
-    public function getModule();
+    public static function getModule();
 }

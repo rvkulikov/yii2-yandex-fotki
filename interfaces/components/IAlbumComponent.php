@@ -17,11 +17,11 @@ interface IAlbumComponent extends ICrudComponent
     const CLASS_NAME = __CLASS__;
 
     /**
-     * @param int|string|int[]|string[] $identity
+     * @param int|string $id
      *
      * @return IAlbum
      */
-    public function get($identity);
+    public function get($id);
 
     /**
      * @param mixed $data

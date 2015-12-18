@@ -20,11 +20,11 @@ class TagComponent extends Component implements ITagComponent
     use ModuleAccess;
 
     /**
-     * @param int|string|int[]|string[] $identity
+     * @param int|string|int[]|string[] $id
      *
      * @return ITag
      */
-    public function get($identity)
+    public function get($id)
     {
         // TODO: Implement get() method.
     }

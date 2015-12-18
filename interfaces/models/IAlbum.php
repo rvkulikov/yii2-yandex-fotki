@@ -15,27 +15,33 @@ use romkaChev\yandexFotki\interfaces\IModuleAccess;
  *
  * @package romkaChev\yandexFotki\interfaces\models
  *
- * @property string   urn
- * @property integer  id
- * @property IAuthor  author
- * @property string   title
- * @property string   summary
- * @property boolean  isProtected
+ * @property string  urn
+ * @property integer id
+ * @property IAuthor author
+ * @property string  title
+ * @property string  summary
+ * @property boolean isProtected
  *
- * @property ICover[] covers
+ * @property IPhoto  cover
  *
- * @property string   createdAt
- * @property string   updatedAt
+ * @property string  publishedAt
+ * @property string  updatedAt
+ * @property string  editedAt
  *
- * @property string   linkSelf
- * @property string   linkEdit
- * @property string   linkPhotos
- * @property string   linkCover
- * @property string   linkYmapsml
- * @property string   linkAlternate
+ * @property string  linkSelf
+ * @property string  linkEdit
+ * @property string  linkPhotos
+ * @property string  linkCover
+ * @property string  linkYmapsml
+ * @property string  linkAlternate
  *
  */
 interface IAlbum extends IModuleAccess
 {
-    public static function loadRemote($id);
+    /**
+     * @param array $data
+     *
+     * @return static
+     */
+    public function loadWithData($data);
 }

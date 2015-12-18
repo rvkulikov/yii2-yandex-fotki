@@ -21,4 +21,6 @@ use romkaChev\yandexFotki\interfaces\IModuleAccess;
 interface IAuthor extends IModuleAccess
 {
 
+    const CLASS_NAME = __CLASS__;
+
 }

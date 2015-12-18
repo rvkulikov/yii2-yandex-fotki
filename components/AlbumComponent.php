@@ -11,6 +11,7 @@ namespace romkaChev\yandexFotki\components;
 
 use romkaChev\yandexFotki\interfaces\components\IAlbumComponent;
 use romkaChev\yandexFotki\interfaces\models\IAlbum;
+use romkaChev\yandexFotki\models\Album;
 use romkaChev\yandexFotki\traits\ModuleAccess;
 use yii\base\Component;
 
@@ -20,13 +21,20 @@ class AlbumComponent extends Component implements IAlbumComponent
     use ModuleAccess;
 
     /**
-     * @param int|string|int[]|string[] $identity
+     * @param int|string $id
      *
-     * @return IAlbum
+     * @return Album
      */
-    public function get($identity)
+    public function get($id)
     {
-        // TODO: Implement get() method.
+        $httpClient = $this->module->httpClient;
+        $request    = $httpClient->get("album/{$id}/", ['format' => 'json']);
+        $response   = $request->send();
+
+        $album = $this->module->createAlbumModel();
+        $album->loadWithData($response->getData());
+
+        return $album;
     }
 
     /**

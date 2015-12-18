@@ -10,28 +10,51 @@ namespace romkaChev\yandexFotki;
 
 
 use InvalidArgumentException;
+use romkaChev\yandexFotki\components\AlbumComponent;
+use romkaChev\yandexFotki\components\PhotoComponent;
+use romkaChev\yandexFotki\components\TagComponent;
 use romkaChev\yandexFotki\interfaces\components\IAlbumComponent;
 use romkaChev\yandexFotki\interfaces\components\IPhotoComponent;
 use romkaChev\yandexFotki\interfaces\components\ITagComponent;
 use romkaChev\yandexFotki\interfaces\IModule;
+use romkaChev\yandexFotki\models\AddressBinding;
+use romkaChev\yandexFotki\models\Album;
+use romkaChev\yandexFotki\models\Author;
+use romkaChev\yandexFotki\models\Photo;
+use romkaChev\yandexFotki\models\Tag;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\caching\Cache;
 use yii\caching\DummyCache;
+use yii\helpers\ArrayHelper;
+use yii\httpclient\Client;
 
 /**
  * Class Module
  *
  * @package romkaChev\yandexFotki
  *
- * @property Cache           cache
- * @property IAlbumComponent albums
- * @property IPhotoComponent photos
- * @property ITagComponent   tags
+ * @property Client         httpClient
+ * @property Cache          cache
+ * @property AlbumComponent albums
+ * @property PhotoComponent photos
+ * @property TagComponent   tags
  */
 class Module extends \yii\base\Module implements IModule
 {
+    public $login      = null;
+    public $oauthToken = null;
 
+    public $addressBindingModel;
+    public $albumModel;
+    public $authorModel;
+    public $photoModel;
+    public $tagModel;
+
+    /**
+     * @var Client
+     */
+    private $_httpClient;
     /**
      * @var Cache
      */
@@ -49,12 +72,58 @@ class Module extends \yii\base\Module implements IModule
      */
     private $_tags;
 
+    public function init()
+    {
+        parent::init();
+
+        $httpClient                 = $this->httpClient;
+        $httpClient->baseUrl        = "http://api-fotki.yandex.ru/api/users/{$this->login}";
+        $httpClient->requestConfig  = [
+            'headers' => [
+                'Content-Type'  => 'application/json; charset=utf-8; type=entry',
+                'Authorization' => "OAuth {$this->oauthToken}",
+            ],
+        ];
+        $httpClient->responseConfig = [
+            'format' => $httpClient::FORMAT_JSON,
+        ];
+    }
+
+
     /**
-     * @param array|callable|string|Cache $value
-     *
-     * @return $this
-     * @throws InvalidConfigException
-     * @throws InvalidArgumentException
+     * @inheritdoc
+     */
+    public function setHttpClient($value)
+    {
+        if (!$value instanceof Client) {
+            $value = Yii::createObject($value);
+        }
+
+        if (!$value instanceof Client) {
+            $instance = Client::className();
+            $type     = gettype($value);
+            throw new InvalidArgumentException("Value must be an instance of '{$instance}', '{$type}' given.");
+        }
+
+        $this->_httpClient = $value;
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getHttpClient()
+    {
+        if (!$this->_httpClient) {
+            throw new InvalidConfigException('HttpClient property was not specified');
+        }
+
+        return $this->_httpClient;
+    }
+
+    /**
+     * @inheritdoc
      */
     public function setCache($value)
     {
@@ -74,7 +143,7 @@ class Module extends \yii\base\Module implements IModule
     }
 
     /**
-     * @return Cache
+     * @inheritdoc
      */
     public function getCache()
     {
@@ -88,11 +157,7 @@ class Module extends \yii\base\Module implements IModule
     }
 
     /**
-     * @param array|callable|IAlbumComponent|string $value
-     *
-     * @return $this
-     * @throws InvalidConfigException
-     * @throws InvalidArgumentException
+     * @inheritdoc
      */
     public function setAlbums($value)
     {
@@ -112,8 +177,7 @@ class Module extends \yii\base\Module implements IModule
     }
 
     /**
-     * @return IAlbumComponent
-     * @throws InvalidConfigException
+     * @inheritdoc
      */
     public function getAlbums()
     {
@@ -125,11 +189,7 @@ class Module extends \yii\base\Module implements IModule
     }
 
     /**
-     * @param array|callable|IPhotoComponent|string $value
-     *
-     * @return $this
-     * @throws InvalidConfigException
-     * @throws InvalidArgumentException
+     * @inheritdoc
      */
     public function setPhotos($value)
     {
@@ -149,8 +209,7 @@ class Module extends \yii\base\Module implements IModule
     }
 
     /**
-     * @return IAlbumComponent
-     * @throws InvalidConfigException
+     * @inheritdoc
      */
     public function getPhotos()
     {
@@ -162,11 +221,7 @@ class Module extends \yii\base\Module implements IModule
     }
 
     /**
-     * @param array|callable|ITagComponent|string $value
-     *
-     * @return $this
-     * @throws InvalidConfigException
-     * @throws InvalidArgumentException
+     * @inheritdoc
      */
     public function setTags($value)
     {
@@ -186,8 +241,7 @@ class Module extends \yii\base\Module implements IModule
     }
 
     /**
-     * @return IPhotoComponent
-     * @throws InvalidConfigException
+     * @inheritdoc
      */
     public function getTags()
     {
@@ -196,5 +250,70 @@ class Module extends \yii\base\Module implements IModule
         }
 
         return $this->_photos;
+    }
+
+    /**
+     * @param array $config
+     *
+     * @return AddressBinding
+     * @throws InvalidConfigException
+     */
+    public function createAddressBindingModel($config = [])
+    {
+        $config['class'] = ArrayHelper::getValue($config, 'class', $this->addressBindingModel);
+
+        return Yii::createObject($config);
+    }
+
+    /**
+     * @param array $config
+     *
+     * @return Album
+     * @throws InvalidConfigException
+     */
+    public function createAlbumModel($config = [])
+    {
+        $config['class'] = ArrayHelper::getValue($config, 'class', $this->albumModel);
+
+        return Yii::createObject($config);
+    }
+
+    /**
+     * @param array $config
+     *
+     * @return Author
+     * @throws InvalidConfigException
+     */
+    public function createAuthorModel($config = [])
+    {
+        $config['class'] = ArrayHelper::getValue($config, 'class', $this->authorModel);
+
+        return Yii::createObject($config);
+    }
+
+    /**
+     * @param array $config
+     *
+     * @return Photo
+     * @throws InvalidConfigException
+     */
+    public function createPhotoModel($config = [])
+    {
+        $config['class'] = ArrayHelper::getValue($config, 'class', $this->photoModel);
+
+        return Yii::createObject($config);
+    }
+
+    /**
+     * @param array $config
+     *
+     * @return Tag
+     * @throws InvalidConfigException
+     */
+    public function createTagModel($config = [])
+    {
+        $config['class'] = ArrayHelper::getValue($config, 'class', $this->tagModel);
+
+        return Yii::createObject($config);
     }
 }

@@ -20,11 +20,11 @@ class PhotoComponent extends Component implements IPhotoComponent
     use ModuleAccess;
 
     /**
-     * @param int|string|int[]|string[] $identity
+     * @param int|string|int[]|string[] $id
      *
      * @return IPhoto
      */
-    public function get($identity)
+    public function get($id)
     {
         // TODO: Implement get() method.
     }

@@ -9,12 +9,26 @@
 namespace romkaChev\yandexFotki\tests\unit;
 
 
+use romkaChev\yandexFotki\Module;
 use yii\console\Application;
+use yii\helpers\ArrayHelper;
 
 class BaseTestCase extends \PHPUnit_Framework_TestCase
 {
     protected function setUp()
     {
-        new Application(require(__DIR__ . '/config.php'));
+        new Application(ArrayHelper::merge(
+            require(__DIR__ . '/config/main.php'),
+            require(__DIR__ . '/config/main-local.php')
+        ));
+    }
+
+    /**
+     * @return Module
+     */
+    public function getModule()
+    {
+        /** @noinspection PhpUndefinedFieldInspection */
+        return \Yii::$app->getModule('yandexFotki');
     }
 }

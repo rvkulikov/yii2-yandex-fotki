@@ -12,8 +12,14 @@ use InvalidArgumentException;
 use romkaChev\yandexFotki\interfaces\components\IAlbumComponent;
 use romkaChev\yandexFotki\interfaces\components\IPhotoComponent;
 use romkaChev\yandexFotki\interfaces\components\ITagComponent;
+use romkaChev\yandexFotki\interfaces\models\IAddressBinding;
+use romkaChev\yandexFotki\interfaces\models\IAlbum;
+use romkaChev\yandexFotki\interfaces\models\IAuthor;
+use romkaChev\yandexFotki\interfaces\models\IPhoto;
+use romkaChev\yandexFotki\interfaces\models\ITag;
 use yii\base\InvalidConfigException;
 use yii\caching\Cache;
+use yii\httpclient\Client;
 
 /**
  * Interface IModule
@@ -21,9 +27,30 @@ use yii\caching\Cache;
  * @package romkaChev\yandexFotki\interfaces
  *
  * @property string oauthToken
+ *
+ * @property Client httpClient
+ * @property Cache  cache
+ * @property IAlbumComponent albums
+ * @property IPhotoComponent photos
+ * @property ITagComponent tags
  */
 interface IModule
 {
+    /**
+     * @param Client|string|array|callable $value
+     *
+     * @throws InvalidConfigException
+     * @throws InvalidArgumentException
+     *
+     * @return static
+     */
+    public function setHttpClient($value);
+
+    /**
+     * @return Client
+     */
+    public function getHttpClient();
+
     /**
      * @param Cache|string|array|callable $value
      *
@@ -90,4 +117,43 @@ interface IModule
      */
     public function getTags();
 
+    /**
+     * @param array $config
+     *
+     * @return IAddressBinding
+     * @throws InvalidConfigException
+     */
+    public function createAddressBindingModel($config);
+
+    /**
+     * @param array $config
+     *
+     * @return IAlbum
+     * @throws InvalidConfigException
+     */
+    public function createAlbumModel($config);
+
+    /**
+     * @param array $config
+     *
+     * @return IAuthor
+     * @throws InvalidConfigException
+     */
+    public function createAuthorModel($config);
+
+    /**
+     * @param array $config
+     *
+     * @return IPhoto
+     * @throws InvalidConfigException
+     */
+    public function createPhotoModel($config);
+
+    /**
+     * @param array $config
+     *
+     * @return ITag
+     * @throws InvalidConfigException
+     */
+    public function createTagModel($config);
 }
