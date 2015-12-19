@@ -22,20 +22,23 @@ use yii\caching\Cache;
 use yii\httpclient\Client;
 
 /**
- * Interface IModule
+ * Interface IYandexFotki
  *
  * @package romkaChev\yandexFotki\interfaces
  *
- * @property string oauthToken
+ * @property string          oauthToken
  *
- * @property Client httpClient
- * @property Cache  cache
+ * @property Client          httpClient
+ * @property Cache           cache
  * @property IAlbumComponent albums
  * @property IPhotoComponent photos
- * @property ITagComponent tags
+ * @property ITagComponent   tags
  */
-interface IModule
+interface IYandexFotki
 {
+
+    const CLASS_NAME = __CLASS__;
+
     /**
      * @param Client|string|array|callable $value
      *

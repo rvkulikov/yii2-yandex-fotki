@@ -8,14 +8,14 @@
 
 namespace romkaChev\yandexFotki\interfaces\models\serviceDocument;
 
-use romkaChev\yandexFotki\interfaces\IModuleAccess;
+use romkaChev\yandexFotki\interfaces\IYandexFotkiAccess;
 
 /**
  * Interface IAlbumList
  *
  * @package romkaChev\yandexFotki\interfaces\models\serviceDocument
  */
-interface IAlbumsList extends IList, IModuleAccess
+interface IAlbumsList extends IList, IYandexFotkiAccess
 {
 
 }

@@ -8,7 +8,7 @@
 
 namespace romkaChev\yandexFotki\interfaces\models;
 
-use romkaChev\yandexFotki\interfaces\IModuleAccess;
+use romkaChev\yandexFotki\interfaces\IYandexFotkiAccess;
 use romkaChev\yandexFotki\interfaces\models\serviceDocument\IAlbumsList;
 use romkaChev\yandexFotki\interfaces\models\serviceDocument\IPhotosList;
 use romkaChev\yandexFotki\interfaces\models\serviceDocument\ITagsList;
@@ -22,7 +22,7 @@ use romkaChev\yandexFotki\interfaces\models\serviceDocument\ITagsList;
  * @property IPhotosList photosList
  * @property ITagsList   tagsList
  */
-interface IServiceDocument extends IModuleAccess
+interface IServiceDocument extends IYandexFotkiAccess
 {
 
 }

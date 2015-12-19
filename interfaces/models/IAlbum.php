@@ -8,7 +8,7 @@
 
 namespace romkaChev\yandexFotki\interfaces\models;
 
-use romkaChev\yandexFotki\interfaces\IModuleAccess;
+use romkaChev\yandexFotki\interfaces\IYandexFotkiAccess;
 
 /**
  * Interface IAlbum
@@ -36,7 +36,7 @@ use romkaChev\yandexFotki\interfaces\IModuleAccess;
  * @property string  linkAlternate
  *
  */
-interface IAlbum extends IModuleAccess
+interface IAlbum extends IYandexFotkiAccess
 {
     /**
      * @param array $data

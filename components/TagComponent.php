@@ -12,13 +12,13 @@ namespace romkaChev\yandexFotki\components;
 use romkaChev\yandexFotki\interfaces\components\ITagComponent;
 use romkaChev\yandexFotki\interfaces\models\ITag;
 use romkaChev\yandexFotki\models\Tag;
-use romkaChev\yandexFotki\traits\ModuleAccess;
+use romkaChev\yandexFotki\traits\YandexFotkiAccess;
 use yii\base\Component;
 
 class TagComponent extends Component implements ITagComponent
 {
 
-    use ModuleAccess;
+    use YandexFotkiAccess;
 
     /**
      * @param string $name
@@ -27,11 +27,11 @@ class TagComponent extends Component implements ITagComponent
      */
     public function get($name)
     {
-        $httpClient = $this->module->httpClient;
+        $httpClient = $this->yandexFotki->httpClient;
         $request    = $httpClient->get("tag/{$name}/", ['format' => 'json']);
         $response   = $request->send();
 
-        $tag = $this->module->createTagModel();
+        $tag = $this->yandexFotki->createTagModel();
         $tag->loadWithData($response->getData());
 
         return $tag;

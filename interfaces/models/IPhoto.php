@@ -8,7 +8,7 @@
 
 namespace romkaChev\yandexFotki\interfaces\models;
 
-use romkaChev\yandexFotki\interfaces\IModuleAccess;
+use romkaChev\yandexFotki\interfaces\IYandexFotkiAccess;
 
 /**
  * Interface IPhoto
@@ -36,7 +36,7 @@ use romkaChev\yandexFotki\interfaces\IModuleAccess;
  * @property string          linkEditMedia
  * @property string          linkAlbum
  */
-interface IPhoto extends IModuleAccess
+interface IPhoto extends IYandexFotkiAccess
 {
 
 }

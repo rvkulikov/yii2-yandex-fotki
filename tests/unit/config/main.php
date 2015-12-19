@@ -14,7 +14,7 @@ use romkaChev\yandexFotki\models\Album;
 use romkaChev\yandexFotki\models\Author;
 use romkaChev\yandexFotki\models\Photo;
 use romkaChev\yandexFotki\models\Tag;
-use romkaChev\yandexFotki\Module;
+use romkaChev\yandexFotki\YandexFotki;
 use yii\httpclient\Client;
 
 return [
@@ -26,9 +26,9 @@ return [
         '@webroot' => __DIR__ . '/../runtime',
         '@vendor'  => __DIR__ . '/../../../vendor',
     ],
-    'modules'    => [
+    'components' => [
         'yandexFotki' => [
-            'class'               => Module::className(),
+            'class'               => YandexFotki::className(),
             'login'               => null, // set it in main-local.php
             'oauthToken'          => null, // set it in main-local.php
             'albums'              => AlbumComponent::className(),

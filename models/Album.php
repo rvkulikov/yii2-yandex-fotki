@@ -11,7 +11,7 @@ namespace romkaChev\yandexFotki\models;
 
 use romkaChev\yandexFotki\interfaces\models\IAlbum;
 use romkaChev\yandexFotki\interfaces\models\IAuthor;
-use romkaChev\yandexFotki\traits\ModuleAccess;
+use romkaChev\yandexFotki\traits\YandexFotkiAccess;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 
@@ -24,7 +24,7 @@ use yii\helpers\ArrayHelper;
  */
 class Album extends Model implements IAlbum
 {
-    use ModuleAccess;
+    use YandexFotkiAccess;
 
     /** @var string */
     public $urn;
@@ -66,7 +66,7 @@ class Album extends Model implements IAlbum
      */
     public function loadWithData($data)
     {
-        $author = $this->getModule()->createAuthorModel();
+        $author = $this->yandexFotki->createAuthorModel();
         $author->loadWithData(ArrayHelper::getValue($data, 'authors.0'));
 
         $this->load([

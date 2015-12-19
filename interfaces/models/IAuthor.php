@@ -8,7 +8,7 @@
 
 namespace romkaChev\yandexFotki\interfaces\models;
 
-use romkaChev\yandexFotki\interfaces\IModuleAccess;
+use romkaChev\yandexFotki\interfaces\IYandexFotkiAccess;
 
 /**
  * Interface IAuthor
@@ -18,7 +18,7 @@ use romkaChev\yandexFotki\interfaces\IModuleAccess;
  * @property string  name
  * @property integer uid
  */
-interface IAuthor extends IModuleAccess
+interface IAuthor extends IYandexFotkiAccess
 {
 
     const CLASS_NAME = __CLASS__;

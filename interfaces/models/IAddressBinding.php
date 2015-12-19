@@ -8,7 +8,7 @@
 
 namespace romkaChev\yandexFotki\interfaces\models;
 
-use romkaChev\yandexFotki\interfaces\IModuleAccess;
+use romkaChev\yandexFotki\interfaces\IYandexFotkiAccess;
 
 /**
  * Interface IPhotoAddressBinding
@@ -18,7 +18,7 @@ use romkaChev\yandexFotki\interfaces\IModuleAccess;
  * @property mixed   point // todo
  * @property integer organizationId
  */
-interface IAddressBinding extends IModuleAccess
+interface IAddressBinding extends IYandexFotkiAccess
 {
 
 }

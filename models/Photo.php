@@ -10,11 +10,11 @@ namespace romkaChev\yandexFotki\models;
 
 
 use romkaChev\yandexFotki\interfaces\models\IPhoto;
-use romkaChev\yandexFotki\traits\ModuleAccess;
+use romkaChev\yandexFotki\traits\YandexFotkiAccess;
 use yii\base\Model;
 
 class Photo extends Model implements IPhoto
 {
-    use ModuleAccess;
+    use YandexFotkiAccess;
 
 }

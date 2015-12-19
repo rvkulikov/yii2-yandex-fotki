@@ -8,7 +8,7 @@
 
 namespace romkaChev\yandexFotki\interfaces\models;
 
-use romkaChev\yandexFotki\interfaces\IModuleAccess;
+use romkaChev\yandexFotki\interfaces\IYandexFotkiAccess;
 
 /**
  * Interface IPhotosCollection
@@ -26,7 +26,7 @@ use romkaChev\yandexFotki\interfaces\IModuleAccess;
  * @property string   linkSelf
  * @property string   linkAlternate
  */
-interface IPhotosCollection extends IModuleAccess
+interface IPhotosCollection extends IYandexFotkiAccess
 {
 
 }

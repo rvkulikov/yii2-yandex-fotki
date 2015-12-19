@@ -8,7 +8,7 @@
 
 namespace romkaChev\yandexFotki\interfaces\models;
 
-use romkaChev\yandexFotki\interfaces\IModuleAccess;
+use romkaChev\yandexFotki\interfaces\IYandexFotkiAccess;
 
 /**
  * Class ITag
@@ -28,6 +28,6 @@ use romkaChev\yandexFotki\interfaces\IModuleAccess;
  * @property string  linkPhotos
  * @property string  linkAlternate
  */
-interface ITag extends IModuleAccess
+interface ITag extends IYandexFotkiAccess
 {
 }

@@ -9,7 +9,7 @@
 namespace romkaChev\yandexFotki\tests\unit;
 
 
-use romkaChev\yandexFotki\Module;
+use romkaChev\yandexFotki\YandexFotki;
 use yii\console\Application;
 use yii\helpers\ArrayHelper;
 
@@ -24,11 +24,11 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return Module
+     * @return YandexFotki
      */
     public function getModule()
     {
         /** @noinspection PhpUndefinedFieldInspection */
-        return \Yii::$app->getModule('yandexFotki');
+        return \Yii::$app->yandexFotki;
     }
 }

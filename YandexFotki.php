@@ -16,13 +16,14 @@ use romkaChev\yandexFotki\components\TagComponent;
 use romkaChev\yandexFotki\interfaces\components\IAlbumComponent;
 use romkaChev\yandexFotki\interfaces\components\IPhotoComponent;
 use romkaChev\yandexFotki\interfaces\components\ITagComponent;
-use romkaChev\yandexFotki\interfaces\IModule;
+use romkaChev\yandexFotki\interfaces\IYandexFotki;
 use romkaChev\yandexFotki\models\AddressBinding;
 use romkaChev\yandexFotki\models\Album;
 use romkaChev\yandexFotki\models\Author;
 use romkaChev\yandexFotki\models\Photo;
 use romkaChev\yandexFotki\models\Tag;
 use Yii;
+use yii\base\Component;
 use yii\base\InvalidConfigException;
 use yii\caching\Cache;
 use yii\caching\DummyCache;
@@ -40,7 +41,7 @@ use yii\httpclient\Client;
  * @property PhotoComponent photos
  * @property TagComponent   tags
  */
-class Module extends \yii\base\Module implements IModule
+class YandexFotki extends Component implements IYandexFotki
 {
     public $login      = null;
     public $oauthToken = null;
@@ -72,6 +73,9 @@ class Module extends \yii\base\Module implements IModule
      */
     private $_tags;
 
+    /**
+     * @inheritdoc
+     */
     public function init()
     {
         parent::init();
@@ -89,12 +93,12 @@ class Module extends \yii\base\Module implements IModule
         ];
     }
 
-
     /**
      * @inheritdoc
      */
     public function setHttpClient($value)
     {
+
         if (!$value instanceof Client) {
             $value = Yii::createObject($value);
         }
@@ -173,6 +177,10 @@ class Module extends \yii\base\Module implements IModule
 
         $this->_albums = $value;
 
+        if ($this->_albums->yandexFotki === null) {
+            $this->_albums->yandexFotki = $this;
+        }
+
         return $this;
     }
 
@@ -204,6 +212,10 @@ class Module extends \yii\base\Module implements IModule
         }
 
         $this->_photos = $value;
+
+        if ($this->_photos->yandexFotki === null) {
+            $this->_photos->yandexFotki = $this;
+        }
 
         return $this;
     }
@@ -237,6 +249,10 @@ class Module extends \yii\base\Module implements IModule
 
         $this->_tags = $value;
 
+        if ($this->_tags->yandexFotki === null) {
+            $this->_tags->yandexFotki = $this;
+        }
+
         return $this;
     }
 
@@ -260,7 +276,8 @@ class Module extends \yii\base\Module implements IModule
      */
     public function createAddressBindingModel($config = [])
     {
-        $config['class'] = ArrayHelper::getValue($config, 'class', $this->addressBindingModel);
+        $config['class']       = ArrayHelper::getValue($config, 'class', $this->addressBindingModel);
+        $config['yandexFotki'] = ArrayHelper::getValue($config, 'yandexFotki', $this);
 
         return Yii::createObject($config);
     }
@@ -273,7 +290,8 @@ class Module extends \yii\base\Module implements IModule
      */
     public function createAlbumModel($config = [])
     {
-        $config['class'] = ArrayHelper::getValue($config, 'class', $this->albumModel);
+        $config['class']       = ArrayHelper::getValue($config, 'class', $this->albumModel);
+        $config['yandexFotki'] = ArrayHelper::getValue($config, 'yandexFotki', $this);
 
         return Yii::createObject($config);
     }
@@ -286,7 +304,8 @@ class Module extends \yii\base\Module implements IModule
      */
     public function createAuthorModel($config = [])
     {
-        $config['class'] = ArrayHelper::getValue($config, 'class', $this->authorModel);
+        $config['class']       = ArrayHelper::getValue($config, 'class', $this->authorModel);
+        $config['yandexFotki'] = ArrayHelper::getValue($config, 'yandexFotki', $this);
 
         return Yii::createObject($config);
     }
@@ -299,7 +318,8 @@ class Module extends \yii\base\Module implements IModule
      */
     public function createPhotoModel($config = [])
     {
-        $config['class'] = ArrayHelper::getValue($config, 'class', $this->photoModel);
+        $config['class']       = ArrayHelper::getValue($config, 'class', $this->photoModel);
+        $config['yandexFotki'] = ArrayHelper::getValue($config, 'yandexFotki', $this);
 
         return Yii::createObject($config);
     }
@@ -312,7 +332,8 @@ class Module extends \yii\base\Module implements IModule
      */
     public function createTagModel($config = [])
     {
-        $config['class'] = ArrayHelper::getValue($config, 'class', $this->tagModel);
+        $config['class']       = ArrayHelper::getValue($config, 'class', $this->tagModel);
+        $config['yandexFotki'] = ArrayHelper::getValue($config, 'yandexFotki', $this);
 
         return Yii::createObject($config);
     }

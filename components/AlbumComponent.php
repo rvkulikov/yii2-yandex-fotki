@@ -12,13 +12,13 @@ namespace romkaChev\yandexFotki\components;
 use romkaChev\yandexFotki\interfaces\components\IAlbumComponent;
 use romkaChev\yandexFotki\interfaces\models\IAlbum;
 use romkaChev\yandexFotki\models\Album;
-use romkaChev\yandexFotki\traits\ModuleAccess;
+use romkaChev\yandexFotki\traits\YandexFotkiAccess;
 use yii\base\Component;
 
 class AlbumComponent extends Component implements IAlbumComponent
 {
 
-    use ModuleAccess;
+    use YandexFotkiAccess;
 
     /**
      * @param int|string $id
@@ -27,12 +27,13 @@ class AlbumComponent extends Component implements IAlbumComponent
      */
     public function get($id)
     {
-        $httpClient = $this->module->httpClient;
+        $httpClient = $this->yandexFotki->httpClient;
         $request    = $httpClient->get("album/{$id}/", ['format' => 'json']);
         $response   = $request->send();
 
-        $album = $this->module->createAlbumModel();
+        $album = $this->yandexFotki->createAlbumModel();
         $album->loadWithData($response->getData());
+
 
         return $album;
     }

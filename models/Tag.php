@@ -11,13 +11,13 @@ namespace romkaChev\yandexFotki\models;
 
 use romkaChev\yandexFotki\interfaces\models\IAuthor;
 use romkaChev\yandexFotki\interfaces\models\ITag;
-use romkaChev\yandexFotki\traits\ModuleAccess;
+use romkaChev\yandexFotki\traits\YandexFotkiAccess;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 
 class Tag extends Model implements ITag
 {
-    use ModuleAccess;
+    use YandexFotkiAccess;
 
     /** @var string */
     public $urn;
@@ -43,7 +43,7 @@ class Tag extends Model implements ITag
      */
     public function loadWithData($data)
     {
-        $author = $this->getModule()->createAuthorModel();
+        $author = $this->getYandexFotki()->createAuthorModel();
         $author->loadWithData(ArrayHelper::getValue($data, 'authors.0'));
 
         $this->load([

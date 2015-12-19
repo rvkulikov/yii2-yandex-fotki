@@ -10,13 +10,13 @@ namespace romkaChev\yandexFotki\models;
 
 
 use romkaChev\yandexFotki\interfaces\models\IAuthor;
-use romkaChev\yandexFotki\traits\ModuleAccess;
+use romkaChev\yandexFotki\traits\YandexFotkiAccess;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 
 class Author extends Model implements IAuthor
 {
-    use ModuleAccess;
+    use YandexFotkiAccess;
 
     /** @var string */
     public $name;

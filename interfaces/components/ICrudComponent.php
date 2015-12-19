@@ -9,9 +9,9 @@
 namespace romkaChev\yandexFotki\interfaces\components;
 
 
-use romkaChev\yandexFotki\interfaces\IModuleAccess;
+use romkaChev\yandexFotki\interfaces\IYandexFotkiAccess;
 
-interface ICrudComponent extends IModuleAccess
+interface ICrudComponent extends IYandexFotkiAccess
 {
     /**
      * @param mixed $id

@@ -11,13 +11,13 @@ namespace romkaChev\yandexFotki\components;
 
 use romkaChev\yandexFotki\interfaces\components\IPhotoComponent;
 use romkaChev\yandexFotki\interfaces\models\IPhoto;
-use romkaChev\yandexFotki\traits\ModuleAccess;
+use romkaChev\yandexFotki\traits\YandexFotkiAccess;
 use yii\base\Component;
 
 class PhotoComponent extends Component implements IPhotoComponent
 {
 
-    use ModuleAccess;
+    use YandexFotkiAccess;
 
     /**
      * @param int|string|int[]|string[] $id
