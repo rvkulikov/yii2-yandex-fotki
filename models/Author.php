@@ -31,7 +31,7 @@ class Author extends Model implements IAuthor
         return [
             ['name', 'string'],
             ['uid', 'integer'],
-            [['name', 'uid'], 'required'],
+            [['name'], 'required'],
         ];
     }
 

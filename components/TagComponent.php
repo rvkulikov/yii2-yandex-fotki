@@ -11,6 +11,7 @@ namespace romkaChev\yandexFotki\components;
 
 use romkaChev\yandexFotki\interfaces\components\ITagComponent;
 use romkaChev\yandexFotki\interfaces\models\ITag;
+use romkaChev\yandexFotki\models\Tag;
 use romkaChev\yandexFotki\traits\ModuleAccess;
 use yii\base\Component;
 
@@ -20,13 +21,20 @@ class TagComponent extends Component implements ITagComponent
     use ModuleAccess;
 
     /**
-     * @param int|string|int[]|string[] $id
+     * @param string $name
      *
-     * @return ITag
+     * @return Tag
      */
-    public function get($id)
+    public function get($name)
     {
-        // TODO: Implement get() method.
+        $httpClient = $this->module->httpClient;
+        $request    = $httpClient->get("tag/{$name}/", ['format' => 'json']);
+        $response   = $request->send();
+
+        $tag = $this->module->createTagModel();
+        $tag->loadWithData($response->getData());
+
+        return $tag;
     }
 
     /**

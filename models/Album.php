@@ -142,7 +142,7 @@ class Album extends Model implements IAlbum
          */
         return function ($array, $defaultValue) {
             $value = ArrayHelper::getValue($array, 'id');
-            preg_match('/^urn:yandex:fotki:flinnraider:album:(?<id>\d+)$/', $value, $matches);
+            preg_match('/^urn:yandex:fotki:([^:]*):album:(?<id>\d+)$/', $value, $matches);
 
             return intval(ArrayHelper::getValue($matches, 'id')) ?: $defaultValue;
         };

@@ -249,7 +249,7 @@ class Module extends \yii\base\Module implements IModule
             throw new InvalidConfigException('Tags property was not specified');
         }
 
-        return $this->_photos;
+        return $this->_tags;
     }
 
     /**
