@@ -34,7 +34,6 @@ class AlbumComponent extends Component implements IAlbumComponent
         $album = $this->yandexFotki->createAlbumModel();
         $album->loadWithData($response->getData());
 
-
         return $album;
     }
 

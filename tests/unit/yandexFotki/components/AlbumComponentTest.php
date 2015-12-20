@@ -23,7 +23,7 @@ class AlbumComponentTest extends BaseTestCase
 
     public function testGet()
     {
-        $album = $this->getModule()->albums->get(487438);
+        $album = $this->getComponent()->albums->get(487438);
         $this->assertEquals(487438, $album->id);
     }
 }

@@ -11,6 +11,7 @@ namespace romkaChev\yandexFotki\components;
 
 use romkaChev\yandexFotki\interfaces\components\IPhotoComponent;
 use romkaChev\yandexFotki\interfaces\models\IPhoto;
+use romkaChev\yandexFotki\models\Photo;
 use romkaChev\yandexFotki\traits\YandexFotkiAccess;
 use yii\base\Component;
 
@@ -20,13 +21,20 @@ class PhotoComponent extends Component implements IPhotoComponent
     use YandexFotkiAccess;
 
     /**
-     * @param int|string|int[]|string[] $id
+     * @param int|string $id
      *
-     * @return IPhoto
+     * @return Photo
      */
     public function get($id)
     {
-        // TODO: Implement get() method.
+        $httpClient = $this->yandexFotki->httpClient;
+        $request    = $httpClient->get("photo/{$id}/", ['format' => 'json']);
+        $response   = $request->send();
+
+        $photo = $this->yandexFotki->createPhotoModel();
+        $photo->loadWithData($response->getData());
+
+        return $photo;
     }
 
     /**

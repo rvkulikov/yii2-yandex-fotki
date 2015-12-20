@@ -2,8 +2,8 @@
 /**
  * Created by PhpStorm.
  * User: Roman
- * Date: 19.12.2015
- * Time: 16:11
+ * Date: 20.12.2015
+ * Time: 9:32
  */
 
 namespace romkaChev\yandexFotki\tests\unit\yandexFotki\components;
@@ -11,12 +11,12 @@ namespace romkaChev\yandexFotki\tests\unit\yandexFotki\components;
 
 use romkaChev\yandexFotki\tests\unit\BaseTestCase;
 
-class TagComponentTest extends BaseTestCase
+class PhotoComponentTest extends BaseTestCase
 {
 
     public function testGet()
     {
-        $tag = $this->getComponent()->tags->get('common');
-        $this->assertEquals('common', $tag->title);
+        $photo = $this->getComponent()->photos->get(1767663);
+        $this->assertEquals(1767663, $photo->id);
     }
 }

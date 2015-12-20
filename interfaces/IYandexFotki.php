@@ -15,7 +15,9 @@ use romkaChev\yandexFotki\interfaces\components\ITagComponent;
 use romkaChev\yandexFotki\interfaces\models\IAddressBinding;
 use romkaChev\yandexFotki\interfaces\models\IAlbum;
 use romkaChev\yandexFotki\interfaces\models\IAuthor;
+use romkaChev\yandexFotki\interfaces\models\IImage;
 use romkaChev\yandexFotki\interfaces\models\IPhoto;
+use romkaChev\yandexFotki\interfaces\models\IPoint;
 use romkaChev\yandexFotki\interfaces\models\ITag;
 use yii\base\InvalidConfigException;
 use yii\caching\Cache;
@@ -159,4 +161,36 @@ interface IYandexFotki
      * @throws InvalidConfigException
      */
     public function createTagModel($config);
+
+    /**
+     * @param array $config
+     *
+     * @return IPoint
+     * @throws InvalidConfigException
+     */
+    public function createPointModel($config);
+
+    /**
+     * @param array $config
+     *
+     * @return IImage
+     * @throws InvalidConfigException
+     */
+    public function createImageModel($config);
+
+    public function setAddressBindingValidator($value);
+
+    public function getAddressBindingValidator();
+
+    public function setAuthorValidator($value);
+
+    public function getAuthorValidator();
+
+    public function setPointValidator($value);
+
+    public function getPointValidator();
+
+    public function setImageValidator($value);
+
+    public function getImageValidator();
 }

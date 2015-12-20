@@ -23,10 +23,11 @@ use romkaChev\yandexFotki\interfaces\IYandexFotkiAccess;
  * @property boolean         isHideOriginal
  * @property boolean         isDisableComments
  *
- * @property mixed           point // todo
+ * @property IImage[]        images
+ * @property IPoint          point
  * @property IAddressBinding addressBinding
  *
- * @property string          createdAt
+ * @property string          publishedAt
  * @property string          updatedAt
  * @property string          editedAt
  *
@@ -36,7 +37,7 @@ use romkaChev\yandexFotki\interfaces\IYandexFotkiAccess;
  * @property string          linkEditMedia
  * @property string          linkAlbum
  */
-interface IPhoto extends IYandexFotkiAccess
+interface IPhoto extends IYandexFotkiAccess, IImageSize
 {
 
 }

@@ -14,11 +14,11 @@ use romkaChev\yandexFotki\interfaces\IYandexFotkiAccess;
  * Interface IPhotoAddressBinding
  *
  * @package romkaChev\yandexFotki\interfaces\models
- * @property string  address
- * @property mixed   point // todo
  * @property integer organizationId
+ * @property string  address
+ * @property IPoint  point
  */
 interface IAddressBinding extends IYandexFotkiAccess
 {
-
+    const CLASS_NAME = __CLASS__;
 }

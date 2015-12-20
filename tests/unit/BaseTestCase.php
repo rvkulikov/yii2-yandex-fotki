@@ -26,7 +26,7 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
     /**
      * @return YandexFotki
      */
-    public function getModule()
+    public function getComponent()
     {
         /** @noinspection PhpUndefinedFieldInspection */
         return \Yii::$app->yandexFotki;

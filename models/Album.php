@@ -10,7 +10,6 @@ namespace romkaChev\yandexFotki\models;
 
 
 use romkaChev\yandexFotki\interfaces\models\IAlbum;
-use romkaChev\yandexFotki\interfaces\models\IAuthor;
 use romkaChev\yandexFotki\traits\YandexFotkiAccess;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
@@ -60,6 +59,30 @@ class Album extends Model implements IAlbum
     public $linkAlternate;
 
     /**
+     * @inheritdoc
+     */
+    public function rules()
+    {
+        return [
+            ['urn', 'string'],
+            ['id', 'integer'],
+            ['author', $this->yandexFotki->authorValidator],
+            ['title', 'string'],
+            ['summary', 'string'],
+            ['isProtected', 'boolean'],
+            ['publishedAt', 'string'],
+            ['updatedAt', 'string'],
+            ['editedAt', 'string'],
+            ['linkSelf', 'url'],
+            ['linkEdit', 'url'],
+            ['linkPhotos', 'url'],
+            ['linkCover', 'url'],
+            ['linkYmapsml', 'url'],
+            ['linkAlternate', 'url'],
+        ];
+    }
+
+    /**
      * @param array $data
      *
      * @return static
@@ -90,43 +113,6 @@ class Album extends Model implements IAlbum
         ]);
 
         return $this;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function rules()
-    {
-        return [
-            ['urn', 'string'],
-            ['id', 'integer'],
-            ['author', 'validateAuthor'],
-            ['title', 'string'],
-            ['summary', 'string'],
-            ['isProtected', 'boolean'],
-            ['publishedAt', 'string'],
-            ['updatedAt', 'string'],
-            ['editedAt', 'string'],
-            ['linkSelf', 'url'],
-            ['linkEdit', 'url'],
-            ['linkPhotos', 'url'],
-            ['linkCover', 'url'],
-            ['linkYmapsml', 'url'],
-            ['linkAlternate', 'url'],
-            [['urn', 'id', 'author'], 'required'],
-        ];
-    }
-
-    /**
-     * @param mixed $attribute
-     */
-    public function validateAuthor($attribute)
-    {
-        if (!$this->$attribute instanceof IAuthor) {
-            $instance = IAuthor::CLASS_NAME;
-            $given    = gettype($this->$attribute);
-            $this->addError($attribute, "The author must be an instance of {$instance}, {$given} given");
-        }
     }
 
     /**

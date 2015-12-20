@@ -20,7 +20,9 @@ use romkaChev\yandexFotki\interfaces\IYandexFotki;
 use romkaChev\yandexFotki\models\AddressBinding;
 use romkaChev\yandexFotki\models\Album;
 use romkaChev\yandexFotki\models\Author;
+use romkaChev\yandexFotki\models\Image;
 use romkaChev\yandexFotki\models\Photo;
+use romkaChev\yandexFotki\models\Point;
 use romkaChev\yandexFotki\models\Tag;
 use Yii;
 use yii\base\Component;
@@ -40,6 +42,11 @@ use yii\httpclient\Client;
  * @property AlbumComponent albums
  * @property PhotoComponent photos
  * @property TagComponent   tags
+ *
+ * @property string|array   addressBindingValidator
+ * @property string|array   authorValidator
+ * @property string|array   pointValidator
+ * @property string|array   imageValidator
  */
 class YandexFotki extends Component implements IYandexFotki
 {
@@ -51,6 +58,13 @@ class YandexFotki extends Component implements IYandexFotki
     public $authorModel;
     public $photoModel;
     public $tagModel;
+    public $pointModel;
+    public $imageModel;
+
+    private $_addressBindingValidator;
+    private $_authorValidator;
+    private $_pointValidator;
+    private $_imageValidator;
 
     /**
      * @var Client
@@ -336,5 +350,73 @@ class YandexFotki extends Component implements IYandexFotki
         $config['yandexFotki'] = ArrayHelper::getValue($config, 'yandexFotki', $this);
 
         return Yii::createObject($config);
+    }
+
+    /**
+     * @param array $config
+     *
+     * @return Point
+     * @throws InvalidConfigException
+     */
+    public function createPointModel($config = [])
+    {
+        $config['class']       = ArrayHelper::getValue($config, 'class', $this->pointModel);
+        $config['yandexFotki'] = ArrayHelper::getValue($config, 'yandexFotki', $this);
+
+        return Yii::createObject($config);
+    }
+
+    /**
+     * @param array $config
+     *
+     * @return Image
+     * @throws InvalidConfigException
+     */
+    public function createImageModel($config = [])
+    {
+        $config['class']       = ArrayHelper::getValue($config, 'class', $this->imageModel);
+        $config['yandexFotki'] = ArrayHelper::getValue($config, 'yandexFotki', $this);
+
+        return Yii::createObject($config);
+    }
+
+    public function setAddressBindingValidator($value)
+    {
+        $this->_addressBindingValidator = $value;
+    }
+
+    public function getAddressBindingValidator()
+    {
+        return $this->_addressBindingValidator;
+    }
+
+    public function setAuthorValidator($value)
+    {
+        $this->_authorValidator = $value;
+    }
+
+    public function getAuthorValidator()
+    {
+        return $this->_authorValidator;
+    }
+
+    public function setPointValidator($value)
+    {
+        $this->_pointValidator = $value;
+    }
+
+    public function getPointValidator()
+    {
+        return $this->_pointValidator;
+    }
+
+    public function setImageValidator($value)
+    {
+        $this->_imageValidator = $value;
+    }
+
+    public function getImageValidator()
+    {
+        return $this->_imageValidator;
     }
 }

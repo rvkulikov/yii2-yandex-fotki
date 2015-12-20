@@ -12,8 +12,14 @@ use romkaChev\yandexFotki\components\TagComponent;
 use romkaChev\yandexFotki\models\AddressBinding;
 use romkaChev\yandexFotki\models\Album;
 use romkaChev\yandexFotki\models\Author;
+use romkaChev\yandexFotki\models\Image;
 use romkaChev\yandexFotki\models\Photo;
+use romkaChev\yandexFotki\models\Point;
 use romkaChev\yandexFotki\models\Tag;
+use romkaChev\yandexFotki\validators\AddressBindingValidator;
+use romkaChev\yandexFotki\validators\AuthorValidator;
+use romkaChev\yandexFotki\validators\ImageValidator;
+use romkaChev\yandexFotki\validators\PointValidator;
 use romkaChev\yandexFotki\YandexFotki;
 use yii\httpclient\Client;
 
@@ -28,18 +34,24 @@ return [
     ],
     'components' => [
         'yandexFotki' => [
-            'class'               => YandexFotki::className(),
-            'login'               => null, // set it in main-local.php
-            'oauthToken'          => null, // set it in main-local.php
-            'albums'              => AlbumComponent::className(),
-            'photos'              => PhotoComponent::className(),
-            'tags'                => TagComponent::className(),
-            'httpClient'          => Client::className(),
-            'addressBindingModel' => AddressBinding::className(),
-            'albumModel'          => Album::className(),
-            'authorModel'         => Author::className(),
-            'photoModel'          => Photo::className(),
-            'tagModel'            => Tag::className(),
+            'class'                   => YandexFotki::className(),
+            'login'                   => null, // set it in main-local.php
+            'oauthToken'              => null, // set it in main-local.php
+            'albums'                  => AlbumComponent::className(),
+            'photos'                  => PhotoComponent::className(),
+            'tags'                    => TagComponent::className(),
+            'httpClient'              => Client::className(),
+            'addressBindingModel'     => AddressBinding::className(),
+            'albumModel'              => Album::className(),
+            'authorModel'             => Author::className(),
+            'photoModel'              => Photo::className(),
+            'tagModel'                => Tag::className(),
+            'pointModel'              => Point::className(),
+            'imageModel'              => Image::className(),
+            'addressBindingValidator' => AddressBindingValidator::className(),
+            'authorValidator'         => AuthorValidator::className(),
+            'pointValidator'          => PointValidator::className(),
+            'imageValidator'          => ImageValidator::className(),
         ],
     ],
 ];
