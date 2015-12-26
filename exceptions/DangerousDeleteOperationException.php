@@ -6,7 +6,7 @@
  * Time: 10:13
  */
 
-namespace romkaChev\yandexFotki\exceptions\network;
+namespace romkaChev\yandexFotki\exceptions;
 
 
 class DangerousDeleteOperationException

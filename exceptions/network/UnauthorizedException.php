@@ -6,7 +6,7 @@
  * Time: 9:12
  */
 
-namespace romkaChev\yandexFotki\exceptions;
+namespace romkaChev\yandexFotki\exceptions\network;
 
 
 class UnauthorizedException
