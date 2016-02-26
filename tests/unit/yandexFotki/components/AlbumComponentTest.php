@@ -36,4 +36,13 @@ class AlbumComponentTest extends BaseTestCase
 
         $this->assertEquals(sort(array_keys($photos)), sort(ArrayHelper::getColumn($photos, 'id')));
     }
+
+    public function testBatchGet()
+    {
+        $albumComponent = $this->getComponent()->albums;
+        $models         = $albumComponent->batchGet([487438, 488819]);
+
+        $this->assertArrayHasKey(487438, $models);
+        $this->assertArrayHasKey(488819, $models);
+    }
 }

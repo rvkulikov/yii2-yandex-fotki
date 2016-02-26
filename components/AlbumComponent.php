@@ -19,6 +19,8 @@ use yii\base\Component;
 use yii\base\InvalidParamException;
 use yii\helpers\ArrayHelper;
 use yii\helpers\VarDumper;
+use yii\httpclient\Request;
+use yii\httpclient\Response;
 
 class AlbumComponent extends Component implements IAlbumComponent
 {
@@ -36,7 +38,7 @@ class AlbumComponent extends Component implements IAlbumComponent
         $request    = $httpClient->get("album/{$id}/", ['format' => 'json']);
         $response   = $request->send();
 
-        $album = $this->yandexFotki->getAlbumModel();
+        $album = $this->yandexFotki->albumModel;
         $album->loadWithData($response->getData());
 
         return $album;
@@ -70,7 +72,7 @@ class AlbumComponent extends Component implements IAlbumComponent
         do {
             $response = $request->send();
 
-            $photosCollection = $this->yandexFotki->getAlbumPhotosCollectionModel();
+            $photosCollection = $this->yandexFotki->albumPhotosCollectionModel;
             $photosCollection->loadWithData($response->getData());
 
             $photos  = ArrayHelper::merge($photos, $photosCollection->getPhotos());
@@ -122,13 +124,28 @@ class AlbumComponent extends Component implements IAlbumComponent
     }
 
     /**
-     * @param $identities
-     *
-     * @return IAlbum[]
+     * @inheritdoc
      */
-    public function batchGet($identities)
+    public function batchGet($ids)
     {
-        // TODO: Implement multiGet() method.
+        $httpClient = $this->yandexFotki->httpClient;
+
+        /** @var Request[] $requests */
+        $requests = array_map(function ($id) use ($httpClient) {
+            return $httpClient->get("album/{$id}/", ['format' => 'json']);
+        }, $ids);
+
+        $responses = $httpClient->batchSend($requests);
+
+        /** @var IAlbum[] $models */
+        $models = array_map(function (Response $response) {
+            $model = $this->yandexFotki->albumModel;
+            $model->loadWithData($response->getData());
+
+            return $model;
+        }, $responses);
+
+        return array_combine(ArrayHelper::getColumn($models, 'id'), $models);
     }
 
     /**

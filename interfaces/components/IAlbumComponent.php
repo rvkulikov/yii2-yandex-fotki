@@ -62,11 +62,11 @@ interface IAlbumComponent extends ICrudComponent
     public function tree($root);
 
     /**
-     * @param $identities
+     * @param $ids
      *
      * @return IAlbum[]
      */
-    public function batchGet($identities);
+    public function batchGet($ids);
 
     /**
      * @param $data

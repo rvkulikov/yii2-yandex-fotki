@@ -11,9 +11,11 @@ namespace romkaChev\yandexFotki\components;
 
 use romkaChev\yandexFotki\interfaces\components\ITagComponent;
 use romkaChev\yandexFotki\interfaces\models\ITag;
-use romkaChev\yandexFotki\models\Tag;
 use romkaChev\yandexFotki\traits\YandexFotkiAccess;
 use yii\base\Component;
+use yii\helpers\ArrayHelper;
+use yii\httpclient\Request;
+use yii\httpclient\Response;
 
 class TagComponent extends Component implements ITagComponent
 {
@@ -21,14 +23,12 @@ class TagComponent extends Component implements ITagComponent
     use YandexFotkiAccess;
 
     /**
-     * @param string $name
-     *
-     * @return Tag
+     * @inheritdoc
      */
-    public function get($name)
+    public function get($id)
     {
         $httpClient = $this->yandexFotki->httpClient;
-        $request    = $httpClient->get("tag/{$name}/", ['format' => 'json']);
+        $request    = $httpClient->get("tag/{$id}/", ['format' => 'json']);
         $response   = $request->send();
 
         $tag = $this->yandexFotki->getTagModel();
@@ -68,13 +68,28 @@ class TagComponent extends Component implements ITagComponent
     }
 
     /**
-     * @param $identities
-     *
-     * @return ITag[]
+     * @inheritdoc
      */
-    public function batchGet($identities)
+    public function batchGet($ids)
     {
-        // TODO: Implement batchGet() method.
+        $httpClient = $this->yandexFotki->httpClient;
+
+        /** @var Request[] $requests */
+        $requests = array_map(function ($id) use ($httpClient) {
+            return $httpClient->get("tag/{$id}/", ['format' => 'json']);
+        }, $ids);
+
+        $responses = $httpClient->batchSend($requests);
+
+        /** @var ITag[] $models */
+        $models = array_map(function (Response $response) {
+            $model = $this->yandexFotki->tagModel;
+            $model->loadWithData($response->getData());
+
+            return $model;
+        }, $responses);
+
+        return array_combine(ArrayHelper::getColumn($models, 'id'), $models);
     }
 
     /**

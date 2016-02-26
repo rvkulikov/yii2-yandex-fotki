@@ -30,4 +30,10 @@ use romkaChev\yandexFotki\interfaces\IYandexFotkiAccess;
  */
 interface ITag extends IYandexFotkiAccess
 {
+    /**
+     * @param array $data
+     *
+     * @return static
+     */
+    public function loadWithData($data);
 }

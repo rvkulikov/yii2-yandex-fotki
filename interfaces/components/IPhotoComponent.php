@@ -17,7 +17,7 @@ interface IPhotoComponent extends ICrudComponent
     const CLASS_NAME = __CLASS__;
 
     /**
-     * @param int|string|int[]|string[] $id
+     * @param int|string $id
      *
      * @return IPhoto
      */
@@ -45,11 +45,11 @@ interface IPhotoComponent extends ICrudComponent
     public function delete($data);
 
     /**
-     * @param $identities
+     * @param $ids
      *
      * @return IPhoto[]
      */
-    public function batchGet($identities);
+    public function batchGet($ids);
 
     /**
      * @param $data

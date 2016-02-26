@@ -10,17 +10,25 @@ namespace romkaChev\yandexFotki\models;
 
 
 use romkaChev\yandexFotki\interfaces\models\ITag;
+use romkaChev\yandexFotki\traits\parsers\AuthorParser;
 use romkaChev\yandexFotki\traits\parsers\DateParser;
 use romkaChev\yandexFotki\traits\YandexFotkiAccess;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 
+/**
+ * Class Tag
+ *
+ * @package romkaChev\yandexFotki\models
+ */
 class Tag extends Model implements ITag
 {
-    use YandexFotkiAccess, DateParser;
+    use YandexFotkiAccess, DateParser, AuthorParser;
 
     /** @var string */
     public $urn;
+    /** @var int */
+    public $id;
     /** @var string */
     public $title;
     /** @var Author */
@@ -43,6 +51,7 @@ class Tag extends Model implements ITag
     {
         return [
             ['urn', 'string'],
+            ['id', 'string'],
             ['title', 'string'],
             ['author', $this->yandexFotki->authorValidator],
             ['updatedAt', 'string'],
@@ -50,7 +59,6 @@ class Tag extends Model implements ITag
             ['linkEdit', 'url'],
             ['linkPhotos', 'url'],
             ['linkAlternate', 'url'],
-            [['urn', 'name'], 'required'],
         ];
     }
 
@@ -61,22 +69,37 @@ class Tag extends Model implements ITag
      */
     public function loadWithData($data)
     {
-        $author = $this->getYandexFotki()->getAuthorModel();
-        $author->loadWithData(ArrayHelper::getValue($data, 'authors.0'));
-
-        $this->load([
-            $this->formName() => [
-                'urn'           => ArrayHelper::getValue($data, 'id'),
-                'title'         => ArrayHelper::getValue($data, 'title'),
-                'author'        => $author,
-                'updatedAt'     => ArrayHelper::getValue($data, $this->getDateParser('updated')),
-                'linkSelf'      => ArrayHelper::getValue($data, 'links.self'),
-                'linkEdit'      => ArrayHelper::getValue($data, 'links.edit'),
-                'linkPhotos'    => ArrayHelper::getValue($data, 'links.photos'),
-                'linkAlternate' => ArrayHelper::getValue($data, 'links.alternate'),
-            ],
+        \Yii::configure($this, [
+            'urn'           => ArrayHelper::getValue($data, 'id'),
+            'id'            => ArrayHelper::getValue($data, $this->getIdParser()),
+            'title'         => ArrayHelper::getValue($data, 'title'),
+            'author'        => ArrayHelper::getValue($data, $this->getAuthorParser($this->yandexFotki->authorModel)),
+            'updatedAt'     => ArrayHelper::getValue($data, $this->getDateParser('updated')),
+            'linkSelf'      => ArrayHelper::getValue($data, 'links.self'),
+            'linkEdit'      => ArrayHelper::getValue($data, 'links.edit'),
+            'linkPhotos'    => ArrayHelper::getValue($data, 'links.photos'),
+            'linkAlternate' => ArrayHelper::getValue($data, 'links.alternate'),
         ]);
 
         return $this;
+    }
+
+    /**
+     * @return \Closure
+     */
+    public function getIdParser()
+    {
+        /**
+         * @param $array
+         * @param $defaultValue
+         *
+         * @return mixed
+         */
+        return function ($array, $defaultValue) {
+            $value = ArrayHelper::getValue($array, 'id');
+            preg_match('/^urn:yandex:fotki:([^:]*):tag:(?<id>.*)$/', $value, $matches);
+
+            return ArrayHelper::getValue($matches, 'id') ?: $defaultValue;
+        };
     }
 }

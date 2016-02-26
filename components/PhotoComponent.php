@@ -14,6 +14,9 @@ use romkaChev\yandexFotki\interfaces\models\IPhoto;
 use romkaChev\yandexFotki\models\Photo;
 use romkaChev\yandexFotki\traits\YandexFotkiAccess;
 use yii\base\Component;
+use yii\helpers\ArrayHelper;
+use yii\httpclient\Request;
+use yii\httpclient\Response;
 
 class PhotoComponent extends Component implements IPhotoComponent
 {
@@ -68,13 +71,28 @@ class PhotoComponent extends Component implements IPhotoComponent
     }
 
     /**
-     * @param $identities
-     *
-     * @return IPhoto[]
+     * @inheritdoc
      */
-    public function batchGet($identities)
+    public function batchGet($ids)
     {
-        // TODO: Implement batchGet() method.
+        $httpClient = $this->yandexFotki->httpClient;
+
+        /** @var Request[] $requests */
+        $requests = array_map(function ($id) use ($httpClient) {
+            return $httpClient->get("photo/{$id}/", ['format' => 'json']);
+        }, $ids);
+
+        $responses = $httpClient->batchSend($requests);
+
+        /** @var IPhoto[] $models */
+        $models = array_map(function (Response $response) {
+            $model = $this->yandexFotki->photoModel;
+            $model->loadWithData($response->getData());
+
+            return $model;
+        }, $responses);
+
+        return array_combine(ArrayHelper::getColumn($models, 'id'), $models);
     }
 
     /**

@@ -17,11 +17,11 @@ interface ITagComponent extends ICrudComponent
     const CLASS_NAME = __CLASS__;
 
     /**
-     * @param string $name
+     * @param string $id
      *
      * @return ITag
      */
-    public function get($name);
+    public function get($id);
 
     /**
      * @param mixed $data
@@ -45,11 +45,11 @@ interface ITagComponent extends ICrudComponent
     public function delete($data);
 
     /**
-     * @param $identities
+     * @param $ids
      *
      * @return ITag[]
      */
-    public function batchGet($identities);
+    public function batchGet($ids);
 
     /**
      * @param $data

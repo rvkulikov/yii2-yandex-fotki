@@ -42,11 +42,11 @@ interface ICrudComponent extends IYandexFotkiAccess
     public function delete($data);
 
     /**
-     * @param $identities
+     * @param $ids
      *
      * @return mixed
      */
-    public function batchGet($identities);
+    public function batchGet($ids);
 
     /**
      * @param $data

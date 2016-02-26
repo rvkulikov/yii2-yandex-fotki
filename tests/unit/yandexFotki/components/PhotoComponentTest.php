@@ -16,7 +16,17 @@ class PhotoComponentTest extends BaseTestCase
 
     public function testGet()
     {
-        $photo = $this->getComponent()->photos->get(1767663);
+        $photoComponent = $this->getComponent()->photos;
+        $photo          = $photoComponent->get(1767663);
         $this->assertEquals(1767663, $photo->id);
+    }
+
+    public function testBatchGet()
+    {
+        $photoComponent = $this->getComponent()->photos;
+        $models         = $photoComponent->batchGet([1767664, 1845379]);
+
+        $this->assertArrayHasKey(1767664, $models);
+        $this->assertArrayHasKey(1845379, $models);
     }
 }
