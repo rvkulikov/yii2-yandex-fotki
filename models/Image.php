@@ -51,14 +51,12 @@ class Image extends Model implements IImage
      */
     public function loadWithData($data)
     {
-        $this->load([
-            $this->formName() => [
-                'href'     => ArrayHelper::getValue($data, 'href'),
-                'height'   => ArrayHelper::getValue($data, 'height'),
-                'width'    => ArrayHelper::getValue($data, 'width'),
-                'byteSize' => ArrayHelper::getValue($data, 'bytesize'),
-                'size'     => ArrayHelper::getValue($data, 'size'),
-            ],
+        \Yii::configure($this, [
+            'href'     => ArrayHelper::getValue($data, 'href'),
+            'height'   => ArrayHelper::getValue($data, 'height'),
+            'width'    => ArrayHelper::getValue($data, 'width'),
+            'byteSize' => ArrayHelper::getValue($data, 'bytesize'),
+            'size'     => ArrayHelper::getValue($data, 'size'),
         ]);
 
         return $this;

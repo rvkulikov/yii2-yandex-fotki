@@ -10,6 +10,7 @@ namespace romkaChev\yandexFotki\models;
 
 
 use romkaChev\yandexFotki\interfaces\models\IPoint;
+use romkaChev\yandexFotki\traits\parsers\CoordinatesParser;
 use romkaChev\yandexFotki\traits\YandexFotkiAccess;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
@@ -21,7 +22,7 @@ use yii\helpers\ArrayHelper;
  */
 class Point extends Model implements IPoint
 {
-    use YandexFotkiAccess;
+    use YandexFotkiAccess, CoordinatesParser;
 
     /** @var int */
     public $zoomLevel;
@@ -52,33 +53,13 @@ class Point extends Model implements IPoint
      */
     public function loadWithData($data)
     {
-        $this->load([
-            $this->formName() => [
-                'zoomLevel'   => ArrayHelper::getValue($data, 'zoomlevel'),
-                'type'        => ArrayHelper::getValue($data, 'type'),
-                'mapType'     => ArrayHelper::getValue($data, 'maptype'),
-                'coordinates' => ArrayHelper::getValue($data, $this->getCoordinatesParser()),
-            ],
+        \Yii::configure($this, [
+            'zoomLevel'   => ArrayHelper::getValue($data, 'zoomlevel'),
+            'type'        => ArrayHelper::getValue($data, 'type'),
+            'mapType'     => ArrayHelper::getValue($data, 'maptype'),
+            'coordinates' => ArrayHelper::getValue($data, $this->getCoordinatesParser()),
         ]);
 
         return $this;
-    }
-
-    /**
-     * @return \Closure
-     */
-    public function getCoordinatesParser()
-    {
-        /**
-         * @param $array
-         * @param $defaultValue
-         *
-         * @return float[]|null
-         */
-        return function ($array, $defaultValue) {
-            $coordinates = ArrayHelper::getValue($array, 'coordinates');
-
-            return $coordinates ? explode(' ', $coordinates) : $defaultValue;
-        };
     }
 }

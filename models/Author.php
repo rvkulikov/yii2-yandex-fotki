@@ -41,11 +41,9 @@ class Author extends Model implements IAuthor
      */
     public function loadWithData($data)
     {
-        $this->load([
-            $this->formName() => [
-                'name' => ArrayHelper::getValue($data, 'name'),
-                'uid'  => ArrayHelper::getValue($data, $this->getUidParser()),
-            ],
+        \Yii::configure($this, [
+            'name' => ArrayHelper::getValue($data, 'name'),
+            'uid'  => ArrayHelper::getValue($data, $this->getUidParser()),
         ]);
 
         return $this;

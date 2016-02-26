@@ -10,13 +10,18 @@ namespace romkaChev\yandexFotki\models;
 
 
 use romkaChev\yandexFotki\interfaces\models\IPhoto;
+use romkaChev\yandexFotki\traits\parsers\AddressBindingParser;
+use romkaChev\yandexFotki\traits\parsers\AuthorParser;
+use romkaChev\yandexFotki\traits\parsers\DateParser;
+use romkaChev\yandexFotki\traits\parsers\ImagesParser;
+use romkaChev\yandexFotki\traits\parsers\PointParser;
 use romkaChev\yandexFotki\traits\YandexFotkiAccess;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 
 class Photo extends Model implements IPhoto
 {
-    use YandexFotkiAccess;
+    use YandexFotkiAccess, AuthorParser, ImagesParser, PointParser, AddressBindingParser, DateParser;
 
     /** @var string */
     public $urn;
@@ -55,6 +60,9 @@ class Photo extends Model implements IPhoto
     /** @var string */
     public $linkAlbum;
 
+    /**
+     * @inheritdoc
+     */
     public function rules()
     {
         return [
@@ -86,47 +94,25 @@ class Photo extends Model implements IPhoto
      */
     public function loadWithData($data)
     {
-        $author = $this->yandexFotki->createAuthorModel();
-        $author->loadWithData(ArrayHelper::getValue($data, 'authors.0'));
-
-        $point = $this->yandexFotki->createPointModel();
-        $point->loadWithData(ArrayHelper::getValue($data, 'geo'));
-
-        $addressBinding = $this->yandexFotki->createAddressBindingModel();
-        $addressBinding->loadWithData(ArrayHelper::getValue($data, 'authors.0'));
-
-        $images = [];
-        foreach (ArrayHelper::getValue($data, 'img', []) as $size => $imageData) {
-            $imageData['size'] = $size;
-
-            $image = $this->yandexFotki->createImageModel();
-            $image->loadWithData($imageData);
-
-            $images[$size] = $image;
-        }
-
-        $this->load([
-            $this->formName() => [
-                'urn'               => ArrayHelper::getValue($data, 'id'),
-                'id'                => ArrayHelper::getValue($data, $this->getIdParser()),
-                'author'            => $author,
-                'access'            => ArrayHelper::getValue($data, 'access'),
-                'isForAdult'        => ArrayHelper::getValue($data, 'xxx', false),
-                'isHideOriginal'    => ArrayHelper::getValue($data, 'hide_original', false),
-                'isDisableComments' => ArrayHelper::getValue($data, 'disable_comments', false),
-                'images'            => $images,
-                'point'             => $point,
-                'addressBinding'    => $addressBinding,
-                'publishedAt'       => ArrayHelper::getValue($data, $this->getDateParser('published')),
-                'updatedAt'         => ArrayHelper::getValue($data, $this->getDateParser('updated')),
-                'editedAt'          => ArrayHelper::getValue($data, $this->getDateParser('edited')),
-                'linkSelf'          => ArrayHelper::getValue($data, 'links.self'),
-                'linkEdit'          => ArrayHelper::getValue($data, 'links.edit'),
-                'linkAlternate'     => ArrayHelper::getValue($data, 'links.alternate'),
-                'linkEditMedia'     => ArrayHelper::getValue($data, 'links.edit-media'),
-                'linkAlbum'         => ArrayHelper::getValue($data, 'links.album'),
-
-            ],
+        \Yii::configure($this, [
+            'urn'               => ArrayHelper::getValue($data, 'id'),
+            'id'                => ArrayHelper::getValue($data, $this->getIdParser()),
+            'author'            => ArrayHelper::getValue($data, $this->getAuthorParser($this->yandexFotki->authorModel)),
+            'access'            => ArrayHelper::getValue($data, 'access'),
+            'isForAdult'        => ArrayHelper::getValue($data, 'xxx', false),
+            'isHideOriginal'    => ArrayHelper::getValue($data, 'hide_original', false),
+            'isDisableComments' => ArrayHelper::getValue($data, 'disable_comments', false),
+            'images'            => ArrayHelper::getValue($data, $this->getImagesParser($this->yandexFotki->imageModel)),
+            'point'             => ArrayHelper::getValue($data, $this->getPointParser($this->yandexFotki->pointModel)),
+            'addressBinding'    => ArrayHelper::getValue($data, $this->getAddressBindingParser($this->yandexFotki->addressBindingModel)),
+            'publishedAt'       => ArrayHelper::getValue($data, $this->getDateParser('published')),
+            'updatedAt'         => ArrayHelper::getValue($data, $this->getDateParser('updated')),
+            'editedAt'          => ArrayHelper::getValue($data, $this->getDateParser('edited')),
+            'linkSelf'          => ArrayHelper::getValue($data, 'links.self'),
+            'linkEdit'          => ArrayHelper::getValue($data, 'links.edit'),
+            'linkAlternate'     => ArrayHelper::getValue($data, 'links.alternate'),
+            'linkEditMedia'     => ArrayHelper::getValue($data, 'links.edit-media'),
+            'linkAlbum'         => ArrayHelper::getValue($data, 'links.album'),
         ]);
 
         return $this;
@@ -148,24 +134,6 @@ class Photo extends Model implements IPhoto
             preg_match('/^urn:yandex:fotki:([^:]*):photo:(?<id>\d+)$/', $value, $matches);
 
             return intval(ArrayHelper::getValue($matches, 'id')) ?: $defaultValue;
-        };
-    }
-
-    /**
-     * @param string $key
-     *
-     * @return \Closure
-     */
-    public function getDateParser($key)
-    {
-        /**
-         * @param $array
-         * @param $defaultValue
-         *
-         * @return mixed
-         */
-        return function ($array, $defaultValue) use ($key) {
-            return \Yii::$app->formatter->asDate(ArrayHelper::getValue($array, $key)) ?: $defaultValue;
         };
     }
 }

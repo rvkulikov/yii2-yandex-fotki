@@ -31,7 +31,7 @@ class TagComponent extends Component implements ITagComponent
         $request    = $httpClient->get("tag/{$name}/", ['format' => 'json']);
         $response   = $request->send();
 
-        $tag = $this->yandexFotki->createTagModel();
+        $tag = $this->yandexFotki->getTagModel();
         $tag->loadWithData($response->getData());
 
         return $tag;

@@ -31,7 +31,7 @@ class PhotoComponent extends Component implements IPhotoComponent
         $request    = $httpClient->get("photo/{$id}/", ['format' => 'json']);
         $response   = $request->send();
 
-        $photo = $this->yandexFotki->createPhotoModel();
+        $photo = $this->yandexFotki->getPhotoModel();
         $photo->loadWithData($response->getData());
 
         return $photo;

@@ -10,13 +10,14 @@ namespace romkaChev\yandexFotki\models;
 
 
 use romkaChev\yandexFotki\interfaces\models\ITag;
+use romkaChev\yandexFotki\traits\parsers\DateParser;
 use romkaChev\yandexFotki\traits\YandexFotkiAccess;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 
 class Tag extends Model implements ITag
 {
-    use YandexFotkiAccess;
+    use YandexFotkiAccess, DateParser;
 
     /** @var string */
     public $urn;
@@ -60,7 +61,7 @@ class Tag extends Model implements ITag
      */
     public function loadWithData($data)
     {
-        $author = $this->getYandexFotki()->createAuthorModel();
+        $author = $this->getYandexFotki()->getAuthorModel();
         $author->loadWithData(ArrayHelper::getValue($data, 'authors.0'));
 
         $this->load([
@@ -77,23 +78,5 @@ class Tag extends Model implements ITag
         ]);
 
         return $this;
-    }
-
-    /**
-     * @param string $key
-     *
-     * @return \Closure
-     */
-    public function getDateParser($key)
-    {
-        /**
-         * @param $array
-         * @param $defaultValue
-         *
-         * @return mixed
-         */
-        return function ($array, $defaultValue) use ($key) {
-            return \Yii::$app->formatter->asDate(ArrayHelper::getValue($array, $key)) ?: $defaultValue;
-        };
     }
 }

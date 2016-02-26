@@ -10,6 +10,7 @@ namespace romkaChev\yandexFotki\tests\unit\yandexFotki\components;
 
 
 use romkaChev\yandexFotki\tests\unit\BaseTestCase;
+use yii\helpers\ArrayHelper;
 
 /**
  * Class AlbumComponentTest
@@ -23,7 +24,16 @@ class AlbumComponentTest extends BaseTestCase
 
     public function testGet()
     {
-        $album = $this->getComponent()->albums->get(487438);
+        $albumComponent = $this->getComponent()->albums;
+        $album          = $albumComponent->get(487438);
         $this->assertEquals(487438, $album->id);
+    }
+
+    public function testGetPhotos()
+    {
+        $albumComponent = $this->getComponent()->albums;
+        $photos         = $albumComponent->getPhotos(488819);
+
+        $this->assertEquals(sort(array_keys($photos)), sort(ArrayHelper::getColumn($photos, 'id')));
     }
 }

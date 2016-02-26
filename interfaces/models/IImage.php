@@ -14,4 +14,11 @@ use romkaChev\yandexFotki\interfaces\IYandexFotkiAccess;
 interface IImage extends IYandexFotkiAccess, IImageSize
 {
     const CLASS_NAME = __CLASS__;
+
+    /**
+     * @param array $data
+     *
+     * @return static
+     */
+    public function loadWithData($data);
 }

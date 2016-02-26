@@ -15,20 +15,27 @@ use romkaChev\yandexFotki\interfaces\IYandexFotkiAccess;
  *
  * @package romkaChev\yandexFotki\interfaces\models
  *
- * @property string   urn
- * @property integer  id
- * @property IAuthor  author
- * @property string   title
- * @property string   summary
- *
- * @property IPhoto[] photos
- *
- * @property string   updatedAt
- *
- * @property string   linkSelf
- * @property string   linkAlternate
+ * @property string  $urn
+ * @property integer $id
+ * @property IAuthor $author
+ * @property string  $title
+ * @property string  $summary
+ * @property string  $updatedAt
+ * @property string  $linkSelf
+ * @property string  $linkNext
+ * @property string  $linkAlternate
  */
 interface IAlbumPhotosCollection extends IYandexFotkiAccess
 {
+    /**
+     * @param array $data
+     *
+     * @return static
+     */
+    public function loadWithData($data);
 
+    /**
+     * @return IPhoto[]
+     */
+    public function getPhotos();
 }

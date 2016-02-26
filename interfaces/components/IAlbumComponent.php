@@ -10,6 +10,8 @@ namespace romkaChev\yandexFotki\interfaces\components;
 
 
 use romkaChev\yandexFotki\interfaces\models\IAlbum;
+use romkaChev\yandexFotki\interfaces\models\IPhoto;
+use romkaChev\yandexFotki\models\options\GetAlbumPhotosOptions;
 
 interface IAlbumComponent extends ICrudComponent
 {
@@ -22,6 +24,14 @@ interface IAlbumComponent extends ICrudComponent
      * @return IAlbum
      */
     public function get($id);
+
+    /**
+     * @param int|string            $id
+     * @param GetAlbumPhotosOptions $options
+     *
+     * @return IPhoto[]
+     */
+    public function getPhotos($id, GetAlbumPhotosOptions $options = null);
 
     /**
      * @param mixed $data

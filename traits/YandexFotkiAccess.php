@@ -12,7 +12,6 @@ namespace romkaChev\yandexFotki\traits;
 use InvalidArgumentException;
 use romkaChev\yandexFotki\interfaces\IYandexFotki;
 use romkaChev\yandexFotki\YandexFotki;
-use Yii;
 use yii\base\InvalidConfigException;
 
 /**
@@ -46,7 +45,7 @@ trait YandexFotkiAccess
     public function setYandexFotki($value)
     {
         if (!$value instanceof IYandexFotki) {
-            $value = Yii::createObject($value);
+            $value = \Yii::createObject($value);
         }
 
         if (!$value instanceof IYandexFotki) {

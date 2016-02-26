@@ -2,32 +2,30 @@
 /**
  * Created by PhpStorm.
  * User: Roman
- * Date: 18.12.2015
- * Time: 22:12
+ * Date: 26.02.2016
+ * Time: 17:59
  */
 
 namespace romkaChev\yandexFotki\models;
 
 
-use romkaChev\yandexFotki\interfaces\models\IAlbum;
+use romkaChev\yandexFotki\interfaces\models\IAlbumPhotosCollection;
 use romkaChev\yandexFotki\interfaces\models\IPhoto;
-use romkaChev\yandexFotki\models\options\GetAlbumPhotosOptions;
 use romkaChev\yandexFotki\traits\parsers\AuthorParser;
 use romkaChev\yandexFotki\traits\parsers\DateParser;
+use romkaChev\yandexFotki\traits\parsers\PhotosParser;
 use romkaChev\yandexFotki\traits\YandexFotkiAccess;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 
 /**
- * Class Album
+ * Class AlbumPhotosCollection
  *
  * @package romkaChev\yandexFotki\models
- *
- * @todo    cover
  */
-class Album extends Model implements IAlbum
+class AlbumPhotosCollection extends Model implements IAlbumPhotosCollection
 {
-    use YandexFotkiAccess, AuthorParser, DateParser;
+    use YandexFotkiAccess, AuthorParser, DateParser, PhotosParser;
 
     /** @var string */
     public $urn;
@@ -39,28 +37,16 @@ class Album extends Model implements IAlbum
     public $title;
     /** @var string */
     public $summary;
-    /** @var bool */
-    public $isProtected;
-    /** todo this */
-    public $cover;
-    /** @var string */
-    public $publishedAt;
     /** @var string */
     public $updatedAt;
     /** @var string */
-    public $editedAt;
-    /** @var string */
     public $linkSelf;
     /** @var string */
-    public $linkEdit;
-    /** @var string */
-    public $linkPhotos;
-    /** @var string */
-    public $linkCover;
-    /** @var string */
-    public $linkYmapsml;
+    public $linkNext;
     /** @var string */
     public $linkAlternate;
+    /** @var int */
+    public $imageCount;
     /** @var IPhoto[] */
     protected $photos;
 
@@ -75,15 +61,9 @@ class Album extends Model implements IAlbum
             ['author', $this->yandexFotki->authorValidator],
             ['title', 'string'],
             ['summary', 'string'],
-            ['isProtected', 'boolean'],
-            ['publishedAt', 'string'],
             ['updatedAt', 'string'],
-            ['editedAt', 'string'],
             ['linkSelf', 'url'],
-            ['linkEdit', 'url'],
-            ['linkPhotos', 'url'],
-            ['linkCover', 'url'],
-            ['linkYmapsml', 'url'],
+            ['linkNext', 'url'],
             ['linkAlternate', 'url'],
             ['photos', 'each', 'rule' => [$this->yandexFotki->photoValidator]]
         ];
@@ -102,32 +82,15 @@ class Album extends Model implements IAlbum
             'author'        => ArrayHelper::getValue($data, $this->getAuthorParser($this->yandexFotki->authorModel)),
             'title'         => ArrayHelper::getValue($data, 'title'),
             'summary'       => ArrayHelper::getValue($data, 'summary'),
-            'isProtected'   => ArrayHelper::getValue($data, 'isProtected', false),
-            'publishedAt'   => ArrayHelper::getValue($data, $this->getDateParser('published')),
             'updatedAt'     => ArrayHelper::getValue($data, $this->getDateParser('updated')),
-            'editedAt'      => ArrayHelper::getValue($data, $this->getDateParser('edited')),
             'linkSelf'      => ArrayHelper::getValue($data, 'links.self'),
-            'linkEdit'      => ArrayHelper::getValue($data, 'links.edit'),
-            'linkPhotos'    => ArrayHelper::getValue($data, 'links.photos'),
-            'linkCover'     => ArrayHelper::getValue($data, 'links.cover'),
-            'linkYmapsml'   => ArrayHelper::getValue($data, 'links.ymapsml'),
+            'linkNext'      => ArrayHelper::getValue($data, 'links.next'),
             'linkAlternate' => ArrayHelper::getValue($data, 'links.alternate'),
+            'imageCount'    => ArrayHelper::getValue($data, 'imageCount'),
+            'photos'        => ArrayHelper::getValue($data, $this->getPhotosParser($this->yandexFotki->photoModel))
         ]);
 
         return $this;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getPhotos(GetAlbumPhotosOptions $options = null)
-    {
-        if (!$this->photos) {
-            $albumComponent = $this->yandexFotki->albums;
-            $this->photos   = $albumComponent->getPhotos($this->id, $options);
-        }
-
-        return $this->photos;
     }
 
     /**
@@ -147,5 +110,21 @@ class Album extends Model implements IAlbum
 
             return intval(ArrayHelper::getValue($matches, 'id')) ?: $defaultValue;
         };
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getPhotos()
+    {
+        return $this->photos;
+    }
+
+    /**
+     * @param IPhoto[] $photos
+     */
+    public function setPhotos($photos)
+    {
+        $this->photos = $photos;
     }
 }

@@ -14,6 +14,7 @@ use romkaChev\yandexFotki\interfaces\components\IPhotoComponent;
 use romkaChev\yandexFotki\interfaces\components\ITagComponent;
 use romkaChev\yandexFotki\interfaces\models\IAddressBinding;
 use romkaChev\yandexFotki\interfaces\models\IAlbum;
+use romkaChev\yandexFotki\interfaces\models\IAlbumPhotosCollection;
 use romkaChev\yandexFotki\interfaces\models\IAuthor;
 use romkaChev\yandexFotki\interfaces\models\IImage;
 use romkaChev\yandexFotki\interfaces\models\IPhoto;
@@ -28,13 +29,28 @@ use yii\httpclient\Client;
  *
  * @package romkaChev\yandexFotki\interfaces
  *
- * @property string          oauthToken
+ * @property string                 $oauthToken
  *
- * @property Client          httpClient
- * @property Cache           cache
- * @property IAlbumComponent albums
- * @property IPhotoComponent photos
- * @property ITagComponent   tags
+ * @property Client                 $httpClient
+ * @property Cache                  $cache
+ * @property IAlbumComponent        $albums
+ * @property IPhotoComponent        $photos
+ * @property ITagComponent          $tags
+ *
+ * @property IAddressBinding        $addressBindingModel
+ * @property IAlbum                 $albumModel
+ * @property IAlbumPhotosCollection $albumPhotosCollectionModel
+ * @property IAuthor                $authorModel
+ * @property IPhoto                 $photoModel
+ * @property ITag                   $tagModel
+ * @property IPoint                 $pointModel
+ * @property IImage                 $imageModel
+ *
+ * @property string|array           $addressBindingValidator
+ * @property string|array           $authorValidator
+ * @property string|array           $pointValidator
+ * @property string|array           $photoValidator
+ * @property string|array           $imageValidator
  */
 interface IYandexFotki
 {
@@ -122,61 +138,95 @@ interface IYandexFotki
      */
     public function getTags();
 
+
+
+    //region models
+
     /**
-     * @param array $config
-     *
      * @return IAddressBinding
      * @throws InvalidConfigException
      */
-    public function createAddressBindingModel($config);
+    public function getAddressBindingModel();
 
     /**
-     * @param array $config
-     *
      * @return IAlbum
      * @throws InvalidConfigException
      */
-    public function createAlbumModel($config);
+    public function getAlbumModel();
 
     /**
-     * @param array $config
-     *
      * @return IAuthor
      * @throws InvalidConfigException
      */
-    public function createAuthorModel($config);
+    public function getAuthorModel();
 
     /**
-     * @param array $config
-     *
      * @return IPhoto
      * @throws InvalidConfigException
      */
-    public function createPhotoModel($config);
+    public function getPhotoModel();
 
     /**
-     * @param array $config
-     *
      * @return ITag
      * @throws InvalidConfigException
      */
-    public function createTagModel($config);
+    public function getTagModel();
 
     /**
-     * @param array $config
-     *
      * @return IPoint
      * @throws InvalidConfigException
      */
-    public function createPointModel($config);
+    public function getPointModel();
 
     /**
-     * @param array $config
-     *
      * @return IImage
      * @throws InvalidConfigException
      */
-    public function createImageModel($config);
+    public function getImageModel();
+
+
+    /**
+     * @param mixed $addressBindingModel
+     */
+    public function setAddressBindingModel($addressBindingModel);
+
+    /**
+     * @param mixed $albumModel
+     */
+    public function setAlbumModel($albumModel);
+
+    /**
+     * @param mixed $albumPhotosCollectionModel
+     */
+    public function setAlbumPhotosCollectionModel($albumPhotosCollectionModel);
+
+    /**
+     * @param mixed $authorModel
+     */
+    public function setAuthorModel($authorModel);
+
+    /**
+     * @param mixed $photoModel
+     */
+    public function setPhotoModel($photoModel);
+
+    /**
+     * @param mixed $tagModel
+     */
+    public function setTagModel($tagModel);
+
+    /**
+     * @param mixed $pointModel
+     */
+    public function setPointModel($pointModel);
+
+    /**
+     * @param mixed $imageModel
+     */
+    public function setImageModel($imageModel);
+
+    //endregion
+
 
     public function setAddressBindingValidator($value);
 

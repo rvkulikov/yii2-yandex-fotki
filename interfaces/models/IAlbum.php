@@ -9,32 +9,32 @@
 namespace romkaChev\yandexFotki\interfaces\models;
 
 use romkaChev\yandexFotki\interfaces\IYandexFotkiAccess;
+use romkaChev\yandexFotki\models\options\GetAlbumPhotosOptions;
 
 /**
  * Interface IAlbum
  *
  * @package romkaChev\yandexFotki\interfaces\models
  *
- * @property string  urn
- * @property integer id
- * @property IAuthor author
- * @property string  title
- * @property string  summary
- * @property boolean isProtected
+ * @property string  $urn
+ * @property integer $id
+ * @property IAuthor $author
+ * @property string  $title
+ * @property string  $summary
+ * @property boolean $isProtected
  *
- * @property IPhoto  cover
+ * @property IPhoto  $cover
  *
- * @property string  publishedAt
- * @property string  updatedAt
- * @property string  editedAt
+ * @property string  $publishedAt
+ * @property string  $updatedAt
+ * @property string  $editedAt
  *
- * @property string  linkSelf
- * @property string  linkEdit
- * @property string  linkPhotos
- * @property string  linkCover
- * @property string  linkYmapsml
- * @property string  linkAlternate
- *
+ * @property string  $linkSelf
+ * @property string  $linkEdit
+ * @property string  $linkPhotos
+ * @property string  $linkCover
+ * @property string  $linkYmapsml
+ * @property string  $linkAlternate
  */
 interface IAlbum extends IYandexFotkiAccess
 {
@@ -44,4 +44,11 @@ interface IAlbum extends IYandexFotkiAccess
      * @return static
      */
     public function loadWithData($data);
+
+    /**
+     * @param GetAlbumPhotosOptions $options
+     *
+     * @return IPhoto[]
+     */
+    public function getPhotos(GetAlbumPhotosOptions $options = null);
 }

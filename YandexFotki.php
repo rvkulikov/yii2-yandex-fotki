@@ -17,14 +17,20 @@ use romkaChev\yandexFotki\interfaces\components\IAlbumComponent;
 use romkaChev\yandexFotki\interfaces\components\IPhotoComponent;
 use romkaChev\yandexFotki\interfaces\components\ITagComponent;
 use romkaChev\yandexFotki\interfaces\IYandexFotki;
-use romkaChev\yandexFotki\models\AddressBinding;
+use romkaChev\yandexFotki\interfaces\models\IAddressBinding;
+use romkaChev\yandexFotki\interfaces\models\IAlbum;
+use romkaChev\yandexFotki\interfaces\models\IAlbumPhotosCollection;
+use romkaChev\yandexFotki\interfaces\models\IAuthor;
+use romkaChev\yandexFotki\interfaces\models\IImage;
+use romkaChev\yandexFotki\interfaces\models\IPhoto;
+use romkaChev\yandexFotki\interfaces\models\IPoint;
+use romkaChev\yandexFotki\interfaces\models\ITag;
 use romkaChev\yandexFotki\models\Album;
 use romkaChev\yandexFotki\models\Author;
 use romkaChev\yandexFotki\models\Image;
 use romkaChev\yandexFotki\models\Photo;
 use romkaChev\yandexFotki\models\Point;
 use romkaChev\yandexFotki\models\Tag;
-use Yii;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
 use yii\caching\Cache;
@@ -37,33 +43,45 @@ use yii\httpclient\Client;
  *
  * @package romkaChev\yandexFotki
  *
- * @property Client         httpClient
- * @property Cache          cache
- * @property AlbumComponent albums
- * @property PhotoComponent photos
- * @property TagComponent   tags
+ * @property Client                 $httpClient
+ * @property Cache                  $cache
+ * @property AlbumComponent         $albums
+ * @property PhotoComponent         $photos
+ * @property TagComponent           $tags
  *
- * @property string|array   addressBindingValidator
- * @property string|array   authorValidator
- * @property string|array   pointValidator
- * @property string|array   imageValidator
+ * @property string|array           $addressBindingValidator
+ * @property string|array           $authorValidator
+ * @property string|array           $pointValidator
+ * @property string|array           $photoValidator
+ * @property string|array           $imageValidator
+ *
+ * @property IAddressBinding        $addressBindingModel
+ * @property IAlbum                 $albumModel
+ * @property IAlbumPhotosCollection $albumPhotosCollectionModel
+ * @property IAuthor                $authorModel
+ * @property IPhoto                 $photoModel
+ * @property ITag                   $tagModel
+ * @property IPoint                 $pointModel
+ * @property IImage                 $imageModel
  */
 class YandexFotki extends Component implements IYandexFotki
 {
     public $login      = null;
     public $oauthToken = null;
 
-    public $addressBindingModel;
-    public $albumModel;
-    public $authorModel;
-    public $photoModel;
-    public $tagModel;
-    public $pointModel;
-    public $imageModel;
+    protected $addressBindingModel;
+    protected $albumModel;
+    protected $albumPhotosCollectionModel;
+    protected $authorModel;
+    protected $photoModel;
+    protected $tagModel;
+    protected $pointModel;
+    protected $imageModel;
 
     private $_addressBindingValidator;
     private $_authorValidator;
     private $_pointValidator;
+    private $_photoValidator;
     private $_imageValidator;
 
     /**
@@ -114,7 +132,7 @@ class YandexFotki extends Component implements IYandexFotki
     {
 
         if (!$value instanceof Client) {
-            $value = Yii::createObject($value);
+            $value = \Yii::createObject($value);
         }
 
         if (!$value instanceof Client) {
@@ -146,7 +164,7 @@ class YandexFotki extends Component implements IYandexFotki
     public function setCache($value)
     {
         if (!$value instanceof Cache) {
-            $value = Yii::createObject($value);
+            $value = \Yii::createObject($value);
         }
 
         if (!$value instanceof Cache) {
@@ -180,7 +198,7 @@ class YandexFotki extends Component implements IYandexFotki
     public function setAlbums($value)
     {
         if (!$value instanceof IAlbumComponent) {
-            $value = Yii::createObject($value);
+            $value = \Yii::createObject($value);
         }
 
         if (!$value instanceof IAlbumComponent) {
@@ -216,7 +234,7 @@ class YandexFotki extends Component implements IYandexFotki
     public function setPhotos($value)
     {
         if (!$value instanceof IPhotoComponent) {
-            $value = Yii::createObject($value);
+            $value = \Yii::createObject($value);
         }
 
         if (!$value instanceof IPhotoComponent) {
@@ -252,7 +270,7 @@ class YandexFotki extends Component implements IYandexFotki
     public function setTags($value)
     {
         if (!$value instanceof ITagComponent) {
-            $value = Yii::createObject($value);
+            $value = \Yii::createObject($value);
         }
 
         if (!$value instanceof ITagComponent) {
@@ -282,103 +300,193 @@ class YandexFotki extends Component implements IYandexFotki
         return $this->_tags;
     }
 
-    /**
-     * @param array $config
-     *
-     * @return AddressBinding
-     * @throws InvalidConfigException
-     */
-    public function createAddressBindingModel($config = [])
-    {
-        $config['class']       = ArrayHelper::getValue($config, 'class', $this->addressBindingModel);
-        $config['yandexFotki'] = ArrayHelper::getValue($config, 'yandexFotki', $this);
+    //region models
 
-        return Yii::createObject($config);
+    /**
+     * @inheritdoc
+     */
+    public function getAddressBindingModel()
+    {
+        if (!$this->addressBindingModel instanceof IAddressBinding) {
+            $config                = is_string($this->addressBindingModel) ? ['class' => $this->addressBindingModel] : $this->addressBindingModel;
+            $config['yandexFotki'] = ArrayHelper::getValue($config, 'yandexFotki', $this);
+
+            $this->addressBindingModel = \Yii::createObject($config);
+        }
+
+        return clone $this->addressBindingModel;
     }
 
     /**
-     * @param array $config
-     *
-     * @return Album
-     * @throws InvalidConfigException
+     * @inheritdoc
      */
-    public function createAlbumModel($config = [])
+    public function getAlbumModel()
     {
-        $config['class']       = ArrayHelper::getValue($config, 'class', $this->albumModel);
-        $config['yandexFotki'] = ArrayHelper::getValue($config, 'yandexFotki', $this);
+        if (!$this->albumModel instanceof Album) {
+            $config                = is_string($this->albumModel) ? ['class' => $this->albumModel] : $this->albumModel;
+            $config['yandexFotki'] = ArrayHelper::getValue($config, 'yandexFotki', $this);
 
-        return Yii::createObject($config);
+            $this->albumModel = \Yii::createObject($config);
+        }
+
+        return clone $this->albumModel;
     }
 
     /**
-     * @param array $config
-     *
-     * @return Author
-     * @throws InvalidConfigException
+     * @inheritdoc
      */
-    public function createAuthorModel($config = [])
+    public function getAlbumPhotosCollectionModel()
     {
-        $config['class']       = ArrayHelper::getValue($config, 'class', $this->authorModel);
-        $config['yandexFotki'] = ArrayHelper::getValue($config, 'yandexFotki', $this);
+        if (!$this->albumPhotosCollectionModel instanceof IAlbumPhotosCollection) {
+            $config                = is_string($this->albumPhotosCollectionModel) ? ['class' => $this->albumPhotosCollectionModel] : $this->albumPhotosCollectionModel;
+            $config['yandexFotki'] = ArrayHelper::getValue($config, 'yandexFotki', $this);
 
-        return Yii::createObject($config);
+            $this->albumPhotosCollectionModel = \Yii::createObject($config);
+        }
+
+        return clone $this->albumPhotosCollectionModel;
     }
 
     /**
-     * @param array $config
-     *
-     * @return Photo
-     * @throws InvalidConfigException
+     * @inheritdoc
      */
-    public function createPhotoModel($config = [])
+    public function getAuthorModel($config = [])
     {
-        $config['class']       = ArrayHelper::getValue($config, 'class', $this->photoModel);
-        $config['yandexFotki'] = ArrayHelper::getValue($config, 'yandexFotki', $this);
+        if (!$this->authorModel instanceof Author) {
+            $config                = is_string($this->authorModel) ? ['class' => $this->authorModel] : $this->authorModel;
+            $config['yandexFotki'] = ArrayHelper::getValue($config, 'yandexFotki', $this);
 
-        return Yii::createObject($config);
+            $this->authorModel = \Yii::createObject($config);
+        }
+
+        return clone $this->authorModel;
     }
 
     /**
-     * @param array $config
-     *
-     * @return Tag
-     * @throws InvalidConfigException
+     * @inheritdoc
      */
-    public function createTagModel($config = [])
+    public function getPhotoModel()
     {
-        $config['class']       = ArrayHelper::getValue($config, 'class', $this->tagModel);
-        $config['yandexFotki'] = ArrayHelper::getValue($config, 'yandexFotki', $this);
+        if (!$this->photoModel instanceof Photo) {
+            $config                = is_string($this->photoModel) ? ['class' => $this->photoModel] : $this->photoModel;
+            $config['yandexFotki'] = ArrayHelper::getValue($config, 'yandexFotki', $this);
 
-        return Yii::createObject($config);
+            $this->photoModel = \Yii::createObject($config);
+        }
+
+        return clone $this->photoModel;
     }
 
     /**
-     * @param array $config
-     *
-     * @return Point
-     * @throws InvalidConfigException
+     * @inheritdoc
      */
-    public function createPointModel($config = [])
+    public function getTagModel()
     {
-        $config['class']       = ArrayHelper::getValue($config, 'class', $this->pointModel);
-        $config['yandexFotki'] = ArrayHelper::getValue($config, 'yandexFotki', $this);
+        if (!$this->tagModel instanceof Tag) {
+            $config                = is_string($this->tagModel) ? ['class' => $this->tagModel] : $this->tagModel;
+            $config['yandexFotki'] = ArrayHelper::getValue($config, 'yandexFotki', $this);
 
-        return Yii::createObject($config);
+            $this->tagModel = \Yii::createObject($config);
+        }
+
+        return clone $this->tagModel;
     }
 
     /**
-     * @param array $config
-     *
-     * @return Image
-     * @throws InvalidConfigException
+     * @inheritdoc
      */
-    public function createImageModel($config = [])
+    public function getPointModel()
     {
-        $config['class']       = ArrayHelper::getValue($config, 'class', $this->imageModel);
-        $config['yandexFotki'] = ArrayHelper::getValue($config, 'yandexFotki', $this);
+        if (!$this->pointModel instanceof Point) {
+            $config                = is_string($this->pointModel) ? ['class' => $this->pointModel] : $this->pointModel;
+            $config['yandexFotki'] = ArrayHelper::getValue($config, 'yandexFotki', $this);
 
-        return Yii::createObject($config);
+            $this->pointModel = \Yii::createObject($config);
+        }
+
+        return clone $this->pointModel;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getImageModel()
+    {
+        if (!$this->imageModel instanceof Image) {
+            $config                = is_string($this->imageModel) ? ['class' => $this->imageModel] : $this->imageModel;
+            $config['yandexFotki'] = ArrayHelper::getValue($config, 'yandexFotki', $this);
+
+            $this->imageModel = \Yii::createObject($config);
+        }
+
+        return clone $this->imageModel;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setAddressBindingModel($addressBindingModel)
+    {
+        $this->addressBindingModel = $addressBindingModel;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setAlbumModel($albumModel)
+    {
+        $this->albumModel = $albumModel;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setAlbumPhotosCollectionModel($albumPhotosCollectionModel)
+    {
+        $this->albumPhotosCollectionModel = $albumPhotosCollectionModel;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setAuthorModel($authorModel)
+    {
+        $this->authorModel = $authorModel;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setPhotoModel($photoModel)
+    {
+        $this->photoModel = $photoModel;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setTagModel($tagModel)
+    {
+        $this->tagModel = $tagModel;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setPointModel($pointModel)
+    {
+        $this->pointModel = $pointModel;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setImageModel($imageModel)
+    {
+        $this->imageModel = $imageModel;
+    }
+
+    //endregion
 
     public function setAddressBindingValidator($value)
     {
@@ -408,6 +516,16 @@ class YandexFotki extends Component implements IYandexFotki
     public function getPointValidator()
     {
         return $this->_pointValidator;
+    }
+
+    public function setPhotoValidator($value)
+    {
+        $this->_photoValidator = $value;
+    }
+
+    public function getPhotoValidator()
+    {
+        return $this->_imageValidator;
     }
 
     public function setImageValidator($value)
