@@ -10,7 +10,7 @@ namespace romkaChev\yandexFotki\traits\parsers;
 
 
 use romkaChev\yandexFotki\interfaces\IYandexFotki;
-use romkaChev\yandexFotki\interfaces\models\IImage;
+use romkaChev\yandexFotki\interfaces\models\AbstractImage;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -22,16 +22,16 @@ use yii\helpers\ArrayHelper;
 trait ImagesParser
 {
     /**
-     * @param IImage $model
+     * @param AbstractImage $model
      *
      * @return \Closure
      */
-    public function getImagesParser(IImage $model)
+    public function getImagesParser(AbstractImage $model)
     {
         /**
          * @param $array
          *
-         * @return IImage[]
+         * @return AbstractImage[]
          */
         return function ($array) use ($model) {
             $images = [];

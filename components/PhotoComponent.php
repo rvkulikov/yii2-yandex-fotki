@@ -10,7 +10,7 @@ namespace romkaChev\yandexFotki\components;
 
 
 use romkaChev\yandexFotki\interfaces\components\IPhotoComponent;
-use romkaChev\yandexFotki\interfaces\models\IPhoto;
+use romkaChev\yandexFotki\interfaces\models\AbstractPhoto;
 use romkaChev\yandexFotki\models\Photo;
 use romkaChev\yandexFotki\traits\YandexFotkiAccess;
 use yii\base\Component;
@@ -18,7 +18,12 @@ use yii\helpers\ArrayHelper;
 use yii\httpclient\Request;
 use yii\httpclient\Response;
 
-class PhotoComponent extends Component implements IPhotoComponent
+/**
+ * Class PhotoComponent
+ *
+ * @package romkaChev\yandexFotki\components
+ */
+final class PhotoComponent extends Component implements IPhotoComponent
 {
 
     use YandexFotkiAccess;
@@ -30,32 +35,32 @@ class PhotoComponent extends Component implements IPhotoComponent
      */
     public function get($id)
     {
-        $httpClient = $this->yandexFotki->httpClient;
+        $httpClient = $this->yandexFotki->getHttpClient();
         $request    = $httpClient->get("photo/{$id}/", ['format' => 'json']);
         $response   = $request->send();
 
-        $photo = $this->yandexFotki->getPhotoModel();
+        $photo = $this->yandexFotki->getFactory()->getPhotoModel();
         $photo->loadWithData($response->getData());
 
         return $photo;
     }
 
     /**
-     * @param mixed $data
+     * @param mixed $options
      *
-     * @return IPhoto
+     * @return AbstractPhoto
      */
-    public function create($data)
+    public function create($options)
     {
         // TODO: Implement create() method.
     }
 
     /**
-     * @param mixed $data
+     * @param mixed $options
      *
-     * @return IPhoto
+     * @return AbstractPhoto
      */
-    public function update($data)
+    public function update($options)
     {
         // TODO: Implement update() method.
     }
@@ -63,7 +68,7 @@ class PhotoComponent extends Component implements IPhotoComponent
     /**
      * @param mixed $data
      *
-     * @return IPhoto
+     * @return AbstractPhoto
      */
     public function delete($data)
     {
@@ -75,7 +80,7 @@ class PhotoComponent extends Component implements IPhotoComponent
      */
     public function batchGet($ids)
     {
-        $httpClient = $this->yandexFotki->httpClient;
+        $httpClient = $this->yandexFotki->getHttpClient();
 
         /** @var Request[] $requests */
         $requests = array_map(function ($id) use ($httpClient) {
@@ -84,9 +89,9 @@ class PhotoComponent extends Component implements IPhotoComponent
 
         $responses = $httpClient->batchSend($requests);
 
-        /** @var IPhoto[] $models */
+        /** @var AbstractPhoto[] $models */
         $models = array_map(function (Response $response) {
-            $model = $this->yandexFotki->photoModel;
+            $model = $this->yandexFotki->getFactory()->getPhotoModel();
             $model->loadWithData($response->getData());
 
             return $model;
@@ -98,7 +103,7 @@ class PhotoComponent extends Component implements IPhotoComponent
     /**
      * @param $data
      *
-     * @return IPhoto[]
+     * @return AbstractPhoto[]
      */
     public function batchCreate($data)
     {
@@ -108,7 +113,7 @@ class PhotoComponent extends Component implements IPhotoComponent
     /**
      * @param $data
      *
-     * @return IPhoto[]
+     * @return AbstractPhoto[]
      */
     public function batchUpdate($data)
     {
@@ -118,7 +123,7 @@ class PhotoComponent extends Component implements IPhotoComponent
     /**
      * @param $data
      *
-     * @return IPhoto[]
+     * @return AbstractPhoto[]
      */
     public function batchDelete($data)
     {

@@ -9,7 +9,7 @@
 namespace romkaChev\yandexFotki\validators;
 
 
-use romkaChev\yandexFotki\interfaces\models\IPhoto;
+use romkaChev\yandexFotki\interfaces\models\AbstractPhoto;
 use yii\validators\Validator;
 
 /**
@@ -24,10 +24,10 @@ class PhotoValidator extends Validator
      */
     public function validateAttribute($model, $attribute)
     {
-        if (!$model->{$attribute} instanceof IPhoto) {
-            $instance = IPhoto::CLASS_NAME;
+        if (!$model->{$attribute} instanceof AbstractPhoto) {
+            $instance = AbstractPhoto::className();
             $given    = get_class($this->$attribute);
-            $this->addError($model, $attribute, "The point must be an instance of '{$instance}', '{$given}'");
+            $this->addError($model, $attribute, "{$attribute} must be an instance of '{$instance}', '{$given}' given.");
         }
     }
 }

@@ -9,7 +9,7 @@
 namespace romkaChev\yandexFotki\validators;
 
 
-use romkaChev\yandexFotki\interfaces\models\IAuthor;
+use romkaChev\yandexFotki\interfaces\models\AbstractAuthor;
 use yii\validators\Validator;
 
 class AuthorValidator extends Validator
@@ -19,10 +19,10 @@ class AuthorValidator extends Validator
      */
     public function validateAttribute($model, $attribute)
     {
-        if (!$this->$attribute instanceof IAuthor) {
-            $instance = IAuthor::CLASS_NAME;
-            $given    = gettype($this->$attribute);
-            $this->addError($model, $attribute, "The author must be an instance of {$instance}, {$given} given");
+        if (!$this->$attribute instanceof AbstractAuthor) {
+            $instance = AbstractAuthor::className();
+            $given    = get_class($this->$attribute);
+            $this->addError($model, $attribute, "{$attribute} must be an instance of '{$instance}', '{$given}' given.");
         }
     }
 }

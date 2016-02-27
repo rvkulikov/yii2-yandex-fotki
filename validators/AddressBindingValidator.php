@@ -9,7 +9,7 @@
 namespace romkaChev\yandexFotki\validators;
 
 
-use romkaChev\yandexFotki\interfaces\models\IAddressBinding;
+use romkaChev\yandexFotki\interfaces\models\AbstractAddressBinding;
 use yii\validators\Validator;
 
 class AddressBindingValidator extends Validator
@@ -20,11 +20,10 @@ class AddressBindingValidator extends Validator
      */
     public function validateAttribute($model, $attribute)
     {
-        if (!$this->$attribute instanceof IAddressBinding) {
-            $instance = IAddressBinding::CLASS_NAME;
-            $given    = gettype($this->$attribute);
-            $this->addError($model, $attribute,
-                "The addressBinding must be an instance of {$instance}, {$given} given");
+        if (!$this->$attribute instanceof AbstractAddressBinding) {
+            $instance = AbstractAddressBinding::className();
+            $given    = get_class($this->$attribute);
+            $this->addError($model, $attribute, "{$attribute} must be an instance of '{$instance}', '{$given}' given.");
         }
     }
 }

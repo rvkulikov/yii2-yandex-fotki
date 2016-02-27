@@ -9,7 +9,7 @@
 namespace romkaChev\yandexFotki\traits\parsers;
 
 
-use romkaChev\yandexFotki\interfaces\models\IPhoto;
+use romkaChev\yandexFotki\interfaces\models\AbstractPhoto;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -20,16 +20,16 @@ use yii\helpers\ArrayHelper;
 trait PhotosParser
 {
     /**
-     * @param IPhoto $model
+     * @param AbstractPhoto $model
      *
      * @return \Closure
      */
-    public function getPhotosParser(IPhoto $model)
+    public function getPhotosParser(AbstractPhoto $model)
     {
         /**
          * @param $array
          *
-         * @return IPhoto[]
+         * @return AbstractPhoto[]
          */
         return function ($array) use ($model) {
             $entries = ArrayHelper::getValue($array, 'entries');

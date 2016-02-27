@@ -10,8 +10,10 @@ namespace romkaChev\yandexFotki\components;
 
 
 use romkaChev\yandexFotki\interfaces\components\IAlbumComponent;
-use romkaChev\yandexFotki\interfaces\models\IAlbum;
-use romkaChev\yandexFotki\interfaces\models\IPhoto;
+use romkaChev\yandexFotki\interfaces\models\AbstractAlbum;
+use romkaChev\yandexFotki\interfaces\models\AbstractPhoto;
+use romkaChev\yandexFotki\interfaces\models\options\AbstractCreateAlbumOptions;
+use romkaChev\yandexFotki\interfaces\models\options\AbstractGetAlbumPhotosOptions;
 use romkaChev\yandexFotki\models\Album;
 use romkaChev\yandexFotki\models\options\GetAlbumPhotosOptions;
 use romkaChev\yandexFotki\traits\YandexFotkiAccess;
@@ -22,7 +24,12 @@ use yii\helpers\VarDumper;
 use yii\httpclient\Request;
 use yii\httpclient\Response;
 
-class AlbumComponent extends Component implements IAlbumComponent
+/**
+ * Class AlbumComponent
+ *
+ * @package romkaChev\yandexFotki\components
+ */
+final class AlbumComponent extends Component implements IAlbumComponent
 {
 
     use YandexFotkiAccess;
@@ -34,23 +41,23 @@ class AlbumComponent extends Component implements IAlbumComponent
      */
     public function get($id)
     {
-        $httpClient = $this->yandexFotki->httpClient;
+        $httpClient = $this->yandexFotki->getHttpClient();
         $request    = $httpClient->get("album/{$id}/", ['format' => 'json']);
         $response   = $request->send();
 
-        $album = $this->yandexFotki->albumModel;
+        $album = $this->yandexFotki->getFactory()->getAlbumModel();
         $album->loadWithData($response->getData());
 
         return $album;
     }
 
     /**
-     * @param int|string            $id
-     * @param GetAlbumPhotosOptions $options
+     * @param int|string                    $id
+     * @param AbstractGetAlbumPhotosOptions $options
      *
-     * @return IPhoto[]
+     * @return AbstractPhoto[]
      */
-    public function getPhotos($id, GetAlbumPhotosOptions $options = null)
+    public function getPhotos($id, AbstractGetAlbumPhotosOptions $options = null)
     {
         if ($options === null) {
             $options = GetAlbumPhotosOptions::createDefault();
@@ -62,7 +69,7 @@ class AlbumComponent extends Component implements IAlbumComponent
 
         $photos = [];
 
-        $httpClient = $this->yandexFotki->httpClient;
+        $httpClient = $this->yandexFotki->getHttpClient();
         $request    = $httpClient->get("album/{$id}/photos/{$options->sort}/", [
             'format'   => 'json',
             'limit'    => $options->limit,
@@ -72,7 +79,7 @@ class AlbumComponent extends Component implements IAlbumComponent
         do {
             $response = $request->send();
 
-            $photosCollection = $this->yandexFotki->albumPhotosCollectionModel;
+            $photosCollection = $this->yandexFotki->getFactory()->getAlbumPhotosCollectionModel();
             $photosCollection->loadWithData($response->getData());
 
             $photos  = ArrayHelper::merge($photos, $photosCollection->getPhotos());
@@ -84,21 +91,32 @@ class AlbumComponent extends Component implements IAlbumComponent
     }
 
     /**
-     * @param mixed $data
+     * @param AbstractCreateAlbumOptions $options
      *
-     * @return IAlbum
+     * @return AbstractAlbum
      */
-    public function create($data)
+    public function create(AbstractCreateAlbumOptions $options)
     {
-        // TODO: Implement create() method.
+        if (!$options->validate()) {
+            throw new InvalidParamException(VarDumper::dumpAsString($options->getErrors()));
+        }
+
+        $httpClient = $this->yandexFotki->getHttpClient();
+        $request    = $httpClient->post("albums/", $options->toArray());
+        $response   = $request->send();
+
+        $album = $this->yandexFotki->getFactory()->getAlbumModel();
+        $album->loadWithData($response->getData());
+
+        return $album;
     }
 
     /**
-     * @param mixed $data
+     * @param mixed $options
      *
-     * @return IAlbum
+     * @return AbstractAlbum
      */
-    public function update($data)
+    public function update($options)
     {
         // TODO: Implement update() method.
     }
@@ -106,7 +124,7 @@ class AlbumComponent extends Component implements IAlbumComponent
     /**
      * @param mixed $data
      *
-     * @return IAlbum
+     * @return AbstractAlbum
      */
     public function delete($data)
     {
@@ -128,7 +146,7 @@ class AlbumComponent extends Component implements IAlbumComponent
      */
     public function batchGet($ids)
     {
-        $httpClient = $this->yandexFotki->httpClient;
+        $httpClient = $this->yandexFotki->getHttpClient();
 
         /** @var Request[] $requests */
         $requests = array_map(function ($id) use ($httpClient) {
@@ -137,9 +155,9 @@ class AlbumComponent extends Component implements IAlbumComponent
 
         $responses = $httpClient->batchSend($requests);
 
-        /** @var IAlbum[] $models */
+        /** @var AbstractAlbum[] $models */
         $models = array_map(function (Response $response) {
-            $model = $this->yandexFotki->albumModel;
+            $model = $this->yandexFotki->getFactory()->getAlbumModel();
             $model->loadWithData($response->getData());
 
             return $model;
@@ -149,19 +167,38 @@ class AlbumComponent extends Component implements IAlbumComponent
     }
 
     /**
-     * @param $data
-     *
-     * @return IAlbum[]
+     * @inheritdoc
      */
-    public function batchCreate($data)
+    public function batchCreate(array $optionsArray)
     {
-        // TODO: Implement multiCreate() method.
+        $httpClient = $this->yandexFotki->getHttpClient();
+
+        $requests = [];
+        foreach ($optionsArray as $options) {
+            if (!$options->validate()) {
+                throw new InvalidParamException(VarDumper::dumpAsString($options->getErrors()));
+            }
+
+            $requests[] = $httpClient->post("albums/", $options->toArray());
+        }
+
+        $responses = $httpClient->batchSend($requests);
+
+        $albums = [];
+        foreach ($responses as $response) {
+            $album = $this->yandexFotki->getFactory()->getAlbumModel();
+            $album->loadWithData($response->getData());
+
+            $albums[] = $album;
+        };
+
+        return $albums;
     }
 
     /**
      * @param $data
      *
-     * @return IAlbum[]
+     * @return AbstractAlbum[]
      */
     public function batchUpdate($data)
     {
@@ -171,7 +208,7 @@ class AlbumComponent extends Component implements IAlbumComponent
     /**
      * @param $data
      *
-     * @return IAlbum[]
+     * @return AbstractAlbum[]
      */
     public function batchDelete($data)
     {

@@ -9,7 +9,7 @@
 namespace romkaChev\yandexFotki\validators;
 
 
-use romkaChev\yandexFotki\interfaces\models\IPoint;
+use romkaChev\yandexFotki\interfaces\models\AbstractPoint;
 use yii\validators\Validator;
 
 class PointValidator extends Validator
@@ -20,10 +20,10 @@ class PointValidator extends Validator
      */
     public function validateAttribute($model, $attribute)
     {
-        if (!$this->$attribute instanceof IPoint) {
-            $instance = IPoint::CLASS_NAME;
-            $given    = gettype($this->$attribute);
-            $this->addError($model, $attribute, "The point must be an instance of {$instance}, {$given} given");
+        if (!$this->$attribute instanceof AbstractPoint) {
+            $instance = AbstractPoint::className();
+            $given    = get_class($this->$attribute);
+            $this->addError($model, $attribute, "{$attribute} must be an instance of '{$instance}', '{$given}' given.");
         }
     }
 }

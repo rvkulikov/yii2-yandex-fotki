@@ -9,7 +9,7 @@
 namespace romkaChev\yandexFotki\tests\unit;
 
 
-use romkaChev\yandexFotki\YandexFotki;
+use romkaChev\yandexFotki\interfaces\IYandexFotki;
 use yii\console\Application;
 use yii\helpers\ArrayHelper;
 
@@ -24,7 +24,7 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return YandexFotki
+     * @return IYandexFotki
      */
     public function getComponent()
     {

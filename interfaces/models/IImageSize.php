@@ -8,7 +8,11 @@
 
 namespace romkaChev\yandexFotki\interfaces\models;
 
-
+/**
+ * Interface IImageSize
+ *
+ * @package romkaChev\yandexFotki\interfaces\models
+ */
 interface IImageSize
 {
     const SIZE_XXXS     = 'XXXS';

@@ -9,6 +9,7 @@
 namespace romkaChev\yandexFotki\tests\unit\yandexFotki\components;
 
 
+use romkaChev\yandexFotki\interfaces\models\options\AbstractCreateAlbumOptions;
 use romkaChev\yandexFotki\tests\unit\BaseTestCase;
 use yii\helpers\ArrayHelper;
 
@@ -24,25 +25,82 @@ class AlbumComponentTest extends BaseTestCase
 
     public function testGet()
     {
-        $albumComponent = $this->getComponent()->albums;
-        $album          = $albumComponent->get(487438);
-        $this->assertEquals(487438, $album->id);
+        $albumComponent = $this->getComponent()->getAlbums();
+        $model          = $albumComponent->get(487438);
+        $this->assertEquals(487438, $model->id);
     }
 
     public function testGetPhotos()
     {
-        $albumComponent = $this->getComponent()->albums;
-        $photos         = $albumComponent->getPhotos(488819);
+        $albumComponent = $this->getComponent()->getAlbums();
+        $model          = $albumComponent->getPhotos(488819);
 
-        $this->assertEquals(sort(array_keys($photos)), sort(ArrayHelper::getColumn($photos, 'id')));
+        $this->assertEquals(sort(array_keys($model)), sort(ArrayHelper::getColumn($model, 'id')));
     }
 
     public function testBatchGet()
     {
-        $albumComponent = $this->getComponent()->albums;
+        $albumComponent = $this->getComponent()->getAlbums();
         $models         = $albumComponent->batchGet([487438, 488819]);
 
         $this->assertArrayHasKey(487438, $models);
         $this->assertArrayHasKey(488819, $models);
+    }
+
+    public function testCreate()
+    {
+        $factory        = $this->getComponent()->getFactory();
+        $albumComponent = $this->getComponent()->getAlbums();
+
+        /** @var AbstractCreateAlbumOptions $options */
+        $options = \Yii::configure($factory->getCreateAlbumOptions(), [
+            'title'   => 'testCreate1_title',
+            'summary' => 'testCreate1_summary'
+        ]);
+
+        $model1 = $albumComponent->create($options);
+
+        $this->assertEquals('testCreate1_title', $model1->title);
+        $this->assertEquals('testCreate1_summary', $model1->summary);
+
+        /** @var AbstractCreateAlbumOptions $options */
+        $options = \Yii::configure($factory->getCreateAlbumOptions(), [
+            'title'    => 'testCreate2_title',
+            'summary'  => 'testCreate2_summary',
+            'parentId' => $model1->id
+        ]);
+
+        $model2 = $albumComponent->create($options);
+
+        $this->assertEquals('testCreate2_title', $model2->title);
+        $this->assertEquals('testCreate2_summary', $model2->summary);
+//        $this->assertEquals($model1->id, $model2->parentId); // todo
+
+    }
+
+    public function testBatchCreate()
+    {
+        $factory        = $this->getComponent()->getFactory();
+        $albumComponent = $this->getComponent()->getAlbums();
+
+        /** @var AbstractCreateAlbumOptions $options */
+        $options1 = \Yii::configure($factory->getCreateAlbumOptions(), [
+            'title'   => 'testBatchCreate1_title',
+            'summary' => 'testBatchCreate1_summary'
+        ]);
+
+        /** @var AbstractCreateAlbumOptions $options */
+        $options2 = \Yii::configure($factory->getCreateAlbumOptions(), [
+            'title'   => 'testBatchCreate2_title',
+            'summary' => 'testBatchCreate2_summary'
+        ]);
+
+        $models = $albumComponent->batchCreate([$options1, $options2]);
+
+        $titles    = ArrayHelper::getColumn($models, 'title');
+        $summaries = ArrayHelper::getColumn($models, 'summary');
+
+        $this->assertArraySubset($titles, ['testBatchCreate1_title', 'testBatchCreate2_title']);
+        $this->assertArraySubset($summaries, ['testBatchCreate1_summary', 'testBatchCreate2_summary']);
     }
 }

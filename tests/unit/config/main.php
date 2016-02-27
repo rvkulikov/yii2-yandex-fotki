@@ -9,11 +9,14 @@
 use romkaChev\yandexFotki\components\AlbumComponent;
 use romkaChev\yandexFotki\components\PhotoComponent;
 use romkaChev\yandexFotki\components\TagComponent;
+use romkaChev\yandexFotki\Factory;
 use romkaChev\yandexFotki\models\AddressBinding;
 use romkaChev\yandexFotki\models\Album;
 use romkaChev\yandexFotki\models\AlbumPhotosCollection;
 use romkaChev\yandexFotki\models\Author;
 use romkaChev\yandexFotki\models\Image;
+use romkaChev\yandexFotki\models\options\CreateAlbumOptions;
+use romkaChev\yandexFotki\models\options\GetAlbumPhotosOptions;
 use romkaChev\yandexFotki\models\Photo;
 use romkaChev\yandexFotki\models\Point;
 use romkaChev\yandexFotki\models\Tag;
@@ -36,26 +39,40 @@ return [
     ],
     'components' => [
         'yandexFotki' => [
-            'class'                      => YandexFotki::className(),
-            'login'                      => null, // set it in main-local.php
-            'oauthToken'                 => null, // set it in main-local.php
-            'albums'                     => AlbumComponent::className(),
-            'photos'                     => PhotoComponent::className(),
-            'tags'                       => TagComponent::className(),
-            'httpClient'                 => Client::className(),
-            'addressBindingModel'        => AddressBinding::className(),
-            'albumPhotosCollectionModel' => AlbumPhotosCollection::className(),
-            'albumModel'                 => Album::className(),
-            'authorModel'                => Author::className(),
-            'photoModel'                 => Photo::className(),
-            'tagModel'                   => Tag::className(),
-            'pointModel'                 => Point::className(),
-            'imageModel'                 => Image::className(),
-            'addressBindingValidator'    => AddressBindingValidator::className(),
-            'authorValidator'            => AuthorValidator::className(),
-            'pointValidator'             => PointValidator::className(),
-            'photoValidator'             => PhotoValidator::className(),
-            'imageValidator'             => ImageValidator::className(),
+            //@formatter:off
+            'class'      => YandexFotki::className(),
+
+            'login'      => null, // set it in main-local.php
+            'oauthToken' => null, // set it in main-local.php
+
+            'httpClient' => Client::className(),
+
+            'albums'     => AlbumComponent::className(),
+            'photos'     => PhotoComponent::className(),
+            'tags'       =>   TagComponent::className(),
+
+            'factory'    => [
+                'class'                      => Factory::className(),
+
+                'addressBindingModel'        =>        AddressBinding::className(),
+                'albumModel'                 =>                 Album::className(),
+                'albumPhotosCollectionModel' => AlbumPhotosCollection::className(),
+                'authorModel'                =>                Author::className(),
+                'photoModel'                 =>                 Photo::className(),
+                'tagModel'                   =>                   Tag::className(),
+                'pointModel'                 =>                 Point::className(),
+                'imageModel'                 =>                 Image::className(),
+
+                'createAlbumOptions'         =>    CreateAlbumOptions::className(),
+                'getAlbumPhotosOptions'      => GetAlbumPhotosOptions::className(),
+
+                'addressBindingValidator'    => AddressBindingValidator::className(),
+                'authorValidator'            =>         AuthorValidator::className(),
+                'pointValidator'             =>          PointValidator::className(),
+                'photoValidator'             =>          PhotoValidator::className(),
+                'imageValidator'             =>          ImageValidator::className(),
+            ],
+            //@formatter:on
         ],
     ],
 ];

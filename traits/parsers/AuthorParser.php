@@ -10,7 +10,7 @@ namespace romkaChev\yandexFotki\traits\parsers;
 
 
 use romkaChev\yandexFotki\interfaces\IYandexFotki;
-use romkaChev\yandexFotki\interfaces\models\IAuthor;
+use romkaChev\yandexFotki\interfaces\models\AbstractAuthor;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -23,11 +23,11 @@ use yii\helpers\ArrayHelper;
 trait AuthorParser
 {
     /**
-     * @param IAuthor $model
+     * @param AbstractAuthor $model
      *
      * @return \Closure
      */
-    public function getAuthorParser(IAuthor $model)
+    public function getAuthorParser(AbstractAuthor $model)
     {
         /**
          * @param $array

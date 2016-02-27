@@ -9,45 +9,14 @@
 namespace romkaChev\yandexFotki\models;
 
 
-use romkaChev\yandexFotki\interfaces\models\IAddressBinding;
-use romkaChev\yandexFotki\traits\parsers\PointParser;
-use romkaChev\yandexFotki\traits\YandexFotkiAccess;
-use yii\base\Model;
-use yii\helpers\ArrayHelper;
+use romkaChev\yandexFotki\interfaces\models\AbstractAddressBinding;
 
-class AddressBinding extends Model implements IAddressBinding
+/**
+ * Class AddressBinding
+ *
+ * @package romkaChev\yandexFotki\models
+ */
+class AddressBinding extends AbstractAddressBinding
 {
-    use YandexFotkiAccess, PointParser;
 
-    /** @var int */
-    public $organizationId;
-    /** @var string */
-    public $address;
-    /** @var Point */
-    public $point;
-
-    public function rules()
-    {
-        return [
-            ['organizationId', 'integer'],
-            ['address', 'string'],
-            ['point', $this->yandexFotki->pointValidator],
-        ];
-    }
-
-    /**
-     * @param $data
-     *
-     * @return $this
-     */
-    public function loadWithData($data)
-    {
-        \Yii::configure($this, [
-            'organizationId' => ArrayHelper::getValue($data, 'organizationId'),
-            'address'        => ArrayHelper::getValue($data, 'address'),
-            'point'          => ArrayHelper::getValue($data, $this->getPointParser($this->yandexFotki->pointModel)),
-        ]);
-
-        return $this;
-    }
 }

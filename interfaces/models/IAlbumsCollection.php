@@ -15,16 +15,16 @@ use romkaChev\yandexFotki\interfaces\IYandexFotkiAccess;
  *
  * @package romkaChev\yandexFotki\interfaces\models
  *
- * @property string   urn
- * @property IAuthor  author
- * @property string   title
+ * @property string          urn
+ * @property AbstractAuthor  author
+ * @property string          title
  *
- * @property IAlbum[] albums
+ * @property AbstractAlbum[] albums
  *
- * @property string   updatedAt
+ * @property string          updatedAt
  *
- * @property string   linkSelf
- * @property string   linkAlternate
+ * @property string          linkSelf
+ * @property string          linkAlternate
  */
 interface IAlbumsCollection extends IYandexFotkiAccess
 {

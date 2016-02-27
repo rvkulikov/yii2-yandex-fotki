@@ -10,14 +10,19 @@ namespace romkaChev\yandexFotki\components;
 
 
 use romkaChev\yandexFotki\interfaces\components\ITagComponent;
-use romkaChev\yandexFotki\interfaces\models\ITag;
+use romkaChev\yandexFotki\interfaces\models\AbstractTag;
 use romkaChev\yandexFotki\traits\YandexFotkiAccess;
 use yii\base\Component;
 use yii\helpers\ArrayHelper;
 use yii\httpclient\Request;
 use yii\httpclient\Response;
 
-class TagComponent extends Component implements ITagComponent
+/**
+ * Class TagComponent
+ *
+ * @package romkaChev\yandexFotki\components
+ */
+final class TagComponent extends Component implements ITagComponent
 {
 
     use YandexFotkiAccess;
@@ -27,32 +32,32 @@ class TagComponent extends Component implements ITagComponent
      */
     public function get($id)
     {
-        $httpClient = $this->yandexFotki->httpClient;
+        $httpClient = $this->yandexFotki->getHttpClient();
         $request    = $httpClient->get("tag/{$id}/", ['format' => 'json']);
         $response   = $request->send();
 
-        $tag = $this->yandexFotki->getTagModel();
+        $tag = $this->yandexFotki->getFactory()->getTagModel();
         $tag->loadWithData($response->getData());
 
         return $tag;
     }
 
     /**
-     * @param mixed $data
+     * @param mixed $options
      *
-     * @return ITag
+     * @return AbstractTag
      */
-    public function create($data)
+    public function create($options)
     {
         // TODO: Implement create() method.
     }
 
     /**
-     * @param mixed $data
+     * @param mixed $options
      *
-     * @return ITag
+     * @return AbstractTag
      */
-    public function update($data)
+    public function update($options)
     {
         // TODO: Implement update() method.
     }
@@ -60,7 +65,7 @@ class TagComponent extends Component implements ITagComponent
     /**
      * @param mixed $data
      *
-     * @return ITag
+     * @return AbstractTag
      */
     public function delete($data)
     {
@@ -72,7 +77,7 @@ class TagComponent extends Component implements ITagComponent
      */
     public function batchGet($ids)
     {
-        $httpClient = $this->yandexFotki->httpClient;
+        $httpClient = $this->yandexFotki->getHttpClient();
 
         /** @var Request[] $requests */
         $requests = array_map(function ($id) use ($httpClient) {
@@ -81,9 +86,9 @@ class TagComponent extends Component implements ITagComponent
 
         $responses = $httpClient->batchSend($requests);
 
-        /** @var ITag[] $models */
+        /** @var AbstractTag[] $models */
         $models = array_map(function (Response $response) {
-            $model = $this->yandexFotki->tagModel;
+            $model = $this->yandexFotki->getFactory()->getTagModel();
             $model->loadWithData($response->getData());
 
             return $model;
@@ -95,7 +100,7 @@ class TagComponent extends Component implements ITagComponent
     /**
      * @param $data
      *
-     * @return ITag[]
+     * @return AbstractTag[]
      */
     public function batchCreate($data)
     {
@@ -105,7 +110,7 @@ class TagComponent extends Component implements ITagComponent
     /**
      * @param $data
      *
-     * @return ITag[]
+     * @return AbstractTag[]
      */
     public function batchUpdate($data)
     {
@@ -115,7 +120,7 @@ class TagComponent extends Component implements ITagComponent
     /**
      * @param $data
      *
-     * @return ITag[]
+     * @return AbstractTag[]
      */
     public function batchDelete($data)
     {

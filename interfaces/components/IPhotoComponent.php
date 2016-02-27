@@ -9,66 +9,68 @@
 namespace romkaChev\yandexFotki\interfaces\components;
 
 
-use romkaChev\yandexFotki\interfaces\models\IPhoto;
+use romkaChev\yandexFotki\interfaces\models\AbstractPhoto;
 
-interface IPhotoComponent extends ICrudComponent
+/**
+ * Interface IPhotoComponent
+ *
+ * @package romkaChev\yandexFotki\interfaces\components
+ */
+interface IPhotoComponent
 {
-
-    const CLASS_NAME = __CLASS__;
-
     /**
      * @param int|string $id
      *
-     * @return IPhoto
+     * @return AbstractPhoto
      */
     public function get($id);
 
     /**
-     * @param mixed $data
+     * @param mixed $options
      *
-     * @return IPhoto
+     * @return AbstractPhoto
      */
-    public function create($data);
+    public function create($options);
+
+    /**
+     * @param mixed $options
+     *
+     * @return AbstractPhoto
+     */
+    public function update($options);
 
     /**
      * @param mixed $data
      *
-     * @return IPhoto
-     */
-    public function update($data);
-
-    /**
-     * @param mixed $data
-     *
-     * @return IPhoto
+     * @return AbstractPhoto
      */
     public function delete($data);
 
     /**
      * @param $ids
      *
-     * @return IPhoto[]
+     * @return AbstractPhoto[]
      */
     public function batchGet($ids);
 
     /**
      * @param $data
      *
-     * @return IPhoto[]
+     * @return AbstractPhoto[]
      */
     public function batchCreate($data);
 
     /**
      * @param $data
      *
-     * @return IPhoto[]
+     * @return AbstractPhoto[]
      */
     public function batchUpdate($data);
 
     /**
      * @param $data
      *
-     * @return IPhoto[]
+     * @return AbstractPhoto[]
      */
     public function batchDelete($data);
 }

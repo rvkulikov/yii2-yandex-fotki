@@ -16,14 +16,14 @@ class TagComponentTest extends BaseTestCase
 
     public function testGet()
     {
-        $tagComponent = $this->getComponent()->tags;
+        $tagComponent = $this->getComponent()->getTags();
         $tag          = $tagComponent->get('common');
         $this->assertEquals('common', $tag->title);
     }
 
     public function testBatchGet()
     {
-        $tagComponent = $this->getComponent()->tags;
+        $tagComponent = $this->getComponent()->getTags();
         $models       = $tagComponent->batchGet(['foo', 'bar']);
 
         $this->assertArrayHasKey('foo', $models);

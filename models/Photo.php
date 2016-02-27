@@ -9,131 +9,13 @@
 namespace romkaChev\yandexFotki\models;
 
 
-use romkaChev\yandexFotki\interfaces\models\IPhoto;
-use romkaChev\yandexFotki\traits\parsers\AddressBindingParser;
-use romkaChev\yandexFotki\traits\parsers\AuthorParser;
-use romkaChev\yandexFotki\traits\parsers\DateParser;
-use romkaChev\yandexFotki\traits\parsers\ImagesParser;
-use romkaChev\yandexFotki\traits\parsers\PointParser;
-use romkaChev\yandexFotki\traits\YandexFotkiAccess;
-use yii\base\Model;
-use yii\helpers\ArrayHelper;
+use romkaChev\yandexFotki\interfaces\models\AbstractPhoto;
 
-class Photo extends Model implements IPhoto
+/**
+ * Class Photo
+ *
+ * @package romkaChev\yandexFotki\models
+ */
+class Photo extends AbstractPhoto
 {
-    use YandexFotkiAccess, AuthorParser, ImagesParser, PointParser, AddressBindingParser, DateParser;
-
-    /** @var string */
-    public $urn;
-    /** @var int */
-    public $id;
-    /** @var Author */
-    public $author;
-    /** @var string */
-    public $access;
-    /** @var bool */
-    public $isForAdult;
-    /** @var bool */
-    public $isHideOriginal;
-    /** @var bool */
-    public $isDisableComments;
-    /** @var Image[] */
-    public $images;
-    /** @var Point */
-    public $point;
-    /** @var AddressBinding */
-    public $addressBinding;
-    /** @var string */
-    public $publishedAt;
-    /** @var string */
-    public $updatedAt;
-    /** @var string */
-    public $editedAt;
-    /** @var string */
-    public $linkSelf;
-    /** @var string */
-    public $linkEdit;
-    /** @var string */
-    public $linkAlternate;
-    /** @var string */
-    public $linkEditMedia;
-    /** @var string */
-    public $linkAlbum;
-
-    /**
-     * @inheritdoc
-     */
-    public function rules()
-    {
-        return [
-            ['urn', 'string'],
-            ['id', 'integer'],
-            ['author', $this->yandexFotki->authorValidator],
-            ['access', 'string'],
-            ['isForAdult', 'boolean'],
-            ['isHideOriginal', 'boolean'],
-            ['isDisableComments', 'boolean'],
-            ['images', 'each', 'rule' => [$this->yandexFotki->imageValidator]],
-            ['point', $this->yandexFotki->pointValidator],
-            ['addressBinding', $this->yandexFotki->addressBindingValidator],
-            ['publishedAt', 'string'],
-            ['updatedAt', 'string'],
-            ['editedAt', 'string'],
-            ['linkSelf', 'string'],
-            ['linkEdit', 'string'],
-            ['linkAlternate', 'string'],
-            ['linkEditMedia', 'string'],
-            ['linkAlbum', 'string'],
-        ];
-    }
-
-    /**
-     * @param array $data
-     *
-     * @return $this
-     */
-    public function loadWithData($data)
-    {
-        \Yii::configure($this, [
-            'urn'               => ArrayHelper::getValue($data, 'id'),
-            'id'                => ArrayHelper::getValue($data, $this->getIdParser()),
-            'author'            => ArrayHelper::getValue($data, $this->getAuthorParser($this->yandexFotki->authorModel)),
-            'access'            => ArrayHelper::getValue($data, 'access'),
-            'isForAdult'        => ArrayHelper::getValue($data, 'xxx', false),
-            'isHideOriginal'    => ArrayHelper::getValue($data, 'hide_original', false),
-            'isDisableComments' => ArrayHelper::getValue($data, 'disable_comments', false),
-            'images'            => ArrayHelper::getValue($data, $this->getImagesParser($this->yandexFotki->imageModel)),
-            'point'             => ArrayHelper::getValue($data, $this->getPointParser($this->yandexFotki->pointModel)),
-            'addressBinding'    => ArrayHelper::getValue($data, $this->getAddressBindingParser($this->yandexFotki->addressBindingModel)),
-            'publishedAt'       => ArrayHelper::getValue($data, $this->getDateParser('published')),
-            'updatedAt'         => ArrayHelper::getValue($data, $this->getDateParser('updated')),
-            'editedAt'          => ArrayHelper::getValue($data, $this->getDateParser('edited')),
-            'linkSelf'          => ArrayHelper::getValue($data, 'links.self'),
-            'linkEdit'          => ArrayHelper::getValue($data, 'links.edit'),
-            'linkAlternate'     => ArrayHelper::getValue($data, 'links.alternate'),
-            'linkEditMedia'     => ArrayHelper::getValue($data, 'links.edit-media'),
-            'linkAlbum'         => ArrayHelper::getValue($data, 'links.album'),
-        ]);
-
-        return $this;
-    }
-
-    /**
-     * @return \Closure
-     */
-    public function getIdParser()
-    {
-        /**
-         * @param $array
-         * @param $defaultValue
-         *
-         * @return mixed
-         */
-        return function ($array, $defaultValue) {
-            $value = ArrayHelper::getValue($array, 'id');
-            preg_match('/^urn:yandex:fotki:([^:]*):photo:(?<id>\d+)$/', $value, $matches);
-
-            return intval(ArrayHelper::getValue($matches, 'id')) ?: $defaultValue;
-        };
-    }
 }

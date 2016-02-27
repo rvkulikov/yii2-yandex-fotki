@@ -9,7 +9,7 @@
 namespace romkaChev\yandexFotki\validators;
 
 
-use romkaChev\yandexFotki\interfaces\models\IImage;
+use romkaChev\yandexFotki\interfaces\models\AbstractImage;
 use yii\validators\Validator;
 
 class ImageValidator extends Validator
@@ -19,10 +19,10 @@ class ImageValidator extends Validator
      */
     public function validateAttribute($model, $attribute)
     {
-        if (!$this->$attribute instanceof IImage) {
-            $instance = IImage::CLASS_NAME;
-            $given    = gettype($this->$attribute);
-            $this->addError($model, $attribute, "The image must be an instance of {$instance}, {$given} given");
+        if (!$this->$attribute instanceof AbstractImage) {
+            $instance = AbstractImage::className();
+            $given    = get_class($this->$attribute);
+            $this->addError($model, $attribute, "{$attribute} must be an instance of '{$instance}', '{$given}' given.");
         }
     }
 

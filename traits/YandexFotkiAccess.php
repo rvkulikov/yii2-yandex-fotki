@@ -11,29 +11,27 @@ namespace romkaChev\yandexFotki\traits;
 
 use InvalidArgumentException;
 use romkaChev\yandexFotki\interfaces\IYandexFotki;
-use romkaChev\yandexFotki\YandexFotki;
 use yii\base\InvalidConfigException;
 
 /**
- * Class ModuleAccess
+ * Class YandexFotkiAccess
  *
  * @package romkaChev\yandexFotki\traits
- * @property YandexFotki yandexFotki
  */
 trait YandexFotkiAccess
 {
 
     /**
-     * @var YandexFotki
+     * @var IYandexFotki
      */
-    private $_yandexFotki;
+    protected $yandexFotki;
 
     /**
-     * @return YandexFotki
+     * @return IYandexFotki
      */
     public function getYandexFotki()
     {
-        return $this->_yandexFotki;
+        return $this->yandexFotki;
     }
 
     /**
@@ -49,12 +47,12 @@ trait YandexFotkiAccess
         }
 
         if (!$value instanceof IYandexFotki) {
-            $instance = IYandexFotki::CLASS_NAME;
-            $given    = gettype($value);
+            $instance = '\romkaChev\yandexFotki\interfaces\IYandexFotki'; // todo hardcode
+            $given    = get_class($value);
             throw new InvalidArgumentException("Value must be an instance of '{$instance}', '{$given}' given.");
         }
 
-        $this->_yandexFotki = $value;
+        $this->yandexFotki = $value;
 
         return $this;
     }

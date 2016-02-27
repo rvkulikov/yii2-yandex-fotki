@@ -9,48 +9,52 @@
 namespace romkaChev\yandexFotki\interfaces\components;
 
 
-use romkaChev\yandexFotki\interfaces\models\IAlbum;
-use romkaChev\yandexFotki\interfaces\models\IPhoto;
-use romkaChev\yandexFotki\models\options\GetAlbumPhotosOptions;
+use romkaChev\yandexFotki\interfaces\models\AbstractAlbum;
+use romkaChev\yandexFotki\interfaces\models\AbstractPhoto;
+use romkaChev\yandexFotki\interfaces\models\options\AbstractCreateAlbumOptions;
+use romkaChev\yandexFotki\interfaces\models\options\AbstractGetAlbumPhotosOptions;
+use romkaChev\yandexFotki\models\options\CreateAlbumOptions;
 
-interface IAlbumComponent extends ICrudComponent
+/**
+ * Interface IAlbumComponent
+ *
+ * @package romkaChev\yandexFotki\interfaces\components
+ */
+interface IAlbumComponent
 {
-
-    const CLASS_NAME = __CLASS__;
-
     /**
      * @param int|string $id
      *
-     * @return IAlbum
+     * @return AbstractAlbum
      */
     public function get($id);
 
     /**
-     * @param int|string            $id
-     * @param GetAlbumPhotosOptions $options
+     * @param int|string                    $id
+     * @param AbstractGetAlbumPhotosOptions $options
      *
-     * @return IPhoto[]
+     * @return AbstractPhoto[]
      */
-    public function getPhotos($id, GetAlbumPhotosOptions $options = null);
+    public function getPhotos($id, AbstractGetAlbumPhotosOptions $options = null);
+
+    /**
+     * @param AbstractCreateAlbumOptions $options
+     *
+     * @return AbstractAlbum
+     */
+    public function create(AbstractCreateAlbumOptions $options);
+
+    /**
+     * @param mixed $options
+     *
+     * @return AbstractAlbum
+     */
+    public function update($options);
 
     /**
      * @param mixed $data
      *
-     * @return IAlbum
-     */
-    public function create($data);
-
-    /**
-     * @param mixed $data
-     *
-     * @return IAlbum
-     */
-    public function update($data);
-
-    /**
-     * @param mixed $data
-     *
-     * @return IAlbum
+     * @return AbstractAlbum
      */
     public function delete($data);
 
@@ -64,28 +68,28 @@ interface IAlbumComponent extends ICrudComponent
     /**
      * @param $ids
      *
-     * @return IAlbum[]
+     * @return AbstractAlbum[]
      */
     public function batchGet($ids);
 
     /**
-     * @param $data
+     * @param CreateAlbumOptions[] $optionsArray
      *
-     * @return IAlbum[]
+     * @return AbstractAlbum[]
      */
-    public function batchCreate($data);
+    public function batchCreate(array $optionsArray);
 
     /**
      * @param $data
      *
-     * @return IAlbum[]
+     * @return AbstractAlbum[]
      */
     public function batchUpdate($data);
 
     /**
      * @param $data
      *
-     * @return IAlbum[]
+     * @return AbstractAlbum[]
      */
     public function batchDelete($data);
 

@@ -9,60 +9,8 @@
 namespace romkaChev\yandexFotki\models;
 
 
-use romkaChev\yandexFotki\interfaces\models\IAuthor;
-use romkaChev\yandexFotki\traits\YandexFotkiAccess;
-use yii\base\Model;
-use yii\helpers\ArrayHelper;
+use romkaChev\yandexFotki\interfaces\models\AbstractAuthor;
 
-class Author extends Model implements IAuthor
+class Author extends AbstractAuthor
 {
-    use YandexFotkiAccess;
-
-    /** @var string */
-    public $name;
-    /** @var int */
-    public $uid;
-
-    /**
-     * @inheritdoc
-     */
-    public function rules()
-    {
-        return [
-            ['name', 'string'],
-            ['uid', 'integer'],
-        ];
-    }
-
-    /**
-     * @param array $data
-     *
-     * @return static
-     */
-    public function loadWithData($data)
-    {
-        \Yii::configure($this, [
-            'name' => ArrayHelper::getValue($data, 'name'),
-            'uid'  => ArrayHelper::getValue($data, $this->getUidParser()),
-        ]);
-
-        return $this;
-    }
-
-    /**
-     * @return \Closure
-     */
-    public function getUidParser()
-    {
-
-        /**
-         * @param $array
-         * @param $defaultValue
-         *
-         * @return mixed
-         */
-        return function ($array, $defaultValue) {
-            return intval(ArrayHelper::getValue($array, 'uid')) ?: $defaultValue;
-        };
-    }
 }

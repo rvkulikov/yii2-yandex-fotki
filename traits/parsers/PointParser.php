@@ -9,7 +9,7 @@
 namespace romkaChev\yandexFotki\traits\parsers;
 
 
-use romkaChev\yandexFotki\interfaces\models\IPoint;
+use romkaChev\yandexFotki\interfaces\models\AbstractPoint;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -20,11 +20,11 @@ use yii\helpers\ArrayHelper;
 trait PointParser
 {
     /**
-     * @param IPoint $model
+     * @param AbstractPoint $model
      *
      * @return \Closure
      */
-    public function getPointParser(IPoint $model)
+    public function getPointParser(AbstractPoint $model)
     {
         /**
          * @param $array

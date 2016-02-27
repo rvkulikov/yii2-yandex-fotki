@@ -9,66 +9,68 @@
 namespace romkaChev\yandexFotki\interfaces\components;
 
 
-use romkaChev\yandexFotki\interfaces\models\ITag;
+use romkaChev\yandexFotki\interfaces\models\AbstractTag;
 
-interface ITagComponent extends ICrudComponent
+/**
+ * Interface ITagComponent
+ *
+ * @package romkaChev\yandexFotki\interfaces\components
+ */
+interface ITagComponent
 {
-
-    const CLASS_NAME = __CLASS__;
-
     /**
      * @param string $id
      *
-     * @return ITag
+     * @return AbstractTag
      */
     public function get($id);
 
     /**
-     * @param mixed $data
+     * @param mixed $options
      *
-     * @return ITag
+     * @return AbstractTag
      */
-    public function create($data);
+    public function create($options);
+
+    /**
+     * @param mixed $options
+     *
+     * @return AbstractTag
+     */
+    public function update($options);
 
     /**
      * @param mixed $data
      *
-     * @return ITag
-     */
-    public function update($data);
-
-    /**
-     * @param mixed $data
-     *
-     * @return ITag
+     * @return AbstractTag
      */
     public function delete($data);
 
     /**
      * @param $ids
      *
-     * @return ITag[]
+     * @return AbstractTag[]
      */
     public function batchGet($ids);
 
     /**
      * @param $data
      *
-     * @return ITag[]
+     * @return AbstractTag[]
      */
     public function batchCreate($data);
 
     /**
      * @param $data
      *
-     * @return ITag[]
+     * @return AbstractTag[]
      */
     public function batchUpdate($data);
 
     /**
      * @param $data
      *
-     * @return ITag[]
+     * @return AbstractTag[]
      */
     public function batchDelete($data);
 }
