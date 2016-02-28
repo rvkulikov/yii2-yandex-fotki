@@ -10,6 +10,7 @@ namespace romkaChev\yandexFotki\interfaces\models;
 
 use DateTime;
 use romkaChev\yandexFotki\interfaces\LoadableWithData;
+use romkaChev\yandexFotki\interfaces\models\options\AbstractGetTagPhotosOptions;
 use romkaChev\yandexFotki\traits\parsers\AuthorParser;
 use romkaChev\yandexFotki\traits\parsers\DateParser;
 use yii\helpers\ArrayHelper;
@@ -41,6 +42,8 @@ abstract class AbstractTag extends AbstractModel implements LoadableWithData
     public $linkPhotos;
     /** @var string */
     public $linkAlternate;
+    /** @var AbstractPhoto[] */
+    protected $photos;
 
     /**
      * @inheritdoc
@@ -74,6 +77,8 @@ abstract class AbstractTag extends AbstractModel implements LoadableWithData
 
             ['linkAlternate', 'url'],
             ['linkAlternate', 'default', 'value' => function(){return $this->defaultLinkAlternate();}],
+            
+            ['photos', 'each', 'rule' => [$this->getYandexFotki()->getFactory()->getPhotoValidator()]]
             //@formatter:on
         ];
     }
@@ -190,6 +195,19 @@ abstract class AbstractTag extends AbstractModel implements LoadableWithData
         }
 
         return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getPhotos(AbstractGetTagPhotosOptions $options = null)
+    {
+        if (!$this->photos) {
+            $component    = $this->getYandexFotki()->getTags();
+            $this->photos = $component->getPhotos($this->id, $options);
+        }
+
+        return $this->photos;
     }
 
     /**

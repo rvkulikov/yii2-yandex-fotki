@@ -18,9 +18,11 @@ use romkaChev\yandexFotki\interfaces\models\AbstractImage;
 use romkaChev\yandexFotki\interfaces\models\AbstractPhoto;
 use romkaChev\yandexFotki\interfaces\models\AbstractPoint;
 use romkaChev\yandexFotki\interfaces\models\AbstractTag;
+use romkaChev\yandexFotki\interfaces\models\AbstractTagPhotosCollection;
 use romkaChev\yandexFotki\interfaces\models\options\AbstractCreateAlbumOptions;
 use romkaChev\yandexFotki\interfaces\models\options\AbstractCreatePhotoOptions;
 use romkaChev\yandexFotki\interfaces\models\options\AbstractGetAlbumPhotosOptions;
+use romkaChev\yandexFotki\interfaces\models\options\AbstractGetTagPhotosOptions;
 use romkaChev\yandexFotki\traits\YandexFotkiAccess;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
@@ -50,6 +52,8 @@ final class Factory extends Component implements IFactory
     private $photoModel;
     /** @var AbstractTag */
     private $tagModel;
+    /** @var AbstractTagPhotosCollection */
+    private $tagPhotosCollectionModel;
     /** @var AbstractPoint */
     private $pointModel;
     /** @var AbstractImage */
@@ -63,6 +67,8 @@ final class Factory extends Component implements IFactory
     private $getAlbumPhotosOptions;
     /** @var AbstractCreatePhotoOptions */
     private $createPhotoOptions;
+    /** @var AbstractGetTagPhotosOptions */
+    private $getTagPhotosOptions;
     //</editor-fold>
 
     //<editor-fold desc="Validators">
@@ -203,6 +209,26 @@ final class Factory extends Component implements IFactory
     /**
      * @inheritdoc
      */
+    public function getTagPhotosCollectionModel()
+    {
+        $this->preProcessConfigurableItem('tagPhotosCollectionModel', AbstractTagPhotosCollection::className());
+
+        return $this->tagPhotosCollectionModel;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setTagPhotosCollectionModel($tagPhotosCollectionModel)
+    {
+        $this->tagPhotosCollectionModel = $tagPhotosCollectionModel;
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getPointModel()
     {
         $this->preProcessConfigurableItem('pointModel', AbstractPoint::className());
@@ -300,6 +326,26 @@ final class Factory extends Component implements IFactory
     public function setCreatePhotoOptions($createPhotoOptions)
     {
         $this->createPhotoOptions = $createPhotoOptions;
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getGetTagPhotosOptions()
+    {
+        $this->preProcessConfigurableItem('getTagPhotosOptions', AbstractGetTagPhotosOptions::className());
+
+        return clone $this->getTagPhotosOptions;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setGetTagPhotosOptions($getTagPhotosOptions)
+    {
+        $this->getTagPhotosOptions = $getTagPhotosOptions;
 
         return $this;
     }

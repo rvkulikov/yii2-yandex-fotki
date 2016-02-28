@@ -10,10 +10,14 @@ namespace romkaChev\yandexFotki\components;
 
 
 use romkaChev\yandexFotki\interfaces\components\ITagComponent;
+use romkaChev\yandexFotki\interfaces\models\AbstractPhoto;
 use romkaChev\yandexFotki\interfaces\models\AbstractTag;
+use romkaChev\yandexFotki\interfaces\models\options\AbstractGetTagPhotosOptions;
 use romkaChev\yandexFotki\traits\YandexFotkiAccess;
 use yii\base\Component;
+use yii\base\InvalidParamException;
 use yii\helpers\ArrayHelper;
+use yii\helpers\VarDumper;
 use yii\httpclient\Request;
 
 /**
@@ -31,6 +35,8 @@ final class TagComponent extends Component implements ITagComponent
      */
     public function get($id)
     {
+        $id = urlencode($id);
+
         $httpClient = $this->yandexFotki->getApiHttpClient();
         $request    = $httpClient->get("tag/{$id}/", ['format' => 'json']);
         $response   = $request->send();
@@ -39,6 +45,43 @@ final class TagComponent extends Component implements ITagComponent
         $tag->loadWithData($response->getData(), true);
 
         return $tag;
+    }
+
+    /**
+     * @param int|string                  $id
+     * @param AbstractGetTagPhotosOptions $options
+     *
+     * @return AbstractPhoto[]
+     */
+    public function getPhotos($id, AbstractGetTagPhotosOptions $options = null)
+    {
+        $id      = urlencode($id);
+        $options = $options ?: AbstractGetTagPhotosOptions::createDefault();
+
+        if (!$options->validate()) {
+            throw new InvalidParamException(VarDumper::dumpAsString($options->getErrors()));
+        }
+
+        $photos = [];
+
+        $httpClient = $this->yandexFotki->getApiHttpClient();
+        $request    = $httpClient->get("tag/{$id}/photos/{$options->sort}/", [
+            'format' => 'json',
+            'limit'  => $options->limit
+        ]);
+
+        do {
+            $response = $request->send();
+
+            $photosCollection = $this->yandexFotki->getFactory()->getTagPhotosCollectionModel();
+            $photosCollection->loadWithData($response->getData(), true);
+
+            $photos  = ArrayHelper::merge($photos, $photosCollection->getPhotos());
+            $request = $httpClient->get($photosCollection->linkNext);
+
+        } while ($photosCollection->linkNext);
+
+        return $photos;
     }
 
     /**

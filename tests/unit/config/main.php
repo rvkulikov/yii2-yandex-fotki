@@ -21,6 +21,7 @@ use romkaChev\yandexFotki\models\options\GetAlbumPhotosOptions;
 use romkaChev\yandexFotki\models\Photo;
 use romkaChev\yandexFotki\models\Point;
 use romkaChev\yandexFotki\models\Tag;
+use romkaChev\yandexFotki\models\TagPhotosCollection;
 use romkaChev\yandexFotki\validators\AddressBindingValidator;
 use romkaChev\yandexFotki\validators\AuthorValidator;
 use romkaChev\yandexFotki\validators\ImageValidator;
@@ -68,6 +69,7 @@ return [
                 'authorModel'                =>                Author::className(),
                 'photoModel'                 =>                 Photo::className(),
                 'tagModel'                   =>                   Tag::className(),
+                'tagPhotosCollectionModel'   =>   TagPhotosCollection::className(),
                 'pointModel'                 =>                 Point::className(),
                 'imageModel'                 =>                 Image::className(),
 

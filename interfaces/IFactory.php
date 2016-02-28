@@ -17,9 +17,11 @@ use romkaChev\yandexFotki\interfaces\models\AbstractImage;
 use romkaChev\yandexFotki\interfaces\models\AbstractPhoto;
 use romkaChev\yandexFotki\interfaces\models\AbstractPoint;
 use romkaChev\yandexFotki\interfaces\models\AbstractTag;
+use romkaChev\yandexFotki\interfaces\models\AbstractTagPhotosCollection;
 use romkaChev\yandexFotki\interfaces\models\options\AbstractCreateAlbumOptions;
 use romkaChev\yandexFotki\interfaces\models\options\AbstractCreatePhotoOptions;
 use romkaChev\yandexFotki\interfaces\models\options\AbstractGetAlbumPhotosOptions;
+use romkaChev\yandexFotki\interfaces\models\options\AbstractGetTagPhotosOptions;
 use yii\base\InvalidConfigException;
 use yii\validators\Validator;
 
@@ -108,6 +110,18 @@ interface IFactory extends IYandexFotkiAccess
     public function setTagModel($tagModel);
 
     /**
+     * @return AbstractTagPhotosCollection
+     */
+    public function getTagPhotosCollectionModel();
+
+    /**
+     * @param AbstractTagPhotosCollection $tagPhotosCollectionModel
+     *
+     * @return static
+     */
+    public function setTagPhotosCollectionModel($tagPhotosCollectionModel);
+
+    /**
      * @return AbstractPoint
      * @throws InvalidConfigException
      */
@@ -173,6 +187,18 @@ interface IFactory extends IYandexFotkiAccess
      * @return static
      */
     public function setCreatePhotoOptions($createPhotoOptions);
+
+    /**
+     * @return AbstractGetTagPhotosOptions
+     */
+    public function getGetTagPhotosOptions();
+
+    /**
+     * @param AbstractGetTagPhotosOptions $getTagPhotosOptions
+     *
+     * @return static
+     */
+    public function setGetTagPhotosOptions($getTagPhotosOptions);
 
     //</editor-fold>
 

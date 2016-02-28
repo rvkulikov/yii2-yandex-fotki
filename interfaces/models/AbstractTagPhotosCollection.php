@@ -3,26 +3,27 @@
  * Created by PhpStorm.
  * User: Roman
  * Date: 17.12.2015
- * Time: 9:03
+ * Time: 9:59
  */
 
 namespace romkaChev\yandexFotki\interfaces\models;
 
 use DateTime;
 use romkaChev\yandexFotki\interfaces\LoadableWithData;
-use romkaChev\yandexFotki\interfaces\models\options\AbstractGetAlbumPhotosOptions;
 use romkaChev\yandexFotki\traits\parsers\AuthorParser;
 use romkaChev\yandexFotki\traits\parsers\DateParser;
+use romkaChev\yandexFotki\traits\parsers\PhotosParser;
 use yii\helpers\ArrayHelper;
 
 /**
- * Class AbstractAlbum
+ * Class AbstractTagPhotosCollection
  *
  * @package romkaChev\yandexFotki\interfaces\models
  */
-abstract class AbstractAlbum extends AbstractModel implements LoadableWithData
+abstract class AbstractTagPhotosCollection extends AbstractModel implements LoadableWithData
 {
-    use AuthorParser, DateParser;
+
+    use AuthorParser, DateParser, PhotosParser;
 
     /** @var string */
     public $urn;
@@ -32,30 +33,16 @@ abstract class AbstractAlbum extends AbstractModel implements LoadableWithData
     public $author;
     /** @var string */
     public $title;
-    /** @var string */
-    public $summary;
-    /** @var bool */
-    public $isProtected;
-    /** todo this */
-    public $cover;
-    /** @var DateTime */
-    public $publishedAt;
     /** @var DateTime */
     public $updatedAt;
-    /** @var DateTime */
-    public $editedAt;
     /** @var string */
     public $linkSelf;
     /** @var string */
-    public $linkEdit;
-    /** @var string */
-    public $linkPhotos;
-    /** @var string */
-    public $linkCover;
-    /** @var string */
-    public $linkYmapsml;
+    public $linkNext;
     /** @var string */
     public $linkAlternate;
+    /** @var int */
+    public $imageCount;
     /** @var AbstractPhoto[] */
     protected $photos;
 
@@ -69,16 +56,9 @@ abstract class AbstractAlbum extends AbstractModel implements LoadableWithData
             ['id', 'integer'],
             ['author', $this->getYandexFotki()->getFactory()->getAuthorValidator()],
             ['title', 'string'],
-            ['summary', 'string'],
-            ['isProtected', 'boolean'],
-            ['publishedAt', 'string'],
             ['updatedAt', 'string'],
-            ['editedAt', 'string'],
             ['linkSelf', 'url'],
-            ['linkEdit', 'url'],
-            ['linkPhotos', 'url'],
-            ['linkCover', 'url'],
-            ['linkYmapsml', 'url'],
+            ['linkNext', 'url'],
             ['linkAlternate', 'url'],
             ['photos', 'each', 'rule' => [$this->getYandexFotki()->getFactory()->getPhotoValidator()]]
         ];
@@ -95,17 +75,12 @@ abstract class AbstractAlbum extends AbstractModel implements LoadableWithData
             'id'            => ArrayHelper::getValue($data, $this->getIdParser()),
             'author'        => ArrayHelper::getValue($data, $this->getAuthorParser('authors.0', $factory->getAuthorModel(), $fast)),
             'title'         => ArrayHelper::getValue($data, 'title'),
-            'summary'       => ArrayHelper::getValue($data, 'summary'),
-            'isProtected'   => ArrayHelper::getValue($data, 'isProtected'),
-            'publishedAt'   => ArrayHelper::getValue($data, $this->getDateParser('published', $this->getYandexFotki()->getFormatter())),
             'updatedAt'     => ArrayHelper::getValue($data, $this->getDateParser('updated', $this->getYandexFotki()->getFormatter())),
-            'editedAt'      => ArrayHelper::getValue($data, $this->getDateParser('edited', $this->getYandexFotki()->getFormatter())),
             'linkSelf'      => ArrayHelper::getValue($data, 'links.self'),
-            'linkEdit'      => ArrayHelper::getValue($data, 'links.edit'),
-            'linkPhotos'    => ArrayHelper::getValue($data, 'links.photos'),
-            'linkCover'     => ArrayHelper::getValue($data, 'links.cover'),
-            'linkYmapsml'   => ArrayHelper::getValue($data, 'links.ymapsml'),
+            'linkNext'      => ArrayHelper::getValue($data, 'links.next'),
             'linkAlternate' => ArrayHelper::getValue($data, 'links.alternate'),
+            'imageCount'    => ArrayHelper::getValue($data, 'imageCount'),
+            'photos'        => ArrayHelper::getValue($data, $this->getPhotosParser('entries', $factory->getPhotoModel(), $fast))
         ];
 
         if ($fast) {
@@ -115,19 +90,6 @@ abstract class AbstractAlbum extends AbstractModel implements LoadableWithData
         }
 
         return $this;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getPhotos(AbstractGetAlbumPhotosOptions $options = null)
-    {
-        if (!$this->photos) {
-            $component    = $this->getYandexFotki()->getAlbums();
-            $this->photos = $component->getPhotos($this->id, $options);
-        }
-
-        return $this->photos;
     }
 
     /**
@@ -143,9 +105,25 @@ abstract class AbstractAlbum extends AbstractModel implements LoadableWithData
          */
         return function ($array, $defaultValue) {
             $value = ArrayHelper::getValue($array, 'id');
-            preg_match('/^urn:yandex:fotki:([^:]*):album:(?<id>\d+)$/', $value, $matches);
+            preg_match('/^urn:yandex:fotki:([^:]*):tag:(?<id>.*)$/', $value, $matches);
 
-            return intval(ArrayHelper::getValue($matches, 'id')) ?: $defaultValue;
+            return ArrayHelper::getValue($matches, 'id') ?: $defaultValue;
         };
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getPhotos()
+    {
+        return $this->photos;
+    }
+
+    /**
+     * @param AbstractPhoto[] $photos
+     */
+    public function setPhotos($photos)
+    {
+        $this->photos = $photos;
     }
 }

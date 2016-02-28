@@ -61,9 +61,7 @@ final class AlbumComponent extends Component implements IAlbumComponent
      */
     public function getPhotos($id, AbstractGetAlbumPhotosOptions $options = null)
     {
-        if ($options === null) {
-            $options = GetAlbumPhotosOptions::createDefault();
-        }
+        $options = $options ?: GetAlbumPhotosOptions::createDefault();
 
         if (!$options->validate()) {
             throw new InvalidParamException(VarDumper::dumpAsString($options->getErrors()));

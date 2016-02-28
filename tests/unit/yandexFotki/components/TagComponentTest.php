@@ -10,6 +10,7 @@ namespace romkaChev\yandexFotki\tests\unit\yandexFotki\components;
 
 
 use romkaChev\yandexFotki\tests\unit\BaseTestCase;
+use yii\helpers\ArrayHelper;
 
 class TagComponentTest extends BaseTestCase
 {
@@ -18,7 +19,16 @@ class TagComponentTest extends BaseTestCase
     {
         $tagComponent = $this->getComponent()->getTags();
         $tag          = $tagComponent->get('common');
+
         $this->assertEquals('common', $tag->title);
+    }
+
+    public function testGetPhotos()
+    {
+        $tagsComponent = $this->getComponent()->getTags();
+        $model         = $tagsComponent->getPhotos('common');
+
+        $this->assertEquals(sort(array_keys($model)), sort(ArrayHelper::getColumn($model, 'id')));
     }
 
     public function testBatchGet()

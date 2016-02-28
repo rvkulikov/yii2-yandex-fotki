@@ -2,11 +2,12 @@
 /**
  * Created by PhpStorm.
  * User: Roman
- * Date: 27.02.2016
- * Time: 18:28
+ * Date: 28.02.2016
+ * Time: 19:47
  */
 
 namespace romkaChev\yandexFotki\interfaces\models\options;
+
 
 use romkaChev\yandexFotki\interfaces\models\AbstractModel;
 use romkaChev\yandexFotki\interfaces\models\IFeedAdapter;
@@ -14,19 +15,17 @@ use yii\base\InvalidConfigException;
 use yii\helpers\VarDumper;
 
 /**
- * Class AbstractGetAlbumPhotosOptions
+ * Class AbstractGetTagPhotosOptions
  *
  * @package romkaChev\yandexFotki\interfaces\models\options
  *
  * @property-read string $sort
  */
-abstract class AbstractGetAlbumPhotosOptions extends AbstractModel implements IFeedAdapter
+class AbstractGetTagPhotosOptions extends AbstractModel implements IFeedAdapter
 {
 
     /** @var int */
     public $limit;
-    /** @var string */
-    public $password;
     /** @var string */
     public $sortType;
     /** @var string */
@@ -38,8 +37,6 @@ abstract class AbstractGetAlbumPhotosOptions extends AbstractModel implements IF
     public function rules()
     {
         return [
-            ['password', 'string'],
-
             ['limit', 'default', 'value' => static::LIMIT_MAX],
             ['limit', 'integer', 'min' => 1, 'max' => static::LIMIT_MAX],
 
@@ -85,4 +82,5 @@ abstract class AbstractGetAlbumPhotosOptions extends AbstractModel implements IF
 
         return $model;
     }
+
 }
