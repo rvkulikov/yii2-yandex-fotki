@@ -16,6 +16,7 @@ use romkaChev\yandexFotki\models\AlbumPhotosCollection;
 use romkaChev\yandexFotki\models\Author;
 use romkaChev\yandexFotki\models\Image;
 use romkaChev\yandexFotki\models\options\CreateAlbumOptions;
+use romkaChev\yandexFotki\models\options\CreatePhotoOptions;
 use romkaChev\yandexFotki\models\options\GetAlbumPhotosOptions;
 use romkaChev\yandexFotki\models\Photo;
 use romkaChev\yandexFotki\models\Point;
@@ -27,6 +28,7 @@ use romkaChev\yandexFotki\validators\PhotoValidator;
 use romkaChev\yandexFotki\validators\PointValidator;
 use romkaChev\yandexFotki\YandexFotki;
 use yii\httpclient\Client;
+use yii\i18n\Formatter;
 
 return [
     'id'         => 'testApp',
@@ -40,18 +42,24 @@ return [
     'components' => [
         'yandexFotki' => [
             //@formatter:off
-            'class'      => YandexFotki::className(),
+            'class'             => YandexFotki::className(),
 
-            'login'      => null, // set it in main-local.php
-            'oauthToken' => null, // set it in main-local.php
+            'apiBaseUrl'        => 'http://api-fotki.yandex.ru/api',
+            'serviceBaseUrl'    => 'http://fotki.yandex.ru',
+            
+            'login'             => null, // set it in main-local.php
+            'oauthToken'        => null, // set it in main-local.php
 
-            'httpClient' => Client::className(),
+            'apiHttpClient'     => Client::className(),
+            'serviceHttpClient' => Client::className(),
 
-            'albums'     => AlbumComponent::className(),
-            'photos'     => PhotoComponent::className(),
-            'tags'       =>   TagComponent::className(),
+            'albums'            => AlbumComponent::className(),
+            'photos'            => PhotoComponent::className(),
+            'tags'              =>   TagComponent::className(),
 
-            'factory'    => [
+            'formatter'         => Formatter::className(),
+
+            'factory'           => [
                 'class'                      => Factory::className(),
 
                 'addressBindingModel'        =>        AddressBinding::className(),
@@ -65,6 +73,7 @@ return [
 
                 'createAlbumOptions'         =>    CreateAlbumOptions::className(),
                 'getAlbumPhotosOptions'      => GetAlbumPhotosOptions::className(),
+                'createPhotoOptions'         =>    CreatePhotoOptions::className(),
 
                 'addressBindingValidator'    => AddressBindingValidator::className(),
                 'authorValidator'            =>         AuthorValidator::className(),

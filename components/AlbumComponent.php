@@ -35,18 +35,20 @@ final class AlbumComponent extends Component implements IAlbumComponent
     use YandexFotkiAccess;
 
     /**
+     * todo password
+     *
      * @param int|string $id
      *
      * @return Album
      */
     public function get($id)
     {
-        $httpClient = $this->yandexFotki->getHttpClient();
+        $httpClient = $this->yandexFotki->getApiHttpClient();
         $request    = $httpClient->get("album/{$id}/", ['format' => 'json']);
         $response   = $request->send();
 
         $album = $this->yandexFotki->getFactory()->getAlbumModel();
-        $album->loadWithData($response->getData());
+        $album->loadWithData($response->getData(), true);
 
         return $album;
     }
@@ -69,7 +71,7 @@ final class AlbumComponent extends Component implements IAlbumComponent
 
         $photos = [];
 
-        $httpClient = $this->yandexFotki->getHttpClient();
+        $httpClient = $this->yandexFotki->getApiHttpClient();
         $request    = $httpClient->get("album/{$id}/photos/{$options->sort}/", [
             'format'   => 'json',
             'limit'    => $options->limit,
@@ -80,7 +82,7 @@ final class AlbumComponent extends Component implements IAlbumComponent
             $response = $request->send();
 
             $photosCollection = $this->yandexFotki->getFactory()->getAlbumPhotosCollectionModel();
-            $photosCollection->loadWithData($response->getData());
+            $photosCollection->loadWithData($response->getData(), true);
 
             $photos  = ArrayHelper::merge($photos, $photosCollection->getPhotos());
             $request = $httpClient->get($photosCollection->linkNext);
@@ -101,12 +103,12 @@ final class AlbumComponent extends Component implements IAlbumComponent
             throw new InvalidParamException(VarDumper::dumpAsString($options->getErrors()));
         }
 
-        $httpClient = $this->yandexFotki->getHttpClient();
+        $httpClient = $this->yandexFotki->getApiHttpClient();
         $request    = $httpClient->post("albums/", $options->toArray());
         $response   = $request->send();
 
         $album = $this->yandexFotki->getFactory()->getAlbumModel();
-        $album->loadWithData($response->getData());
+        $album->loadWithData($response->getData(), true);
 
         return $album;
     }
@@ -142,11 +144,13 @@ final class AlbumComponent extends Component implements IAlbumComponent
     }
 
     /**
+     * todo password
+     *
      * @inheritdoc
      */
     public function batchGet($ids)
     {
-        $httpClient = $this->yandexFotki->getHttpClient();
+        $httpClient = $this->yandexFotki->getApiHttpClient();
 
         /** @var Request[] $requests */
         $requests = array_map(function ($id) use ($httpClient) {
@@ -158,7 +162,7 @@ final class AlbumComponent extends Component implements IAlbumComponent
         /** @var AbstractAlbum[] $models */
         $models = array_map(function (Response $response) {
             $model = $this->yandexFotki->getFactory()->getAlbumModel();
-            $model->loadWithData($response->getData());
+            $model->loadWithData($response->getData(), true);
 
             return $model;
         }, $responses);
@@ -171,7 +175,7 @@ final class AlbumComponent extends Component implements IAlbumComponent
      */
     public function batchCreate(array $optionsArray)
     {
-        $httpClient = $this->yandexFotki->getHttpClient();
+        $httpClient = $this->yandexFotki->getApiHttpClient();
 
         $requests = [];
         foreach ($optionsArray as $options) {
@@ -184,15 +188,15 @@ final class AlbumComponent extends Component implements IAlbumComponent
 
         $responses = $httpClient->batchSend($requests);
 
-        $albums = [];
+        $models = [];
         foreach ($responses as $response) {
-            $album = $this->yandexFotki->getFactory()->getAlbumModel();
-            $album->loadWithData($response->getData());
+            $model = $this->yandexFotki->getFactory()->getAlbumModel();
+            $model->loadWithData($response->getData(), true);
 
-            $albums[] = $album;
+            $models[] = $model;
         };
 
-        return $albums;
+        return ArrayHelper::index($models, 'id');
     }
 
     /**

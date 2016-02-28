@@ -9,7 +9,9 @@
 namespace romkaChev\yandexFotki\tests\unit\yandexFotki\components;
 
 
+use romkaChev\yandexFotki\interfaces\models\options\AbstractCreatePhotoOptions;
 use romkaChev\yandexFotki\tests\unit\BaseTestCase;
+use yii\helpers\ArrayHelper;
 
 class PhotoComponentTest extends BaseTestCase
 {
@@ -28,5 +30,54 @@ class PhotoComponentTest extends BaseTestCase
 
         $this->assertArrayHasKey(1767664, $models);
         $this->assertArrayHasKey(1845379, $models);
+    }
+
+    public function testCreate()
+    {
+        $factory        = $this->getComponent()->getFactory();
+        $photoComponent = $this->getComponent()->getPhotos();
+
+        /** @var AbstractCreatePhotoOptions $options */
+        $options = \Yii::configure($factory->getCreatePhotoOptions(), [
+            'image' => __DIR__ . '/../../assets/test.png',
+            'tags'  => ['TEST_CREATE_1', 'TEST_CREATE_2']
+        ]);
+
+        $model = $photoComponent->create($options);
+
+        $this->assertEquals('test.png', $model->title);
+
+        $tags = array_values(ArrayHelper::getColumn($model->tags, 'title'));
+        sort($tags);
+
+        $this->assertArraySubset($tags, ['test_create_1', 'test_create_2']);
+    }
+
+    public function testBatchCreate()
+    {
+        $factory        = $this->getComponent()->getFactory();
+        $photoComponent = $this->getComponent()->getPhotos();
+
+        /** @var AbstractCreatePhotoOptions $options */
+        $options1 = \Yii::configure($factory->getCreatePhotoOptions(), [
+            'image'   => __DIR__ . '/../../assets/test.png',
+            'title'   => 'testBatchCreate1_title',
+            'summary' => 'testBatchCreate1_summary',
+        ]);
+
+        /** @var AbstractCreatePhotoOptions $options */
+        $options2 = \Yii::configure($factory->getCreatePhotoOptions(), [
+            'image'   => __DIR__ . '/../../assets/test.png',
+            'title'   => 'testBatchCreate2_title',
+            'summary' => 'testBatchCreate2_summary',
+        ]);
+
+        $models = $photoComponent->batchCreate([$options1, $options2]);
+
+        $titles    = array_values(ArrayHelper::getColumn($models, 'title'));
+        $summaries = array_values(ArrayHelper::getColumn($models, 'summary'));
+
+        $this->assertArraySubset($titles, ['testBatchCreate1_title', 'testBatchCreate2_title']);
+        $this->assertArraySubset($summaries, ['testBatchCreate1_summary', 'testBatchCreate2_summary']);
     }
 }

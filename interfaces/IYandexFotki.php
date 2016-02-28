@@ -15,6 +15,7 @@ use romkaChev\yandexFotki\interfaces\components\ITagComponent;
 use yii\base\InvalidConfigException;
 use yii\caching\Cache;
 use yii\httpclient\Client;
+use yii\i18n\Formatter;
 
 /**
  * Interface IYandexFotki
@@ -24,9 +25,14 @@ use yii\httpclient\Client;
 interface IYandexFotki
 {
     /**
-     * @return IFactory
+     * @return string
      */
-    public function getFactory();
+    public function getApiBaseUrl();
+
+    /**
+     * @return string
+     */
+    public function getServiceBaseUrl();
 
     /**
      * @return string
@@ -39,9 +45,39 @@ interface IYandexFotki
     public function getOauthToken();
 
     /**
+     * @return string
+     */
+    public function getPubChannel();
+
+    /**
+     * @return string
+     */
+    public function getAppPlatform();
+
+    /**
+     * @return string
+     */
+    public function getAppVersion();
+
+    /**
+     * @return Formatter
+     */
+    public function getFormatter();
+
+    /**
+     * @return IFactory
+     */
+    public function getFactory();
+
+    /**
      * @return Client
      */
-    public function getHttpClient();
+    public function getApiHttpClient();
+
+    /**
+     * @return Client
+     */
+    public function getServiceHttpClient();
 
     /**
      * @return Cache
@@ -70,14 +106,14 @@ interface IYandexFotki
     public function getTags();
 
     /**
-     * @param IFactory|string|array|callable $value
-     *
-     * @throws InvalidConfigException
-     * @throws InvalidArgumentException
-     *
-     * @return static
+     * @param string $apiBaseUrl
      */
-    public function setFactory($value);
+    public function setApiBaseUrl($apiBaseUrl);
+
+    /**
+     * @param string $serviceBaseUrl
+     */
+    public function setServiceBaseUrl($serviceBaseUrl);
 
     /**
      * @param string $login
@@ -90,6 +126,41 @@ interface IYandexFotki
     public function setOauthToken($oauthToken);
 
     /**
+     * @param string $pubChannel
+     */
+    public function setPubChannel($pubChannel);
+
+    /**
+     * @param string $appPlatform
+     */
+    public function setAppPlatform($appPlatform);
+
+    /**
+     * @param string $appVersion
+     */
+    public function setAppVersion($appVersion);
+
+    /**
+     * @param Formatter|string|array|callable $value
+     *
+     * @throws InvalidConfigException
+     * @throws InvalidArgumentException
+     *
+     * @return static
+     */
+    public function setFormatter($value);
+
+    /**
+     * @param IFactory|string|array|callable $value
+     *
+     * @throws InvalidConfigException
+     * @throws InvalidArgumentException
+     *
+     * @return static
+     */
+    public function setFactory($value);
+
+    /**
      * @param Client|string|array|callable $value
      *
      * @throws InvalidConfigException
@@ -97,7 +168,17 @@ interface IYandexFotki
      *
      * @return static
      */
-    public function setHttpClient($value);
+    public function setApiHttpClient($value);
+
+    /**
+     * @param Client|string|array|callable $value
+     *
+     * @throws InvalidConfigException
+     * @throws InvalidArgumentException
+     *
+     * @return static
+     */
+    public function setServiceHttpClient($value);
 
     /**
      * @param Cache|string|array|callable $value

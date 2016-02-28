@@ -42,12 +42,13 @@ trait YandexFotkiAccess
      */
     public function setYandexFotki($value)
     {
-        if (!$value instanceof IYandexFotki) {
+        $instance = '\romkaChev\yandexFotki\interfaces\IYandexFotki'; // todo hardcode
+
+        if (!$value instanceof $instance) {
             $value = \Yii::createObject($value);
         }
 
-        if (!$value instanceof IYandexFotki) {
-            $instance = '\romkaChev\yandexFotki\interfaces\IYandexFotki'; // todo hardcode
+        if (!$value instanceof $instance) {
             $given    = get_class($value);
             throw new InvalidArgumentException("Value must be an instance of '{$instance}', '{$given}' given.");
         }

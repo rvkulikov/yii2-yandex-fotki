@@ -15,7 +15,6 @@ use romkaChev\yandexFotki\traits\YandexFotkiAccess;
 use yii\base\Component;
 use yii\helpers\ArrayHelper;
 use yii\httpclient\Request;
-use yii\httpclient\Response;
 
 /**
  * Class TagComponent
@@ -32,24 +31,14 @@ final class TagComponent extends Component implements ITagComponent
      */
     public function get($id)
     {
-        $httpClient = $this->yandexFotki->getHttpClient();
+        $httpClient = $this->yandexFotki->getApiHttpClient();
         $request    = $httpClient->get("tag/{$id}/", ['format' => 'json']);
         $response   = $request->send();
 
         $tag = $this->yandexFotki->getFactory()->getTagModel();
-        $tag->loadWithData($response->getData());
+        $tag->loadWithData($response->getData(), true);
 
         return $tag;
-    }
-
-    /**
-     * @param mixed $options
-     *
-     * @return AbstractTag
-     */
-    public function create($options)
-    {
-        // TODO: Implement create() method.
     }
 
     /**
@@ -77,7 +66,7 @@ final class TagComponent extends Component implements ITagComponent
      */
     public function batchGet($ids)
     {
-        $httpClient = $this->yandexFotki->getHttpClient();
+        $httpClient = $this->yandexFotki->getApiHttpClient();
 
         /** @var Request[] $requests */
         $requests = array_map(function ($id) use ($httpClient) {
@@ -86,25 +75,15 @@ final class TagComponent extends Component implements ITagComponent
 
         $responses = $httpClient->batchSend($requests);
 
-        /** @var AbstractTag[] $models */
-        $models = array_map(function (Response $response) {
+        $models = [];
+        foreach ($responses as $response) {
             $model = $this->yandexFotki->getFactory()->getTagModel();
-            $model->loadWithData($response->getData());
+            $model->loadWithData($response->getData(), true);
 
-            return $model;
-        }, $responses);
+            $models[] = $model;
+        };
 
-        return array_combine(ArrayHelper::getColumn($models, 'id'), $models);
-    }
-
-    /**
-     * @param $data
-     *
-     * @return AbstractTag[]
-     */
-    public function batchCreate($data)
-    {
-        // TODO: Implement batchCreate() method.
+        return ArrayHelper::index($models, 'id');
     }
 
     /**

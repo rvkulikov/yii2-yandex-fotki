@@ -9,7 +9,10 @@
 namespace romkaChev\yandexFotki\traits\parsers;
 
 
+use DateTime;
+use DateTimeZone;
 use yii\helpers\ArrayHelper;
+use yii\i18n\Formatter;
 
 /**
  * Class DateParser
@@ -19,11 +22,12 @@ use yii\helpers\ArrayHelper;
 trait DateParser
 {
     /**
-     * @param string $key
+     * @param string|\Closure|array $key
+     * @param Formatter             $formatter
      *
      * @return \Closure
      */
-    public function getDateParser($key)
+    public function getDateParser($key, $formatter)
     {
         /**
          * @param $array
@@ -31,8 +35,12 @@ trait DateParser
          *
          * @return mixed
          */
-        return function ($array, $defaultValue) use ($key) {
-            return \Yii::$app->formatter->asDate(ArrayHelper::getValue($array, $key)) ?: $defaultValue;
+        return function ($array, $defaultValue) use ($key, $formatter) {
+            $value = ArrayHelper::getValue($array, $key);
+
+            return $value
+                ? new DateTime($value, new DateTimeZone($formatter->timeZone))
+                : $defaultValue;
         };
     }
 }

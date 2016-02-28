@@ -8,6 +8,8 @@
 
 namespace romkaChev\yandexFotki\interfaces\models;
 
+use DateTime;
+use romkaChev\yandexFotki\interfaces\LoadableWithData;
 use romkaChev\yandexFotki\traits\parsers\AuthorParser;
 use romkaChev\yandexFotki\traits\parsers\DateParser;
 use yii\helpers\ArrayHelper;
@@ -17,7 +19,7 @@ use yii\helpers\ArrayHelper;
  *
  * @package romkaChev\yandexFotki\interfaces\models
  */
-abstract class AbstractTag extends AbstractModel
+abstract class AbstractTag extends AbstractModel implements LoadableWithData
 {
     use DateParser, AuthorParser;
 
@@ -29,7 +31,7 @@ abstract class AbstractTag extends AbstractModel
     public $title;
     /** @var AbstractAuthor */
     public $author;
-    /** @var string */
+    /** @var DateTime */
     public $updatedAt;
     /** @var string */
     public $linkSelf;
@@ -46,36 +48,146 @@ abstract class AbstractTag extends AbstractModel
     public function rules()
     {
         return [
-            ['urn', 'string'],
+            //@formatter:off
             ['id', 'string'],
+            ['id', 'required'],
+
+            ['urn', 'string'],
+            ['urn', 'default', 'value' => function(){return $this->defaultUrn();}],
+
             ['title', 'string'],
+            ['title', 'default', 'value' => function(){return $this->defaultTitle();}],
+
             ['author', $this->getYandexFotki()->getFactory()->getAuthorValidator()],
+            ['author', 'default', 'value' => function(){return $this->defaultAuthor();}],
+            
             ['updatedAt', 'string'],
+
             ['linkSelf', 'url'],
+            ['linkSelf', 'default', 'value' => function(){return $this->defaultLinkSelf();}],
+
             ['linkEdit', 'url'],
+            ['linkEdit', 'default', 'value' => function(){return $this->defaultLinkEdit();}],
+
             ['linkPhotos', 'url'],
+            ['linkPhotos', 'default', 'value' => function(){return $this->defaultLinkPhotos();}],
+
             ['linkAlternate', 'url'],
+            ['linkAlternate', 'default', 'value' => function(){return $this->defaultLinkAlternate();}],
+            //@formatter:on
         ];
     }
 
     /**
-     * @param array $data
-     *
-     * @return static
+     * @return string
      */
-    public function loadWithData($data)
+    public function defaultUrn()
     {
-        \Yii::configure($this, [
+        $login = $this->getYandexFotki()->getLogin();
+
+        return "urn:yandex:fotki:{$login}:tag:{$this->id}";
+    }
+
+    /**
+     * @return string
+     */
+    public function defaultTitle()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function defaultAuthor()
+    {
+        $factory     = $this->getYandexFotki()->getFactory();
+        $authorModel = $factory->getAuthorModel();
+
+        $authorModel->loadWithData([
+            'name' => $this->getYandexFotki()->getLogin()
+        ], true);
+    }
+
+    /**
+     * @return string
+     */
+    public function defaultAuthors()
+    {
+        return [['name' => $this->getYandexFotki()->getLogin()]];
+    }
+
+    /**
+     * @return string
+     */
+    public function defaultLinkSelf()
+    {
+        $httpClient = $this->getYandexFotki()->getApiHttpClient();
+        $baseUrl    = $httpClient->baseUrl;
+        $tag        = urlencode($this->id);
+
+        return "{$baseUrl}/tag/{$tag}/";
+    }
+
+    /**
+     * @return string
+     */
+    public function defaultLinkEdit()
+    {
+        $httpClient = $this->getYandexFotki()->getApiHttpClient();
+        $baseUrl    = $httpClient->baseUrl;
+        $tag        = urlencode($this->id);
+
+        return "{$baseUrl}/tag/{$tag}/";
+    }
+
+    /**
+     * @return string
+     */
+    public function defaultLinkPhotos()
+    {
+        $httpClient = $this->getYandexFotki()->getApiHttpClient();
+        $baseUrl    = $httpClient->baseUrl;
+        $tag        = urlencode($this->id);
+
+        return "{$baseUrl}/tag/{$tag}/photos/";
+    }
+
+    /**
+     * @return string
+     */
+    public function defaultLinkAlternate()
+    {
+        $httpClient = $this->getYandexFotki()->getServiceHttpClient();
+        $baseUrl    = $httpClient->baseUrl;
+        $tag        = urlencode($this->id);
+
+        return "{$baseUrl}/tags/{$tag}/";
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function loadWithData($data, $fast = false)
+    {
+        $factory    = $this->getYandexFotki()->getFactory();
+        $attributes = [
             'urn'           => ArrayHelper::getValue($data, 'id'),
             'id'            => ArrayHelper::getValue($data, $this->getIdParser()),
             'title'         => ArrayHelper::getValue($data, 'title'),
-            'author'        => ArrayHelper::getValue($data, $this->getAuthorParser($this->getYandexFotki()->getFactory()->getAuthorModel())),
-            'updatedAt'     => ArrayHelper::getValue($data, $this->getDateParser('updated')),
+            'author'        => ArrayHelper::getValue($data, $this->getAuthorParser('authors.0', $factory->getAuthorModel(), $fast)),
+            'updatedAt'     => ArrayHelper::getValue($data, $this->getDateParser('updated', $this->getYandexFotki()->getFormatter())),
             'linkSelf'      => ArrayHelper::getValue($data, 'links.self'),
             'linkEdit'      => ArrayHelper::getValue($data, 'links.edit'),
             'linkPhotos'    => ArrayHelper::getValue($data, 'links.photos'),
             'linkAlternate' => ArrayHelper::getValue($data, 'links.alternate'),
-        ]);
+        ];
+
+        if ($fast) {
+            \Yii::configure($this, $attributes);
+        } else {
+            $this->load([$this->formName() => $attributes]);
+        }
 
         return $this;
     }
@@ -97,5 +209,21 @@ abstract class AbstractTag extends AbstractModel
 
             return ArrayHelper::getValue($matches, 'id') ?: $defaultValue;
         };
+    }
+
+    /**
+     * @return string
+     */
+    public function toString()
+    {
+        return $this->__toString();
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->title;
     }
 }

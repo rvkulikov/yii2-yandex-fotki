@@ -8,6 +8,8 @@
 
 namespace romkaChev\yandexFotki\interfaces\models;
 
+use DateTime;
+use romkaChev\yandexFotki\interfaces\LoadableWithData;
 use romkaChev\yandexFotki\interfaces\models\options\AbstractGetAlbumPhotosOptions;
 use romkaChev\yandexFotki\traits\parsers\AuthorParser;
 use romkaChev\yandexFotki\traits\parsers\DateParser;
@@ -18,7 +20,7 @@ use yii\helpers\ArrayHelper;
  *
  * @package romkaChev\yandexFotki\interfaces\models
  */
-abstract class AbstractAlbum extends AbstractModel
+abstract class AbstractAlbum extends AbstractModel implements LoadableWithData
 {
     use AuthorParser, DateParser;
 
@@ -36,11 +38,11 @@ abstract class AbstractAlbum extends AbstractModel
     public $isProtected;
     /** todo this */
     public $cover;
-    /** @var string */
+    /** @var DateTime */
     public $publishedAt;
-    /** @var string */
+    /** @var DateTime */
     public $updatedAt;
-    /** @var string */
+    /** @var DateTime */
     public $editedAt;
     /** @var string */
     public $linkSelf;
@@ -83,29 +85,34 @@ abstract class AbstractAlbum extends AbstractModel
     }
 
     /**
-     * @param array $data
-     *
-     * @return static
+     * @inheritdoc
      */
-    public function loadWithData($data)
+    public function loadWithData($data, $fast = false)
     {
-        \Yii::configure($this, [
+        $factory    = $this->getYandexFotki()->getFactory();
+        $attributes = [
             'urn'           => ArrayHelper::getValue($data, 'id'),
             'id'            => ArrayHelper::getValue($data, $this->getIdParser()),
-            'author'        => ArrayHelper::getValue($data, $this->getAuthorParser($this->getYandexFotki()->getFactory()->getAuthorModel())),
+            'author'        => ArrayHelper::getValue($data, $this->getAuthorParser('authors.0', $factory->getAuthorModel(), $fast)),
             'title'         => ArrayHelper::getValue($data, 'title'),
             'summary'       => ArrayHelper::getValue($data, 'summary'),
-            'isProtected'   => ArrayHelper::getValue($data, 'isProtected', false),
-            'publishedAt'   => ArrayHelper::getValue($data, $this->getDateParser('published')),
-            'updatedAt'     => ArrayHelper::getValue($data, $this->getDateParser('updated')),
-            'editedAt'      => ArrayHelper::getValue($data, $this->getDateParser('edited')),
+            'isProtected'   => ArrayHelper::getValue($data, 'isProtected'),
+            'publishedAt'   => ArrayHelper::getValue($data, $this->getDateParser('published', $this->getYandexFotki()->getFormatter())),
+            'updatedAt'     => ArrayHelper::getValue($data, $this->getDateParser('updated', $this->getYandexFotki()->getFormatter())),
+            'editedAt'      => ArrayHelper::getValue($data, $this->getDateParser('edited', $this->getYandexFotki()->getFormatter())),
             'linkSelf'      => ArrayHelper::getValue($data, 'links.self'),
             'linkEdit'      => ArrayHelper::getValue($data, 'links.edit'),
             'linkPhotos'    => ArrayHelper::getValue($data, 'links.photos'),
             'linkCover'     => ArrayHelper::getValue($data, 'links.cover'),
             'linkYmapsml'   => ArrayHelper::getValue($data, 'links.ymapsml'),
             'linkAlternate' => ArrayHelper::getValue($data, 'links.alternate'),
-        ]);
+        ];
+
+        if ($fast) {
+            \Yii::configure($this, $attributes);
+        } else {
+            $this->load([$this->formName() => $attributes]);
+        }
 
         return $this;
     }

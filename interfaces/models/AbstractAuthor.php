@@ -8,6 +8,7 @@
 
 namespace romkaChev\yandexFotki\interfaces\models;
 
+use romkaChev\yandexFotki\interfaces\LoadableWithData;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -15,7 +16,7 @@ use yii\helpers\ArrayHelper;
  *
  * @package romkaChev\yandexFotki\interfaces\models
  */
-abstract class AbstractAuthor extends AbstractModel
+abstract class AbstractAuthor extends AbstractModel implements LoadableWithData
 {
     /** @var string */
     public $name;
@@ -34,16 +35,20 @@ abstract class AbstractAuthor extends AbstractModel
     }
 
     /**
-     * @param array $data
-     *
-     * @return static
+     * @inheritdoc
      */
-    public function loadWithData($data)
+    public function loadWithData($data, $fast = false)
     {
-        \Yii::configure($this, [
+        $attributes = [
             'name' => ArrayHelper::getValue($data, 'name'),
             'uid'  => ArrayHelper::getValue($data, $this->getUidParser()),
-        ]);
+        ];
+
+        if ($fast) {
+            \Yii::configure($this, $attributes);
+        } else {
+            $this->load([$this->formName() => $attributes]);
+        }
 
         return $this;
     }

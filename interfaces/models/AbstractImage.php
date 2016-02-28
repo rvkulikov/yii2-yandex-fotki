@@ -9,6 +9,7 @@
 namespace romkaChev\yandexFotki\interfaces\models;
 
 
+use romkaChev\yandexFotki\interfaces\LoadableWithData;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -16,7 +17,7 @@ use yii\helpers\ArrayHelper;
  *
  * @package romkaChev\yandexFotki\interfaces\models
  */
-abstract class AbstractImage extends AbstractModel implements IImageSize
+abstract class AbstractImage extends AbstractModel implements IImageSize, LoadableWithData
 {
 
     /** @var string */
@@ -31,7 +32,7 @@ abstract class AbstractImage extends AbstractModel implements IImageSize
     public $size;
 
     /**
-     * @return array
+     * @inheritdoc
      */
     public function rules()
     {
@@ -44,21 +45,24 @@ abstract class AbstractImage extends AbstractModel implements IImageSize
         ];
     }
 
-
     /**
-     * @param array $data
-     *
-     * @return $this
+     * @inheritdoc
      */
-    public function loadWithData($data)
+    public function loadWithData($data, $fast = false)
     {
-        \Yii::configure($this, [
+        $attributes = [
             'href'     => ArrayHelper::getValue($data, 'href'),
             'height'   => ArrayHelper::getValue($data, 'height'),
             'width'    => ArrayHelper::getValue($data, 'width'),
             'byteSize' => ArrayHelper::getValue($data, 'bytesize'),
             'size'     => ArrayHelper::getValue($data, 'size'),
-        ]);
+        ];
+
+        if ($fast) {
+            \Yii::configure($this, $attributes);
+        } else {
+            $this->load([$this->formName() => $attributes]);
+        }
 
         return $this;
     }

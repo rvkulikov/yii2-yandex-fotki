@@ -20,28 +20,36 @@ use yii\helpers\ArrayHelper;
 trait PhotosParser
 {
     /**
-     * @param AbstractPhoto $model
+     * @param string|\Closure|array $key
+     * @param AbstractPhoto         $model
+     * @param bool                  $fast
      *
      * @return \Closure
      */
-    public function getPhotosParser(AbstractPhoto $model)
+    public function getPhotosParser($key, AbstractPhoto $model, $fast = false)
     {
         /**
          * @param $array
          *
          * @return AbstractPhoto[]
          */
-        return function ($array) use ($model) {
-            $entries = ArrayHelper::getValue($array, 'entries');
+        return function ($array) use ($key, $model, $fast) {
+            $entries = ArrayHelper::getValue($array, $key);
+            $models  = [];
 
-            $photos = array_map(function ($entry) use ($model) {
+            foreach ($entries as $entry) {
+                if ($entry instanceof AbstractPhoto) {
+                    $models[] = $entry;
+                    continue;
+                }
+
                 $localModel = clone $model;
-                $localModel->loadWithData($entry);
+                $localModel->loadWithData($entry, $fast);
 
-                return $localModel;
-            }, $entries);
+                $models[] = $localModel;
+            }
 
-            return ArrayHelper::index($photos, 'id');
+            return ArrayHelper::index($models, 'id');
         };
     }
 

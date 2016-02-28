@@ -9,6 +9,7 @@
 namespace romkaChev\yandexFotki\interfaces\components;
 
 
+use romkaChev\yandexFotki\interfaces\IYandexFotkiAccess;
 use romkaChev\yandexFotki\interfaces\models\AbstractAlbum;
 use romkaChev\yandexFotki\interfaces\models\AbstractPhoto;
 use romkaChev\yandexFotki\interfaces\models\options\AbstractCreateAlbumOptions;
@@ -20,7 +21,7 @@ use romkaChev\yandexFotki\models\options\CreateAlbumOptions;
  *
  * @package romkaChev\yandexFotki\interfaces\components
  */
-interface IAlbumComponent
+interface IAlbumComponent extends IYandexFotkiAccess
 {
     /**
      * @param int|string $id

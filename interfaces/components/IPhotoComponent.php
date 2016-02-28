@@ -9,14 +9,16 @@
 namespace romkaChev\yandexFotki\interfaces\components;
 
 
+use romkaChev\yandexFotki\interfaces\IYandexFotkiAccess;
 use romkaChev\yandexFotki\interfaces\models\AbstractPhoto;
+use romkaChev\yandexFotki\interfaces\models\options\AbstractCreatePhotoOptions;
 
 /**
  * Interface IPhotoComponent
  *
  * @package romkaChev\yandexFotki\interfaces\components
  */
-interface IPhotoComponent
+interface IPhotoComponent extends IYandexFotkiAccess
 {
     /**
      * @param int|string $id
@@ -26,11 +28,11 @@ interface IPhotoComponent
     public function get($id);
 
     /**
-     * @param mixed $options
+     * @param AbstractCreatePhotoOptions $options
      *
      * @return AbstractPhoto
      */
-    public function create($options);
+    public function create(AbstractCreatePhotoOptions $options);
 
     /**
      * @param mixed $options
@@ -54,11 +56,11 @@ interface IPhotoComponent
     public function batchGet($ids);
 
     /**
-     * @param $data
+     * @param AbstractCreatePhotoOptions[] $optionsArray
      *
      * @return AbstractPhoto[]
      */
-    public function batchCreate($data);
+    public function batchCreate(array $optionsArray);
 
     /**
      * @param $data

@@ -20,11 +20,13 @@ use yii\helpers\ArrayHelper;
 trait AddressBindingParser
 {
     /**
+     * @param string|\Closure|array  $key
      * @param AbstractAddressBinding $model
+     * @param bool                   $fast
      *
      * @return \Closure
      */
-    public function getAddressBindingParser(AbstractAddressBinding $model)
+    public function getAddressBindingParser($key, AbstractAddressBinding $model, $fast = false)
     {
         /**
          * @param $array
@@ -32,9 +34,14 @@ trait AddressBindingParser
          *
          * @return AbstractAddressBinding
          */
-        return function ($array, $defaultValue) use ($model) {
+        return function ($array, $defaultValue) use ($key, $model, $fast) {
+            $data = ArrayHelper::getValue($array, $key);
+            if ($data instanceof AbstractAddressBinding) {
+                return $data;
+            }
+
             $value = clone $model;
-            $value->loadWithData(ArrayHelper::getValue($array, 'addressBinding.0'));
+            $value->loadWithData($data, $fast);
 
             return $value ?: $defaultValue;
         };

@@ -18,6 +18,7 @@ use romkaChev\yandexFotki\interfaces\models\AbstractPhoto;
 use romkaChev\yandexFotki\interfaces\models\AbstractPoint;
 use romkaChev\yandexFotki\interfaces\models\AbstractTag;
 use romkaChev\yandexFotki\interfaces\models\options\AbstractCreateAlbumOptions;
+use romkaChev\yandexFotki\interfaces\models\options\AbstractCreatePhotoOptions;
 use romkaChev\yandexFotki\interfaces\models\options\AbstractGetAlbumPhotosOptions;
 use yii\base\InvalidConfigException;
 use yii\validators\Validator;
@@ -38,10 +39,23 @@ interface IFactory extends IYandexFotkiAccess
     public function getAddressBindingModel();
 
     /**
+     * @param mixed $addressBindingModel
+     * @return static
+     */
+    public function setAddressBindingModel($addressBindingModel);
+
+    /**
      * @return AbstractAlbum
      * @throws InvalidConfigException
      */
     public function getAlbumModel();
+
+    /**
+     * @param mixed $albumModel
+     *
+     * @return static
+     */
+    public function setAlbumModel($albumModel);
 
     /**
      * @return AbstractAlbumPhotosCollection
@@ -50,10 +64,24 @@ interface IFactory extends IYandexFotkiAccess
     public function getAlbumPhotosCollectionModel();
 
     /**
+     * @param mixed $albumPhotosCollectionModel
+     *
+     * @return static
+     */
+    public function setAlbumPhotosCollectionModel($albumPhotosCollectionModel);
+
+    /**
      * @return AbstractAuthor
      * @throws InvalidConfigException
      */
     public function getAuthorModel();
+
+    /**
+     * @param mixed $authorModel
+     *
+     * @return static
+     */
+    public function setAuthorModel($authorModel);
 
     /**
      * @return AbstractPhoto
@@ -62,10 +90,22 @@ interface IFactory extends IYandexFotkiAccess
     public function getPhotoModel();
 
     /**
+     * @param mixed $photoModel
+     * @return static
+     */
+    public function setPhotoModel($photoModel);
+
+    /**
      * @return AbstractTag
      * @throws InvalidConfigException
      */
     public function getTagModel();
+
+    /**
+     * @param mixed $tagModel
+     * @return static
+     */
+    public function setTagModel($tagModel);
 
     /**
      * @return AbstractPoint
@@ -74,48 +114,21 @@ interface IFactory extends IYandexFotkiAccess
     public function getPointModel();
 
     /**
+     * @param mixed $pointModel
+     * @return static
+     */
+    public function setPointModel($pointModel);
+
+    /**
      * @return AbstractImage
      * @throws InvalidConfigException
      */
     public function getImageModel();
 
     /**
-     * @param mixed $addressBindingModel
-     */
-    public function setAddressBindingModel($addressBindingModel);
-
-    /**
-     * @param mixed $albumModel
-     */
-    public function setAlbumModel($albumModel);
-
-    /**
-     * @param mixed $albumPhotosCollectionModel
-     */
-    public function setAlbumPhotosCollectionModel($albumPhotosCollectionModel);
-
-    /**
-     * @param mixed $authorModel
-     */
-    public function setAuthorModel($authorModel);
-
-    /**
-     * @param mixed $photoModel
-     */
-    public function setPhotoModel($photoModel);
-
-    /**
-     * @param mixed $tagModel
-     */
-    public function setTagModel($tagModel);
-
-    /**
-     * @param mixed $pointModel
-     */
-    public function setPointModel($pointModel);
-
-    /**
      * @param mixed $imageModel
+     *
+     * @return static
      */
     public function setImageModel($imageModel);
 
@@ -130,20 +143,36 @@ interface IFactory extends IYandexFotkiAccess
     public function getCreateAlbumOptions();
 
     /**
+     * @param mixed $createAlbumOptions
+     *
+     * @return static
+     */
+    public function setCreateAlbumOptions($createAlbumOptions);
+
+    /**
      * @return AbstractGetAlbumPhotosOptions
      * @throws InvalidConfigException
      */
     public function getGetAlbumPhotosOptions();
 
     /**
-     * @param mixed $createAlbumOptions
-     */
-    public function setCreateAlbumOptions($createAlbumOptions);
-
-    /**
      * @param mixed $getAlbumPhotosOptions
+     * @return static
      */
     public function setGetAlbumPhotosOptions($getAlbumPhotosOptions);
+
+    /**
+     * @return AbstractCreatePhotoOptions
+     * @throws InvalidConfigException
+     */
+    public function getCreatePhotoOptions();
+
+    /**
+     * @param mixed $createPhotoOptions
+     *
+     * @return static
+     */
+    public function setCreatePhotoOptions($createPhotoOptions);
 
     //</editor-fold>
 
@@ -156,10 +185,22 @@ interface IFactory extends IYandexFotkiAccess
     public function getAddressBindingValidator();
 
     /**
+     * @param mixed $addressBindingValidator
+     * @return static
+     */
+    public function setAddressBindingValidator($addressBindingValidator);
+
+    /**
      * @return Validator
      * @throws \yii\base\InvalidConfigException
      */
     public function getAuthorValidator();
+
+    /**
+     * @param mixed $authorValidator
+     * @return static
+     */
+    public function setAuthorValidator($authorValidator);
 
     /**
      * @return Validator
@@ -168,10 +209,22 @@ interface IFactory extends IYandexFotkiAccess
     public function getPointValidator();
 
     /**
+     * @param mixed $pointValidator
+     * @return static
+     */
+    public function setPointValidator($pointValidator);
+
+    /**
      * @return Validator
      * @throws \yii\base\InvalidConfigException
      */
     public function getPhotoValidator();
+
+    /**
+     * @param mixed $photoValidator
+     * @return static
+     */
+    public function setPhotoValidator($photoValidator);
 
     /**
      * @return Validator
@@ -180,27 +233,9 @@ interface IFactory extends IYandexFotkiAccess
     public function getImageValidator();
 
     /**
-     * @param mixed $addressBindingValidator
-     */
-    public function setAddressBindingValidator($addressBindingValidator);
-
-    /**
-     * @param mixed $authorValidator
-     */
-    public function setAuthorValidator($authorValidator);
-
-    /**
-     * @param mixed $pointValidator
-     */
-    public function setPointValidator($pointValidator);
-
-    /**
-     * @param mixed $photoValidator
-     */
-    public function setPhotoValidator($photoValidator);
-
-    /**
      * @param mixed $imageValidator
+     *
+     * @return static
      */
     public function setImageValidator($imageValidator);
 

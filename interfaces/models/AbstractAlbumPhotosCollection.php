@@ -8,6 +8,8 @@
 
 namespace romkaChev\yandexFotki\interfaces\models;
 
+use DateTime;
+use romkaChev\yandexFotki\interfaces\LoadableWithData;
 use romkaChev\yandexFotki\traits\parsers\AuthorParser;
 use romkaChev\yandexFotki\traits\parsers\DateParser;
 use romkaChev\yandexFotki\traits\parsers\PhotosParser;
@@ -18,7 +20,7 @@ use yii\helpers\ArrayHelper;
  *
  * @package romkaChev\yandexFotki\interfaces\models
  */
-abstract class AbstractAlbumPhotosCollection extends AbstractModel
+abstract class AbstractAlbumPhotosCollection extends AbstractModel implements LoadableWithData
 {
     use AuthorParser, DateParser, PhotosParser;
 
@@ -32,7 +34,7 @@ abstract class AbstractAlbumPhotosCollection extends AbstractModel
     public $title;
     /** @var string */
     public $summary;
-    /** @var string */
+    /** @var DateTime */
     public $updatedAt;
     /** @var string */
     public $linkSelf;
@@ -65,25 +67,30 @@ abstract class AbstractAlbumPhotosCollection extends AbstractModel
     }
 
     /**
-     * @param array $data
-     *
-     * @return static
+     * @inheritdoc
      */
-    public function loadWithData($data)
+    public function loadWithData($data, $fast = false)
     {
-        \Yii::configure($this, [
+        $factory    = $this->getYandexFotki()->getFactory();
+        $attributes = [
             'urn'           => ArrayHelper::getValue($data, 'id'),
             'id'            => ArrayHelper::getValue($data, $this->getIdParser()),
-            'author'        => ArrayHelper::getValue($data, $this->getAuthorParser($this->getYandexFotki()->getFactory()->getAuthorModel())),
+            'author'        => ArrayHelper::getValue($data, $this->getAuthorParser('authors.0', $factory->getAuthorModel(), $fast)),
             'title'         => ArrayHelper::getValue($data, 'title'),
             'summary'       => ArrayHelper::getValue($data, 'summary'),
-            'updatedAt'     => ArrayHelper::getValue($data, $this->getDateParser('updated')),
+            'updatedAt'     => ArrayHelper::getValue($data, $this->getDateParser('updated', $this->getYandexFotki()->getFormatter())),
             'linkSelf'      => ArrayHelper::getValue($data, 'links.self'),
             'linkNext'      => ArrayHelper::getValue($data, 'links.next'),
             'linkAlternate' => ArrayHelper::getValue($data, 'links.alternate'),
             'imageCount'    => ArrayHelper::getValue($data, 'imageCount'),
-            'photos'        => ArrayHelper::getValue($data, $this->getPhotosParser($this->getYandexFotki()->getFactory()->getPhotoModel()))
-        ]);
+            'photos'        => ArrayHelper::getValue($data, $this->getPhotosParser('entries', $factory->getPhotoModel(), $fast))
+        ];
+
+        if ($fast) {
+            \Yii::configure($this, $attributes);
+        } else {
+            $this->load([$this->formName() => $attributes]);
+        }
 
         return $this;
     }

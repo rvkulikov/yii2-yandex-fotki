@@ -9,7 +9,6 @@
 namespace romkaChev\yandexFotki\traits\parsers;
 
 
-use romkaChev\yandexFotki\interfaces\IYandexFotki;
 use romkaChev\yandexFotki\interfaces\models\AbstractAuthor;
 use yii\helpers\ArrayHelper;
 
@@ -17,17 +16,17 @@ use yii\helpers\ArrayHelper;
  * Class AuthorParser
  *
  * @package romkaChev\yandexFotki\traits\parsers
- *
- * @property IYandexFotki $yandexFotki
  */
 trait AuthorParser
 {
     /**
-     * @param AbstractAuthor $model
+     * @param string|\Closure|array $key
+     * @param AbstractAuthor        $model
+     * @param bool                  $fast
      *
      * @return \Closure
      */
-    public function getAuthorParser(AbstractAuthor $model)
+    public function getAuthorParser($key, AbstractAuthor $model, $fast = false)
     {
         /**
          * @param $array
@@ -35,9 +34,14 @@ trait AuthorParser
          *
          * @return mixed
          */
-        return function ($array, $defaultValue) use ($model) {
+        return function ($array, $defaultValue) use ($key, $model, $fast) {
+            $data = ArrayHelper::getValue($array, $key);
+            if ($data instanceof AbstractAuthor) {
+                return $data;
+            }
+
             $model = clone $model;
-            $model->loadWithData(ArrayHelper::getValue($array, 'authors.0'));
+            $model->loadWithData($data, $fast);
 
             return $model ?: $defaultValue;
         };

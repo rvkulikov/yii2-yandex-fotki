@@ -8,84 +8,59 @@
 
 namespace romkaChev\yandexFotki\interfaces\models;
 
+use romkaChev\yandexFotki\interfaces\LoadableWithData;
 use romkaChev\yandexFotki\traits\parsers\PointParser;
 use yii\helpers\ArrayHelper;
 
 /**
- * Interface IPhotoAddressBinding
+ * Class AbstractAddressBinding
  *
  * @package romkaChev\yandexFotki\interfaces\models
- *
- * @property integer       organizationId
- * @property string        address
- * @property AbstractPoint point
  */
-abstract class AbstractAddressBinding extends AbstractModel
+abstract class AbstractAddressBinding extends AbstractModel implements LoadableWithData
 {
 
     use PointParser;
 
+    /** @var int */
+    public $organizationId;
+    /** @var string */
+    public $address;
+    /** @var AbstractPoint */
+    public $point;
+
     /**
-     * @param array $data
-     *
-     * @return static
+     * @inheritdoc
      */
-    public function loadWithData($data)
+    public function rules()
     {
-        \Yii::configure($this, [
+        return [
+            //@formatter:off
+            ['organizationId', 'integer'],
+            ['address', 'string'],
+            ['point', $this->getYandexFotki()->getFactory()->getPointValidator()],
+            //@formatter:on
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function loadWithData($data, $fast = false)
+    {
+        $factory    = $this->getYandexFotki()->getFactory();
+        $attributes = [
             'organizationId' => ArrayHelper::getValue($data, 'organizationId'),
             'address'        => ArrayHelper::getValue($data, 'address'),
-            'point'          => ArrayHelper::getValue($data, $this->getPointParser($this->getYandexFotki()->getFactory()->getPointModel())),
-        ]);
+            'point'          => ArrayHelper::getValue($data, $this->getPointParser('geo', $factory->getPointModel(), $fast)),
+        ];
+
+        if ($fast) {
+            \Yii::configure($this, $attributes);
+        } else {
+            $this->load([$this->formName() => $attributes]);
+        }
 
         return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getOrganizationId()
-    {
-        return $this->organizationId;
-    }
-
-    /**
-     * @param int $organizationId
-     */
-    public function setOrganizationId($organizationId)
-    {
-        $this->organizationId = $organizationId;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAddress()
-    {
-        return $this->address;
-    }
-
-    /**
-     * @param string $address
-     */
-    public function setAddress($address)
-    {
-        $this->address = $address;
-    }
-
-    /**
-     * @return AbstractPoint
-     */
-    public function getPoint()
-    {
-        return $this->point;
-    }
-
-    /**
-     * @param AbstractPoint $point
-     */
-    public function setPoint($point)
-    {
-        $this->point = $point;
     }
 }

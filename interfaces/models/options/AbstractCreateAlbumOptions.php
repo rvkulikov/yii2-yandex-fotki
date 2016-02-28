@@ -48,10 +48,12 @@ abstract class AbstractCreateAlbumOptions extends AbstractModel implements Linka
      */
     public function toArray(array $fields = [], array $expand = [], $recursive = true)
     {
-        $data          = parent::toArray($fields, $expand, $recursive);
+        $data = parent::toArray($fields, $expand, $recursive);
+
         $data['links'] = array_combine(array_keys($data['_links']), ArrayHelper::getColumn($data['_links'], 'href'));
 
         unset($data['_links']);
+        unset($data['parentId']);
 
         $data = array_filter($data);
 
@@ -63,7 +65,7 @@ abstract class AbstractCreateAlbumOptions extends AbstractModel implements Linka
      */
     public function getLinks()
     {
-        $httpClient = $this->getYandexFotki()->getHttpClient();
+        $httpClient = $this->getYandexFotki()->getApiHttpClient();
         $links      = [];
 
         if ($this->parentId) {

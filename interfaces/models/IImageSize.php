@@ -24,5 +24,7 @@ interface IImageSize
     const SIZE_XL       = 'XL';
     const SIZE_XXL      = 'XXL';
     const SIZE_XXXL     = 'XXXL';
+    const SIZE_X4L      = 'X4L';
+    const SIZE_X5L      = 'X5L';
     const SIZE_ORIGINAL = 'orig';
 }

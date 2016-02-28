@@ -19,9 +19,11 @@ use yii\helpers\ArrayHelper;
 trait CoordinatesParser
 {
     /**
+     * @param string|\Closure|array $key
+     *
      * @return \Closure
      */
-    public function getCoordinatesParser()
+    public function getCoordinatesParser($key)
     {
         /**
          * @param $array
@@ -29,8 +31,8 @@ trait CoordinatesParser
          *
          * @return float[]|null
          */
-        return function ($array, $defaultValue) {
-            $coordinates = ArrayHelper::getValue($array, 'coordinates');
+        return function ($array, $defaultValue) use ($key) {
+            $coordinates = ArrayHelper::getValue($array, $key);
 
             return $coordinates ? array_map('floatval', explode(' ', $coordinates)) : $defaultValue;
         };

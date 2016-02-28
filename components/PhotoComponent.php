@@ -11,10 +11,13 @@ namespace romkaChev\yandexFotki\components;
 
 use romkaChev\yandexFotki\interfaces\components\IPhotoComponent;
 use romkaChev\yandexFotki\interfaces\models\AbstractPhoto;
+use romkaChev\yandexFotki\interfaces\models\options\AbstractCreatePhotoOptions;
 use romkaChev\yandexFotki\models\Photo;
 use romkaChev\yandexFotki\traits\YandexFotkiAccess;
 use yii\base\Component;
+use yii\base\InvalidParamException;
 use yii\helpers\ArrayHelper;
+use yii\helpers\VarDumper;
 use yii\httpclient\Request;
 use yii\httpclient\Response;
 
@@ -29,30 +32,51 @@ final class PhotoComponent extends Component implements IPhotoComponent
     use YandexFotkiAccess;
 
     /**
+     * todo password
+     *
      * @param int|string $id
      *
      * @return Photo
      */
     public function get($id)
     {
-        $httpClient = $this->yandexFotki->getHttpClient();
+        $httpClient = $this->yandexFotki->getApiHttpClient();
         $request    = $httpClient->get("photo/{$id}/", ['format' => 'json']);
         $response   = $request->send();
 
         $photo = $this->yandexFotki->getFactory()->getPhotoModel();
-        $photo->loadWithData($response->getData());
+        $photo->loadWithData($response->getData(), true);
 
         return $photo;
     }
 
     /**
-     * @param mixed $options
+     * @param AbstractCreatePhotoOptions $options
      *
      * @return AbstractPhoto
      */
-    public function create($options)
+    public function create(AbstractCreatePhotoOptions $options)
     {
-        // TODO: Implement create() method.
+        if (!$options->validate()) {
+            throw new InvalidParamException(VarDumper::dumpAsString($options->getErrors()));
+        }
+
+        $httpClient = $this->yandexFotki->getApiHttpClient();
+
+        $data  = $options->toArray();
+        $image = ArrayHelper::remove($data, 'image');
+
+        $request = $httpClient->post("photos/", $data);
+        $request->addFile('image', $image, [
+            'fileName' => $data['title']
+        ]);
+
+        $response = $request->send();
+
+        $photo = $this->yandexFotki->getFactory()->getPhotoModel();
+        $photo->loadWithData($response->getData(), true);
+
+        return $photo;
     }
 
     /**
@@ -76,11 +100,13 @@ final class PhotoComponent extends Component implements IPhotoComponent
     }
 
     /**
+     * todo password
+     *
      * @inheritdoc
      */
     public function batchGet($ids)
     {
-        $httpClient = $this->yandexFotki->getHttpClient();
+        $httpClient = $this->yandexFotki->getApiHttpClient();
 
         /** @var Request[] $requests */
         $requests = array_map(function ($id) use ($httpClient) {
@@ -92,7 +118,7 @@ final class PhotoComponent extends Component implements IPhotoComponent
         /** @var AbstractPhoto[] $models */
         $models = array_map(function (Response $response) {
             $model = $this->yandexFotki->getFactory()->getPhotoModel();
-            $model->loadWithData($response->getData());
+            $model->loadWithData($response->getData(), true);
 
             return $model;
         }, $responses);
@@ -101,13 +127,40 @@ final class PhotoComponent extends Component implements IPhotoComponent
     }
 
     /**
-     * @param $data
-     *
-     * @return AbstractPhoto[]
+     * @inheritdoc
      */
-    public function batchCreate($data)
+    public function batchCreate(array $optionsArray)
     {
-        // TODO: Implement batchCreate() method.
+        $httpClient = $this->yandexFotki->getApiHttpClient();
+
+        $requests = [];
+        foreach ($optionsArray as $options) {
+            if (!$options->validate()) {
+                throw new InvalidParamException(VarDumper::dumpAsString($options->getErrors()));
+            }
+
+            $optionsArray = $options->toArray();
+            $image        = ArrayHelper::remove($optionsArray, 'image');
+
+            $request = $httpClient->post("photos/", $optionsArray);
+            $request->addFile('image', $image, [
+                'fileName' => $optionsArray['title']
+            ]);
+
+            $requests[] = $request;
+        }
+
+        $responses = $httpClient->batchSend($requests);
+
+        $models = [];
+        foreach ($responses as $response) {
+            $model = $this->yandexFotki->getFactory()->getPhotoModel();
+            $model->loadWithData($response->getData(), true);
+
+            $models[] = $model;
+        };
+
+        return ArrayHelper::index($models, 'id');
     }
 
     /**

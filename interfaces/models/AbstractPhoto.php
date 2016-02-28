@@ -8,21 +8,27 @@
 
 namespace romkaChev\yandexFotki\interfaces\models;
 
+use DateTime;
+use InvalidArgumentException;
+use romkaChev\yandexFotki\interfaces\LoadableWithData;
 use romkaChev\yandexFotki\traits\parsers\AddressBindingParser;
 use romkaChev\yandexFotki\traits\parsers\AuthorParser;
 use romkaChev\yandexFotki\traits\parsers\DateParser;
 use romkaChev\yandexFotki\traits\parsers\ImagesParser;
 use romkaChev\yandexFotki\traits\parsers\PointParser;
+use romkaChev\yandexFotki\traits\parsers\TagsParser;
 use yii\helpers\ArrayHelper;
 
 /**
  * Interface IPhoto
  *
  * @package romkaChev\yandexFotki\interfaces\models
+ *
+ * @property AbstractTag[] $tags
  */
-abstract class AbstractPhoto extends AbstractModel implements IImageSize
+abstract class AbstractPhoto extends AbstractModel implements IImageSize, IAccess, LoadableWithData
 {
-    use AuthorParser, ImagesParser, PointParser, AddressBindingParser, DateParser;
+    use AuthorParser, ImagesParser, PointParser, AddressBindingParser, DateParser, TagsParser;
 
     /** @var string */
     public $urn;
@@ -31,24 +37,28 @@ abstract class AbstractPhoto extends AbstractModel implements IImageSize
     /** @var AbstractAuthor */
     public $author;
     /** @var string */
+    public $title;
+    /** @var string */
+    public $summary;
+    /** @var string */
     public $access;
     /** @var bool */
     public $isForAdult;
     /** @var bool */
-    public $isHideOriginal;
+    public $hideOriginal;
     /** @var bool */
-    public $isDisableComments;
+    public $disableComments;
     /** @var AbstractImage[] */
     public $images;
     /** @var AbstractPoint */
     public $point;
     /** @var AbstractAddressBinding */
     public $addressBinding;
-    /** @var string */
+    /** @var DateTime */
     public $publishedAt;
-    /** @var string */
+    /** @var DateTime */
     public $updatedAt;
-    /** @var string */
+    /** @var DateTime */
     public $editedAt;
     /** @var string */
     public $linkSelf;
@@ -60,6 +70,12 @@ abstract class AbstractPhoto extends AbstractModel implements IImageSize
     public $linkEditMedia;
     /** @var string */
     public $linkAlbum;
+    /** @var int */
+    public $albumId;
+    /** @var AbstractAlbum */
+    protected $album;
+    /** @var AbstractTag[] */
+    protected $tags;
 
     /**
      * @inheritdoc
@@ -70,10 +86,12 @@ abstract class AbstractPhoto extends AbstractModel implements IImageSize
             ['urn', 'string'],
             ['id', 'integer'],
             ['author', $this->getYandexFotki()->getFactory()->getAuthorValidator()],
+            ['title', 'string'],
+            ['summary', 'string'],
             ['access', 'string'],
             ['isForAdult', 'boolean'],
-            ['isHideOriginal', 'boolean'],
-            ['isDisableComments', 'boolean'],
+            ['hideOriginal', 'boolean'],
+            ['disableComments', 'boolean'],
             ['images', 'each', 'rule' => [$this->getYandexFotki()->getFactory()->getImageValidator()]],
             ['point', $this->getYandexFotki()->getFactory()->getPointValidator()],
             ['addressBinding', $this->getYandexFotki()->getFactory()->getAddressBindingValidator()],
@@ -85,38 +103,68 @@ abstract class AbstractPhoto extends AbstractModel implements IImageSize
             ['linkAlternate', 'url'],
             ['linkEditMedia', 'url'],
             ['linkAlbum', 'url'],
+            ['albumId', 'integer'],
+            ['tags', 'safe']
         ];
     }
 
     /**
-     * @param array $data
-     *
-     * @return $this
+     * @inheritdoc
      */
-    public function loadWithData($data)
+    public function loadWithData($data, $fast = false)
     {
-        \Yii::configure($this, [
-            'urn'               => ArrayHelper::getValue($data, 'id'),
-            'id'                => ArrayHelper::getValue($data, $this->getIdParser()),
-            'author'            => ArrayHelper::getValue($data, $this->getAuthorParser($this->getYandexFotki()->getFactory()->getAuthorModel())),
-            'access'            => ArrayHelper::getValue($data, 'access'),
-            'isForAdult'        => ArrayHelper::getValue($data, 'xxx', false),
-            'isHideOriginal'    => ArrayHelper::getValue($data, 'hide_original', false),
-            'isDisableComments' => ArrayHelper::getValue($data, 'disable_comments', false),
-            'images'            => ArrayHelper::getValue($data, $this->getImagesParser($this->getYandexFotki()->getFactory()->getImageModel())),
-            'point'             => ArrayHelper::getValue($data, $this->getPointParser($this->getYandexFotki()->getFactory()->getPointModel())),
-            'addressBinding'    => ArrayHelper::getValue($data, $this->getAddressBindingParser($this->getYandexFotki()->getFactory()->getAddressBindingModel())),
-            'publishedAt'       => ArrayHelper::getValue($data, $this->getDateParser('published')),
-            'updatedAt'         => ArrayHelper::getValue($data, $this->getDateParser('updated')),
-            'editedAt'          => ArrayHelper::getValue($data, $this->getDateParser('edited')),
-            'linkSelf'          => ArrayHelper::getValue($data, 'links.self'),
-            'linkEdit'          => ArrayHelper::getValue($data, 'links.edit'),
-            'linkAlternate'     => ArrayHelper::getValue($data, 'links.alternate'),
-            'linkEditMedia'     => ArrayHelper::getValue($data, 'links.edit-media'),
-            'linkAlbum'         => ArrayHelper::getValue($data, 'links.album'),
-        ]);
+        $factory    = $this->getYandexFotki()->getFactory();
+        $attributes = [
+            'urn'             => ArrayHelper::getValue($data, 'id'),
+            'id'              => ArrayHelper::getValue($data, $this->getIdParser()),
+            'author'          => ArrayHelper::getValue($data, $this->getAuthorParser('authors.0', $factory->getAuthorModel(), $fast)),
+            'title'           => ArrayHelper::getValue($data, 'title'),
+            'summary'         => ArrayHelper::getValue($data, 'summary'),
+            'access'          => ArrayHelper::getValue($data, 'access'),
+            'isForAdult'      => ArrayHelper::getValue($data, 'xxx'),
+            'hideOriginal'    => ArrayHelper::getValue($data, 'hide_original'),
+            'disableComments' => ArrayHelper::getValue($data, 'disable_comments'),
+            'images'          => ArrayHelper::getValue($data, $this->getImagesParser('img', $factory->getImageModel(), $fast)),
+            'point'           => ArrayHelper::getValue($data, $this->getPointParser('geo', $factory->getPointModel(), $fast)),
+            'addressBinding'  => ArrayHelper::getValue($data, $this->getAddressBindingParser('addressBinding.0', $factory->getAddressBindingModel(), $fast)),
+            'publishedAt'     => ArrayHelper::getValue($data, $this->getDateParser('published', $this->getYandexFotki()->getFormatter())),
+            'updatedAt'       => ArrayHelper::getValue($data, $this->getDateParser('updated', $this->getYandexFotki()->getFormatter())),
+            'editedAt'        => ArrayHelper::getValue($data, $this->getDateParser('edited', $this->getYandexFotki()->getFormatter())),
+            'linkSelf'        => ArrayHelper::getValue($data, 'links.self'),
+            'linkEdit'        => ArrayHelper::getValue($data, 'links.edit'),
+            'linkAlternate'   => ArrayHelper::getValue($data, 'links.alternate'),
+            'linkEditMedia'   => ArrayHelper::getValue($data, 'links.editMedia'),
+            'linkAlbum'       => ArrayHelper::getValue($data, 'links.album'),
+            'albumId'         => ArrayHelper::getValue($data, $this->getAlbumIdParser()),
+            'tags'            => ArrayHelper::getValue($data, $this->getTagsParser('tags', $factory->getTagModel(), $fast)),
+        ];
+
+        if ($fast) {
+            \Yii::configure($this, $attributes);
+        } else {
+            $this->load([$this->formName() => $attributes]);
+        }
 
         return $this;
+    }
+
+    /**
+     * @return \Closure
+     */
+    public function getAlbumIdParser()
+    {
+        /**
+         * @param $array
+         * @param $defaultValue
+         *
+         * @return mixed
+         */
+        return function ($array, $defaultValue) {
+            $value = ArrayHelper::getValue($array, 'links.album');
+            preg_match('/.*\/users\/([^\/]*)\/album\/(?<albumId>[[^\/]*])/', $value, $matches);
+
+            return intval(ArrayHelper::getValue($matches, 'albumId')) ?: $defaultValue;
+        };
     }
 
     /**
@@ -136,5 +184,29 @@ abstract class AbstractPhoto extends AbstractModel implements IImageSize
 
             return intval(ArrayHelper::getValue($matches, 'id')) ?: $defaultValue;
         };
+    }
+
+    /**
+     * @return AbstractTag[]
+     */
+    public function getTags()
+    {
+        return $this->tags;
+    }
+
+    /**
+     * @param AbstractTag[] $tags
+     */
+    public function setTags($tags)
+    {
+        foreach ($tags as $index => $tag) {
+            $instance = AbstractTag::className();
+
+            if (!$tag instanceof $instance) {
+                $type = get_class($tag);
+                throw new InvalidArgumentException("'tag' must be an instance of '{$instance}', '{$type}' given at index '{$index}'.");
+            }
+        }
+        $this->tags = $tags;
     }
 }

@@ -9,6 +9,7 @@
 namespace romkaChev\yandexFotki\interfaces\components;
 
 
+use romkaChev\yandexFotki\interfaces\IYandexFotkiAccess;
 use romkaChev\yandexFotki\interfaces\models\AbstractTag;
 
 /**
@@ -16,7 +17,7 @@ use romkaChev\yandexFotki\interfaces\models\AbstractTag;
  *
  * @package romkaChev\yandexFotki\interfaces\components
  */
-interface ITagComponent
+interface ITagComponent extends IYandexFotkiAccess
 {
     /**
      * @param string $id
@@ -24,13 +25,6 @@ interface ITagComponent
      * @return AbstractTag
      */
     public function get($id);
-
-    /**
-     * @param mixed $options
-     *
-     * @return AbstractTag
-     */
-    public function create($options);
 
     /**
      * @param mixed $options
@@ -52,13 +46,6 @@ interface ITagComponent
      * @return AbstractTag[]
      */
     public function batchGet($ids);
-
-    /**
-     * @param $data
-     *
-     * @return AbstractTag[]
-     */
-    public function batchCreate($data);
 
     /**
      * @param $data

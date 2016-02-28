@@ -9,19 +9,29 @@
 namespace romkaChev\yandexFotki\validators;
 
 
+use romkaChev\yandexFotki\interfaces\IYandexFotkiAccess;
 use romkaChev\yandexFotki\interfaces\models\AbstractAddressBinding;
+use romkaChev\yandexFotki\traits\YandexFotkiAccess;
 use yii\validators\Validator;
 
-class AddressBindingValidator extends Validator
+/**
+ * Class AddressBindingValidator
+ *
+ * @package romkaChev\yandexFotki\validators
+ */
+class AddressBindingValidator extends Validator implements IYandexFotkiAccess
 {
+
+    use YandexFotkiAccess;
 
     /**
      * @inheritdoc
      */
     public function validateAttribute($model, $attribute)
     {
-        if (!$this->$attribute instanceof AbstractAddressBinding) {
-            $instance = AbstractAddressBinding::className();
+        $instance = AbstractAddressBinding::className();
+
+        if (!$this->$attribute instanceof $instance) {
             $given    = get_class($this->$attribute);
             $this->addError($model, $attribute, "{$attribute} must be an instance of '{$instance}', '{$given}' given.");
         }

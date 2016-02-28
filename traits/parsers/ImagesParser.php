@@ -9,7 +9,6 @@
 namespace romkaChev\yandexFotki\traits\parsers;
 
 
-use romkaChev\yandexFotki\interfaces\IYandexFotki;
 use romkaChev\yandexFotki\interfaces\models\AbstractImage;
 use yii\helpers\ArrayHelper;
 
@@ -17,34 +16,42 @@ use yii\helpers\ArrayHelper;
  * Class ImagesParser
  *
  * @package romkaChev\yandexFotki\traits\parsers
- * @property IYandexFotki $yandexFotki
  */
 trait ImagesParser
 {
     /**
-     * @param AbstractImage $model
+     * @param string|\Closure|array $key
+     * @param AbstractImage         $model
+     * @param bool                  $fast
      *
      * @return \Closure
      */
-    public function getImagesParser(AbstractImage $model)
+    public function getImagesParser($key, AbstractImage $model, $fast = false)
     {
         /**
          * @param $array
          *
          * @return AbstractImage[]
          */
-        return function ($array) use ($model) {
-            $images = [];
-            foreach (ArrayHelper::getValue($array, 'img', []) as $size => $imageData) {
-                $imageData['size'] = $size;
+        return function ($array) use ($key, $model, $fast) {
+            $entries = ArrayHelper::getValue($array, $key, []);
+            $models  = [];
+
+            foreach ($entries as $size => $entry) {
+                if ($entry instanceof AbstractImage) {
+                    $models[] = $entry;
+                    continue;
+                }
+
+                $entry['size'] = $size;
 
                 $localModel = clone $model;
-                $localModel->loadWithData($imageData);
+                $localModel->loadWithData($entry, $fast);
 
-                $images[] = $localModel;
+                $models[] = $localModel;
             }
 
-            return ArrayHelper::index($images, 'size');
+            return ArrayHelper::index($models, 'size');
         };
     }
 }

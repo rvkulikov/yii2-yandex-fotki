@@ -97,8 +97,8 @@ class AlbumComponentTest extends BaseTestCase
 
         $models = $albumComponent->batchCreate([$options1, $options2]);
 
-        $titles    = ArrayHelper::getColumn($models, 'title');
-        $summaries = ArrayHelper::getColumn($models, 'summary');
+        $titles    = array_values(ArrayHelper::getColumn($models, 'title'));
+        $summaries = array_values(ArrayHelper::getColumn($models, 'summary'));
 
         $this->assertArraySubset($titles, ['testBatchCreate1_title', 'testBatchCreate2_title']);
         $this->assertArraySubset($summaries, ['testBatchCreate1_summary', 'testBatchCreate2_summary']);

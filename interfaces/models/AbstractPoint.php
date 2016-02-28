@@ -9,6 +9,7 @@
 namespace romkaChev\yandexFotki\interfaces\models;
 
 
+use romkaChev\yandexFotki\interfaces\LoadableWithData;
 use romkaChev\yandexFotki\traits\parsers\CoordinatesParser;
 use yii\helpers\ArrayHelper;
 
@@ -17,7 +18,7 @@ use yii\helpers\ArrayHelper;
  *
  * @package romkaChev\yandexFotki\interfaces\models
  */
-abstract class AbstractPoint extends AbstractModel
+abstract class AbstractPoint extends AbstractModel implements LoadableWithData
 {
     use CoordinatesParser;
 
@@ -44,18 +45,22 @@ abstract class AbstractPoint extends AbstractModel
     }
 
     /**
-     * @param array $data
-     *
-     * @return $this
+     * @inheritdoc
      */
-    public function loadWithData($data)
+    public function loadWithData($data, $fast = false)
     {
-        \Yii::configure($this, [
+        $attributes = [
             'zoomLevel'   => ArrayHelper::getValue($data, 'zoomlevel'),
             'type'        => ArrayHelper::getValue($data, 'type'),
             'mapType'     => ArrayHelper::getValue($data, 'maptype'),
-            'coordinates' => ArrayHelper::getValue($data, $this->getCoordinatesParser()),
-        ]);
+            'coordinates' => ArrayHelper::getValue($data, $this->getCoordinatesParser('coordinates')),
+        ];
+
+        if ($fast) {
+            \Yii::configure($this, $attributes);
+        } else {
+            $this->load([$this->formName() => $attributes]);
+        }
 
         return $this;
     }

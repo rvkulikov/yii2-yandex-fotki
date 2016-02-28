@@ -20,11 +20,13 @@ use yii\helpers\ArrayHelper;
 trait PointParser
 {
     /**
-     * @param AbstractPoint $model
+     * @param string|\Closure|array $key
+     * @param AbstractPoint         $model
+     * @param bool                  $fast
      *
      * @return \Closure
      */
-    public function getPointParser(AbstractPoint $model)
+    public function getPointParser($key, AbstractPoint $model, $fast = false)
     {
         /**
          * @param $array
@@ -32,9 +34,14 @@ trait PointParser
          *
          * @return mixed
          */
-        return function ($array, $defaultValue) use ($model) {
+        return function ($array, $defaultValue) use ($key, $model, $fast) {
+            $data = ArrayHelper::getValue($array, $key);
+            if ($data instanceof AbstractPoint) {
+                return $data;
+            }
+
             $localModel = clone $model;
-            $localModel->loadWithData(ArrayHelper::getValue($array, 'geo'));
+            $localModel->loadWithData($data, $fast);
 
             return $localModel ?: $defaultValue;
         };
