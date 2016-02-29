@@ -6,7 +6,7 @@
  * Time: 19:42
  */
 
-namespace romkaChev\yandexFotki\interfaces\models;
+namespace romkaChev\yandexFotki\models;
 
 
 use romkaChev\yandexFotki\interfaces\IYandexFotkiAccess;

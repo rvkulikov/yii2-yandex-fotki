@@ -9,7 +9,7 @@
 namespace romkaChev\yandexFotki\traits\parsers;
 
 
-use romkaChev\yandexFotki\interfaces\models\AbstractAddressBinding;
+use romkaChev\yandexFotki\models\AddressBinding;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -20,23 +20,23 @@ use yii\helpers\ArrayHelper;
 trait AddressBindingParser
 {
     /**
-     * @param string|\Closure|array  $key
-     * @param AbstractAddressBinding $model
-     * @param bool                   $fast
+     * @param string|\Closure|array                        $key
+     * @param \romkaChev\yandexFotki\models\AddressBinding $model
+     * @param bool                                         $fast
      *
      * @return \Closure
      */
-    public function getAddressBindingParser($key, AbstractAddressBinding $model, $fast = false)
+    public function getAddressBindingParser($key, AddressBinding $model, $fast = false)
     {
         /**
          * @param $array
          * @param $defaultValue
          *
-         * @return AbstractAddressBinding
+         * @return AddressBinding
          */
         return function ($array, $defaultValue) use ($key, $model, $fast) {
             $data = ArrayHelper::getValue($array, $key);
-            if ($data instanceof AbstractAddressBinding) {
+            if ($data instanceof AddressBinding) {
                 return $data;
             }
 

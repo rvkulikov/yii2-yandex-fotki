@@ -10,7 +10,7 @@ namespace romkaChev\yandexFotki\validators;
 
 
 use romkaChev\yandexFotki\interfaces\IYandexFotkiAccess;
-use romkaChev\yandexFotki\interfaces\models\AbstractPoint;
+use romkaChev\yandexFotki\models\Point;
 use romkaChev\yandexFotki\traits\YandexFotkiAccess;
 use yii\validators\Validator;
 
@@ -29,7 +29,7 @@ class PointValidator extends Validator implements IYandexFotkiAccess
      */
     public function validateAttribute($model, $attribute)
     {
-        $instance = AbstractPoint::className();
+        $instance = Point::className();
 
         if (!$this->$attribute instanceof $instance) {
             $given    = get_class($this->$attribute);

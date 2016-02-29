@@ -2,26 +2,24 @@
 /**
  * Created by PhpStorm.
  * User: Roman
- * Date: 28.02.2016
- * Time: 19:47
+ * Date: 29.02.2016
+ * Time: 22:18
  */
 
-namespace romkaChev\yandexFotki\interfaces\models\options;
+namespace romkaChev\yandexFotki\models\options;
 
 
-use romkaChev\yandexFotki\interfaces\models\AbstractModel;
 use romkaChev\yandexFotki\interfaces\models\IFeedAdapter;
-use yii\base\InvalidConfigException;
-use yii\helpers\VarDumper;
+use romkaChev\yandexFotki\models\AbstractModel;
 
 /**
- * Class AbstractGetTagPhotosOptions
+ * Class AbstractPaginationOptions
  *
  * @package romkaChev\yandexFotki\interfaces\models\options
  *
  * @property-read string $sort
  */
-class AbstractGetTagPhotosOptions extends AbstractModel implements IFeedAdapter
+class PaginationOptions extends AbstractModel implements IFeedAdapter
 {
 
     /** @var int */
@@ -75,10 +73,6 @@ class AbstractGetTagPhotosOptions extends AbstractModel implements IFeedAdapter
                 'sortDirection' => SORT_DESC,
             ]
         ]);
-
-        if (!$model->validate()) {
-            throw new InvalidConfigException(VarDumper::dumpAsString($model->getErrors()));
-        }
 
         return $model;
     }

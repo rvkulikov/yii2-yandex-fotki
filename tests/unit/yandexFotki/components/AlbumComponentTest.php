@@ -9,7 +9,7 @@
 namespace romkaChev\yandexFotki\tests\unit\yandexFotki\components;
 
 
-use romkaChev\yandexFotki\interfaces\models\options\AbstractCreateAlbumOptions;
+use romkaChev\yandexFotki\models\options\CreateAlbumOptions;
 use romkaChev\yandexFotki\tests\unit\BaseTestCase;
 use yii\helpers\ArrayHelper;
 
@@ -52,7 +52,7 @@ class AlbumComponentTest extends BaseTestCase
         $factory        = $this->getComponent()->getFactory();
         $albumComponent = $this->getComponent()->getAlbums();
 
-        /** @var AbstractCreateAlbumOptions $options */
+        /** @var CreateAlbumOptions $options */
         $options = \Yii::configure($factory->getCreateAlbumOptions(), [
             'title'   => 'testCreate1_title',
             'summary' => 'testCreate1_summary'
@@ -63,7 +63,7 @@ class AlbumComponentTest extends BaseTestCase
         $this->assertEquals('testCreate1_title', $model1->title);
         $this->assertEquals('testCreate1_summary', $model1->summary);
 
-        /** @var AbstractCreateAlbumOptions $options */
+        /** @var CreateAlbumOptions $options */
         $options = \Yii::configure($factory->getCreateAlbumOptions(), [
             'title'    => 'testCreate2_title',
             'summary'  => 'testCreate2_summary',
@@ -83,13 +83,13 @@ class AlbumComponentTest extends BaseTestCase
         $factory        = $this->getComponent()->getFactory();
         $albumComponent = $this->getComponent()->getAlbums();
 
-        /** @var AbstractCreateAlbumOptions $options */
+        /** @var CreateAlbumOptions $options */
         $options1 = \Yii::configure($factory->getCreateAlbumOptions(), [
             'title'   => 'testBatchCreate1_title',
             'summary' => 'testBatchCreate1_summary'
         ]);
 
-        /** @var AbstractCreateAlbumOptions $options */
+        /** @var CreateAlbumOptions $options */
         $options2 = \Yii::configure($factory->getCreateAlbumOptions(), [
             'title'   => 'testBatchCreate2_title',
             'summary' => 'testBatchCreate2_summary'

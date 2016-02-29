@@ -10,9 +10,9 @@ namespace romkaChev\yandexFotki\interfaces\components;
 
 
 use romkaChev\yandexFotki\interfaces\IYandexFotkiAccess;
-use romkaChev\yandexFotki\interfaces\models\AbstractPhoto;
-use romkaChev\yandexFotki\interfaces\models\AbstractTag;
-use romkaChev\yandexFotki\interfaces\models\options\AbstractGetTagPhotosOptions;
+use romkaChev\yandexFotki\models\options\GetTagPhotosOptions;
+use romkaChev\yandexFotki\models\Photo;
+use romkaChev\yandexFotki\models\Tag;
 
 /**
  * Interface ITagComponent
@@ -24,50 +24,50 @@ interface ITagComponent extends IYandexFotkiAccess
     /**
      * @param string $id
      *
-     * @return AbstractTag
+     * @return \romkaChev\yandexFotki\models\Tag
      */
     public function get($id);
 
     /**
-     * @param int|string                  $id
-     * @param AbstractGetTagPhotosOptions $options
+     * @param int|string          $id
+     * @param GetTagPhotosOptions $options
      *
-     * @return AbstractPhoto[]
+     * @return Photo[]
      */
-    public function getPhotos($id, AbstractGetTagPhotosOptions $options = null);
+    public function getPhotos($id, GetTagPhotosOptions $options = null);
     
     /**
      * @param mixed $options
      *
-     * @return AbstractTag
+     * @return Tag
      */
     public function update($options);
 
     /**
      * @param mixed $data
      *
-     * @return AbstractTag
+     * @return \romkaChev\yandexFotki\models\Tag
      */
     public function delete($data);
 
     /**
      * @param $ids
      *
-     * @return AbstractTag[]
+     * @return \romkaChev\yandexFotki\models\Tag[]
      */
     public function batchGet($ids);
 
     /**
      * @param $data
      *
-     * @return AbstractTag[]
+     * @return Tag[]
      */
     public function batchUpdate($data);
 
     /**
      * @param $data
      *
-     * @return AbstractTag[]
+     * @return \romkaChev\yandexFotki\models\Tag[]
      */
     public function batchDelete($data);
 }

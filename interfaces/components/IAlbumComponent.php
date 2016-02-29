@@ -10,11 +10,10 @@ namespace romkaChev\yandexFotki\interfaces\components;
 
 
 use romkaChev\yandexFotki\interfaces\IYandexFotkiAccess;
-use romkaChev\yandexFotki\interfaces\models\AbstractAlbum;
-use romkaChev\yandexFotki\interfaces\models\AbstractPhoto;
-use romkaChev\yandexFotki\interfaces\models\options\AbstractCreateAlbumOptions;
-use romkaChev\yandexFotki\interfaces\models\options\AbstractGetAlbumPhotosOptions;
+use romkaChev\yandexFotki\models\Album;
 use romkaChev\yandexFotki\models\options\CreateAlbumOptions;
+use romkaChev\yandexFotki\models\options\GetAlbumPhotosOptions;
+use romkaChev\yandexFotki\models\options\GetAlbumsOptions;
 
 /**
  * Interface IAlbumComponent
@@ -26,71 +25,72 @@ interface IAlbumComponent extends IYandexFotkiAccess
     /**
      * @param int|string $id
      *
-     * @return AbstractAlbum
+     * @return Album
      */
     public function get($id);
 
     /**
-     * @param int|string                    $id
-     * @param AbstractGetAlbumPhotosOptions $options
+     * @param int|string                                                  $id
+     * @param \romkaChev\yandexFotki\models\options\GetAlbumPhotosOptions $options
      *
-     * @return AbstractPhoto[]
+     * @return \romkaChev\yandexFotki\models\Photo[]
      */
-    public function getPhotos($id, AbstractGetAlbumPhotosOptions $options = null);
+    public function getPhotos($id, GetAlbumPhotosOptions $options = null);
 
     /**
-     * @param AbstractCreateAlbumOptions $options
+     * @param CreateAlbumOptions $options
      *
-     * @return AbstractAlbum
+     * @return Album
      */
-    public function create(AbstractCreateAlbumOptions $options);
+    public function create(CreateAlbumOptions $options);
 
     /**
      * @param mixed $options
      *
-     * @return AbstractAlbum
+     * @return Album
      */
     public function update($options);
 
     /**
      * @param mixed $data
      *
-     * @return AbstractAlbum
+     * @return Album
      */
     public function delete($data);
 
     /**
-     * @param mixed $root
+     * @param int                                                    $id
+     * @param \romkaChev\yandexFotki\models\options\GetAlbumsOptions $options
      *
-     * @return mixed
+     * @return Album[]
      */
-    public function tree($root);
+    public function tree($id, GetAlbumsOptions $options = null);
 
     /**
      * @param $ids
      *
-     * @return AbstractAlbum[]
+     * @return Album[]
      */
     public function batchGet($ids);
 
     /**
      * @param CreateAlbumOptions[] $optionsArray
      *
-     * @return AbstractAlbum[]
+     * @return Album[]
      */
     public function batchCreate(array $optionsArray);
 
     /**
      * @param $data
      *
-     * @return AbstractAlbum[]
+     * @return \romkaChev\yandexFotki\models\Album[]
      */
     public function batchUpdate($data);
 
     /**
      * @param $data
      *
-     * @return AbstractAlbum[]
+     * @return Album[]
      */
     public function batchDelete($data);
 

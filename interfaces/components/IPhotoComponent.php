@@ -10,8 +10,8 @@ namespace romkaChev\yandexFotki\interfaces\components;
 
 
 use romkaChev\yandexFotki\interfaces\IYandexFotkiAccess;
-use romkaChev\yandexFotki\interfaces\models\AbstractPhoto;
-use romkaChev\yandexFotki\interfaces\models\options\AbstractCreatePhotoOptions;
+use romkaChev\yandexFotki\models\options\CreatePhotoOptions;
+use romkaChev\yandexFotki\models\Photo;
 
 /**
  * Interface IPhotoComponent
@@ -23,56 +23,56 @@ interface IPhotoComponent extends IYandexFotkiAccess
     /**
      * @param int|string $id
      *
-     * @return AbstractPhoto
+     * @return Photo
      */
     public function get($id);
 
     /**
-     * @param AbstractCreatePhotoOptions $options
+     * @param CreatePhotoOptions $options
      *
-     * @return AbstractPhoto
+     * @return \romkaChev\yandexFotki\models\Photo
      */
-    public function create(AbstractCreatePhotoOptions $options);
+    public function create(CreatePhotoOptions $options);
 
     /**
      * @param mixed $options
      *
-     * @return AbstractPhoto
+     * @return Photo
      */
     public function update($options);
 
     /**
      * @param mixed $data
      *
-     * @return AbstractPhoto
+     * @return \romkaChev\yandexFotki\models\Photo
      */
     public function delete($data);
 
     /**
      * @param $ids
      *
-     * @return AbstractPhoto[]
+     * @return Photo[]
      */
     public function batchGet($ids);
 
     /**
-     * @param AbstractCreatePhotoOptions[] $optionsArray
+     * @param \romkaChev\yandexFotki\models\options\CreatePhotoOptions[] $optionsArray
      *
-     * @return AbstractPhoto[]
+     * @return Photo[]
      */
     public function batchCreate(array $optionsArray);
 
     /**
      * @param $data
      *
-     * @return AbstractPhoto[]
+     * @return Photo[]
      */
     public function batchUpdate($data);
 
     /**
      * @param $data
      *
-     * @return AbstractPhoto[]
+     * @return \romkaChev\yandexFotki\models\Photo[]
      */
     public function batchDelete($data);
 }

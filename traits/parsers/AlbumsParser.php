@@ -2,48 +2,46 @@
 /**
  * Created by PhpStorm.
  * User: Roman
- * Date: 26.02.2016
- * Time: 21:17
+ * Date: 29.02.2016
+ * Time: 22:27
  */
 
 namespace romkaChev\yandexFotki\traits\parsers;
 
 
-use romkaChev\yandexFotki\models\Image;
+use romkaChev\yandexFotki\models\Album;
 use yii\helpers\ArrayHelper;
 
 /**
- * Class ImagesParser
+ * Class AlbumsParser
  *
  * @package romkaChev\yandexFotki\traits\parsers
  */
-trait ImagesParser
+trait AlbumsParser
 {
     /**
      * @param string|\Closure|array $key
-     * @param Image                 $model
+     * @param Album                 $model
      * @param bool                  $fast
      *
      * @return \Closure
      */
-    public function getImagesParser($key, Image $model, $fast = false)
+    public function getAlbumsParser($key, Album $model, $fast = false)
     {
         /**
          * @param $array
          *
-         * @return \romkaChev\yandexFotki\models\Image[]
+         * @return \romkaChev\yandexFotki\models\Album[]
          */
         return function ($array) use ($key, $model, $fast) {
-            $entries = ArrayHelper::getValue($array, $key, []);
+            $entries = ArrayHelper::getValue($array, $key);
             $models  = [];
 
-            foreach ($entries as $size => $entry) {
-                if ($entry instanceof Image) {
+            foreach ($entries as $entry) {
+                if ($entry instanceof Album) {
                     $models[] = $entry;
                     continue;
                 }
-
-                $entry['size'] = $size;
 
                 $localModel = clone $model;
                 $localModel->loadWithData($entry, $fast);
@@ -51,7 +49,7 @@ trait ImagesParser
                 $models[] = $localModel;
             }
 
-            return ArrayHelper::index($models, 'size');
+            return ArrayHelper::index($models, 'id');
         };
     }
 }

@@ -2,26 +2,25 @@
 /**
  * Created by PhpStorm.
  * User: Roman
- * Date: 20.12.2015
- * Time: 9:02
+ * Date: 29.02.2016
+ * Time: 20:38
  */
 
 namespace romkaChev\yandexFotki\validators;
 
 
 use romkaChev\yandexFotki\interfaces\IYandexFotkiAccess;
-use romkaChev\yandexFotki\models\AddressBinding;
+use romkaChev\yandexFotki\models\Album;
 use romkaChev\yandexFotki\traits\YandexFotkiAccess;
 use yii\validators\Validator;
 
 /**
- * Class AddressBindingValidator
+ * Class AlbumValidator
  *
  * @package romkaChev\yandexFotki\validators
  */
-class AddressBindingValidator extends Validator implements IYandexFotkiAccess
+class AlbumValidator extends Validator implements IYandexFotkiAccess
 {
-
     use YandexFotkiAccess;
 
     /**
@@ -29,10 +28,10 @@ class AddressBindingValidator extends Validator implements IYandexFotkiAccess
      */
     public function validateAttribute($model, $attribute)
     {
-        $instance = AddressBinding::className();
+        $instance = Album::className();
 
         if (!$this->$attribute instanceof $instance) {
-            $given    = get_class($this->$attribute);
+            $given = get_class($this->$attribute);
             $this->addError($model, $attribute, "{$attribute} must be an instance of '{$instance}', '{$given}' given.");
         }
     }

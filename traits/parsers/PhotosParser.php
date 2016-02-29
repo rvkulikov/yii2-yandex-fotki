@@ -9,7 +9,7 @@
 namespace romkaChev\yandexFotki\traits\parsers;
 
 
-use romkaChev\yandexFotki\interfaces\models\AbstractPhoto;
+use romkaChev\yandexFotki\models\Photo;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -21,24 +21,24 @@ trait PhotosParser
 {
     /**
      * @param string|\Closure|array $key
-     * @param AbstractPhoto         $model
+     * @param Photo                 $model
      * @param bool                  $fast
      *
      * @return \Closure
      */
-    public function getPhotosParser($key, AbstractPhoto $model, $fast = false)
+    public function getPhotosParser($key, Photo $model, $fast = false)
     {
         /**
          * @param $array
          *
-         * @return AbstractPhoto[]
+         * @return \romkaChev\yandexFotki\models\Photo[]
          */
         return function ($array) use ($key, $model, $fast) {
             $entries = ArrayHelper::getValue($array, $key);
             $models  = [];
 
             foreach ($entries as $entry) {
-                if ($entry instanceof AbstractPhoto) {
+                if ($entry instanceof Photo) {
                     $models[] = $entry;
                     continue;
                 }
@@ -52,5 +52,4 @@ trait PhotosParser
             return ArrayHelper::index($models, 'id');
         };
     }
-
 }

@@ -10,7 +10,7 @@ namespace romkaChev\yandexFotki\validators;
 
 
 use romkaChev\yandexFotki\interfaces\IYandexFotkiAccess;
-use romkaChev\yandexFotki\interfaces\models\AbstractAuthor;
+use romkaChev\yandexFotki\models\Author;
 use romkaChev\yandexFotki\traits\YandexFotkiAccess;
 use yii\validators\Validator;
 
@@ -28,7 +28,7 @@ class AuthorValidator extends Validator implements IYandexFotkiAccess
      */
     public function validateAttribute($model, $attribute)
     {
-        $instance = AbstractAuthor::className();
+        $instance = Author::className();
 
         if (!$this->$attribute instanceof $instance) {
             $given    = get_class($this->$attribute);

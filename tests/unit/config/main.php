@@ -18,11 +18,13 @@ use romkaChev\yandexFotki\models\Image;
 use romkaChev\yandexFotki\models\options\CreateAlbumOptions;
 use romkaChev\yandexFotki\models\options\CreatePhotoOptions;
 use romkaChev\yandexFotki\models\options\GetAlbumPhotosOptions;
+use romkaChev\yandexFotki\models\options\GetTagPhotosOptions;
 use romkaChev\yandexFotki\models\Photo;
 use romkaChev\yandexFotki\models\Point;
 use romkaChev\yandexFotki\models\Tag;
 use romkaChev\yandexFotki\models\TagPhotosCollection;
 use romkaChev\yandexFotki\validators\AddressBindingValidator;
+use romkaChev\yandexFotki\validators\AlbumValidator;
 use romkaChev\yandexFotki\validators\AuthorValidator;
 use romkaChev\yandexFotki\validators\ImageValidator;
 use romkaChev\yandexFotki\validators\PhotoValidator;
@@ -76,8 +78,10 @@ return [
                 'createAlbumOptions'         =>    CreateAlbumOptions::className(),
                 'getAlbumPhotosOptions'      => GetAlbumPhotosOptions::className(),
                 'createPhotoOptions'         =>    CreatePhotoOptions::className(),
+                'getTagPhotoOptions'         =>   GetTagPhotosOptions::className(),
 
                 'addressBindingValidator'    => AddressBindingValidator::className(),
+                'albumValidator'             =>          AlbumValidator::className(),
                 'authorValidator'            =>         AuthorValidator::className(),
                 'pointValidator'             =>          PointValidator::className(),
                 'photoValidator'             =>          PhotoValidator::className(),

@@ -10,8 +10,7 @@ namespace romkaChev\yandexFotki\components;
 
 
 use romkaChev\yandexFotki\interfaces\components\IPhotoComponent;
-use romkaChev\yandexFotki\interfaces\models\AbstractPhoto;
-use romkaChev\yandexFotki\interfaces\models\options\AbstractCreatePhotoOptions;
+use romkaChev\yandexFotki\models\options\CreatePhotoOptions;
 use romkaChev\yandexFotki\models\Photo;
 use romkaChev\yandexFotki\traits\YandexFotkiAccess;
 use yii\base\Component;
@@ -51,11 +50,11 @@ final class PhotoComponent extends Component implements IPhotoComponent
     }
 
     /**
-     * @param AbstractCreatePhotoOptions $options
+     * @param \romkaChev\yandexFotki\models\options\CreatePhotoOptions $options
      *
-     * @return AbstractPhoto
+     * @return Photo
      */
-    public function create(AbstractCreatePhotoOptions $options)
+    public function create(CreatePhotoOptions $options)
     {
         if (!$options->validate()) {
             throw new InvalidParamException(VarDumper::dumpAsString($options->getErrors()));
@@ -82,7 +81,7 @@ final class PhotoComponent extends Component implements IPhotoComponent
     /**
      * @param mixed $options
      *
-     * @return AbstractPhoto
+     * @return Photo
      */
     public function update($options)
     {
@@ -92,7 +91,7 @@ final class PhotoComponent extends Component implements IPhotoComponent
     /**
      * @param mixed $data
      *
-     * @return AbstractPhoto
+     * @return Photo
      */
     public function delete($data)
     {
@@ -115,7 +114,7 @@ final class PhotoComponent extends Component implements IPhotoComponent
 
         $responses = $httpClient->batchSend($requests);
 
-        /** @var AbstractPhoto[] $models */
+        /** @var Photo[] $models */
         $models = array_map(function (Response $response) {
             $model = $this->yandexFotki->getFactory()->getPhotoModel();
             $model->loadWithData($response->getData(), true);
@@ -166,7 +165,7 @@ final class PhotoComponent extends Component implements IPhotoComponent
     /**
      * @param $data
      *
-     * @return AbstractPhoto[]
+     * @return Photo[]
      */
     public function batchUpdate($data)
     {
@@ -176,7 +175,7 @@ final class PhotoComponent extends Component implements IPhotoComponent
     /**
      * @param $data
      *
-     * @return AbstractPhoto[]
+     * @return Photo[]
      */
     public function batchDelete($data)
     {

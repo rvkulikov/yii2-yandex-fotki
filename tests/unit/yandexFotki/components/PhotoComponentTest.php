@@ -9,7 +9,7 @@
 namespace romkaChev\yandexFotki\tests\unit\yandexFotki\components;
 
 
-use romkaChev\yandexFotki\interfaces\models\options\AbstractCreatePhotoOptions;
+use romkaChev\yandexFotki\models\options\CreatePhotoOptions;
 use romkaChev\yandexFotki\tests\unit\BaseTestCase;
 use yii\helpers\ArrayHelper;
 
@@ -37,7 +37,7 @@ class PhotoComponentTest extends BaseTestCase
         $factory        = $this->getComponent()->getFactory();
         $photoComponent = $this->getComponent()->getPhotos();
 
-        /** @var AbstractCreatePhotoOptions $options */
+        /** @var CreatePhotoOptions $options */
         $options = \Yii::configure($factory->getCreatePhotoOptions(), [
             'image' => __DIR__ . '/../../assets/test.png',
             'tags'  => ['TEST_CREATE_1', 'TEST_CREATE_2']
@@ -58,14 +58,14 @@ class PhotoComponentTest extends BaseTestCase
         $factory        = $this->getComponent()->getFactory();
         $photoComponent = $this->getComponent()->getPhotos();
 
-        /** @var AbstractCreatePhotoOptions $options */
+        /** @var CreatePhotoOptions $options */
         $options1 = \Yii::configure($factory->getCreatePhotoOptions(), [
             'image'   => __DIR__ . '/../../assets/test.png',
             'title'   => 'testBatchCreate1_title',
             'summary' => 'testBatchCreate1_summary',
         ]);
 
-        /** @var AbstractCreatePhotoOptions $options */
+        /** @var CreatePhotoOptions $options */
         $options2 = \Yii::configure($factory->getCreatePhotoOptions(), [
             'image'   => __DIR__ . '/../../assets/test.png',
             'title'   => 'testBatchCreate2_title',

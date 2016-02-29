@@ -10,9 +10,9 @@ namespace romkaChev\yandexFotki\components;
 
 
 use romkaChev\yandexFotki\interfaces\components\ITagComponent;
-use romkaChev\yandexFotki\interfaces\models\AbstractPhoto;
-use romkaChev\yandexFotki\interfaces\models\AbstractTag;
-use romkaChev\yandexFotki\interfaces\models\options\AbstractGetTagPhotosOptions;
+use romkaChev\yandexFotki\models\options\GetTagPhotosOptions;
+use romkaChev\yandexFotki\models\Photo;
+use romkaChev\yandexFotki\models\Tag;
 use romkaChev\yandexFotki\traits\YandexFotkiAccess;
 use yii\base\Component;
 use yii\base\InvalidParamException;
@@ -48,15 +48,15 @@ final class TagComponent extends Component implements ITagComponent
     }
 
     /**
-     * @param int|string                  $id
-     * @param AbstractGetTagPhotosOptions $options
+     * @param int|string          $id
+     * @param GetTagPhotosOptions $options
      *
-     * @return AbstractPhoto[]
+     * @return Photo[]
      */
-    public function getPhotos($id, AbstractGetTagPhotosOptions $options = null)
+    public function getPhotos($id, GetTagPhotosOptions $options = null)
     {
         $id      = urlencode($id);
-        $options = $options ?: AbstractGetTagPhotosOptions::createDefault();
+        $options = $options ?: $options->createDefault();
 
         if (!$options->validate()) {
             throw new InvalidParamException(VarDumper::dumpAsString($options->getErrors()));
@@ -87,7 +87,7 @@ final class TagComponent extends Component implements ITagComponent
     /**
      * @param mixed $options
      *
-     * @return AbstractTag
+     * @return Tag
      */
     public function update($options)
     {
@@ -97,7 +97,7 @@ final class TagComponent extends Component implements ITagComponent
     /**
      * @param mixed $data
      *
-     * @return AbstractTag
+     * @return Tag
      */
     public function delete($data)
     {
@@ -132,7 +132,7 @@ final class TagComponent extends Component implements ITagComponent
     /**
      * @param $data
      *
-     * @return AbstractTag[]
+     * @return \romkaChev\yandexFotki\models\Tag[]
      */
     public function batchUpdate($data)
     {
@@ -142,7 +142,7 @@ final class TagComponent extends Component implements ITagComponent
     /**
      * @param $data
      *
-     * @return AbstractTag[]
+     * @return Tag[]
      */
     public function batchDelete($data)
     {

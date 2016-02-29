@@ -10,7 +10,7 @@ namespace romkaChev\yandexFotki\validators;
 
 
 use romkaChev\yandexFotki\interfaces\IYandexFotkiAccess;
-use romkaChev\yandexFotki\interfaces\models\AbstractPhoto;
+use romkaChev\yandexFotki\models\Photo;
 use romkaChev\yandexFotki\traits\YandexFotkiAccess;
 use yii\validators\Validator;
 
@@ -29,7 +29,7 @@ class PhotoValidator extends Validator implements IYandexFotkiAccess
      */
     public function validateAttribute($model, $attribute)
     {
-        $instance = AbstractPhoto::className();
+        $instance = Photo::className();
 
         if (!$model->{$attribute} instanceof $instance) {
             $given    = get_class($this->$attribute);

@@ -9,24 +9,24 @@
 namespace romkaChev\yandexFotki\traits\parsers;
 
 
-use romkaChev\yandexFotki\interfaces\models\AbstractTag;
+use romkaChev\yandexFotki\models\Tag;
 use yii\helpers\ArrayHelper;
 
 trait TagsParser
 {
     /**
      * @param string|\Closure|array $key
-     * @param AbstractTag           $model
+     * @param Tag                   $model
      * @param bool                  $fast
      *
      * @return \Closure
      */
-    public function getTagsParser($key, AbstractTag $model, $fast = false)
+    public function getTagsParser($key, Tag $model, $fast = false)
     {
         /**
          * @param $array
          *
-         * @return AbstractTag[]
+         * @return \romkaChev\yandexFotki\models\Tag[]
          */
         return function ($array) use ($key, $model, $fast) {
             $login   = $model->getYandexFotki()->getLogin();

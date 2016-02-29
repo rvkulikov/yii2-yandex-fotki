@@ -9,19 +9,13 @@
 namespace romkaChev\yandexFotki\interfaces;
 
 
-use romkaChev\yandexFotki\interfaces\models\AbstractAddressBinding;
-use romkaChev\yandexFotki\interfaces\models\AbstractAlbum;
-use romkaChev\yandexFotki\interfaces\models\AbstractAlbumPhotosCollection;
-use romkaChev\yandexFotki\interfaces\models\AbstractAuthor;
-use romkaChev\yandexFotki\interfaces\models\AbstractImage;
-use romkaChev\yandexFotki\interfaces\models\AbstractPhoto;
-use romkaChev\yandexFotki\interfaces\models\AbstractPoint;
-use romkaChev\yandexFotki\interfaces\models\AbstractTag;
-use romkaChev\yandexFotki\interfaces\models\AbstractTagPhotosCollection;
-use romkaChev\yandexFotki\interfaces\models\options\AbstractCreateAlbumOptions;
-use romkaChev\yandexFotki\interfaces\models\options\AbstractCreatePhotoOptions;
-use romkaChev\yandexFotki\interfaces\models\options\AbstractGetAlbumPhotosOptions;
-use romkaChev\yandexFotki\interfaces\models\options\AbstractGetTagPhotosOptions;
+use romkaChev\yandexFotki\models\AddressBinding;
+use romkaChev\yandexFotki\models\AlbumsCollection;
+use romkaChev\yandexFotki\models\Image;
+use romkaChev\yandexFotki\models\options\CreateAlbumOptions;
+use romkaChev\yandexFotki\models\options\GetTagPhotosOptions;
+use romkaChev\yandexFotki\models\Tag;
+use romkaChev\yandexFotki\models\TagPhotosCollection;
 use yii\base\InvalidConfigException;
 use yii\validators\Validator;
 
@@ -35,7 +29,7 @@ interface IFactory extends IYandexFotkiAccess
     //<editor-fold desc="Models">
 
     /**
-     * @return AbstractAddressBinding
+     * @return AddressBinding
      * @throws InvalidConfigException
      */
     public function getAddressBindingModel();
@@ -47,7 +41,7 @@ interface IFactory extends IYandexFotkiAccess
     public function setAddressBindingModel($addressBindingModel);
 
     /**
-     * @return AbstractAlbum
+     * @return \romkaChev\yandexFotki\models\Album
      * @throws InvalidConfigException
      */
     public function getAlbumModel();
@@ -60,7 +54,20 @@ interface IFactory extends IYandexFotkiAccess
     public function setAlbumModel($albumModel);
 
     /**
-     * @return AbstractAlbumPhotosCollection
+     * @return AlbumsCollection
+     * @throws InvalidConfigException
+     */
+    public function getAlbumsCollectionModel();
+
+    /**
+     * @param \romkaChev\yandexFotki\models\AlbumsCollection $albumsCollectionModel
+     *
+     * @return static
+     */
+    public function setAlbumsCollectionModel($albumsCollectionModel);
+
+    /**
+     * @return \romkaChev\yandexFotki\models\AlbumPhotosCollection
      * @throws InvalidConfigException
      */
     public function getAlbumPhotosCollectionModel();
@@ -73,7 +80,7 @@ interface IFactory extends IYandexFotkiAccess
     public function setAlbumPhotosCollectionModel($albumPhotosCollectionModel);
 
     /**
-     * @return AbstractAuthor
+     * @return \romkaChev\yandexFotki\models\Author
      * @throws InvalidConfigException
      */
     public function getAuthorModel();
@@ -86,7 +93,7 @@ interface IFactory extends IYandexFotkiAccess
     public function setAuthorModel($authorModel);
 
     /**
-     * @return AbstractPhoto
+     * @return \romkaChev\yandexFotki\models\Photo
      * @throws InvalidConfigException
      */
     public function getPhotoModel();
@@ -98,7 +105,7 @@ interface IFactory extends IYandexFotkiAccess
     public function setPhotoModel($photoModel);
 
     /**
-     * @return AbstractTag
+     * @return Tag
      * @throws InvalidConfigException
      */
     public function getTagModel();
@@ -110,19 +117,19 @@ interface IFactory extends IYandexFotkiAccess
     public function setTagModel($tagModel);
 
     /**
-     * @return AbstractTagPhotosCollection
+     * @return \romkaChev\yandexFotki\models\TagPhotosCollection
      */
     public function getTagPhotosCollectionModel();
 
     /**
-     * @param AbstractTagPhotosCollection $tagPhotosCollectionModel
+     * @param TagPhotosCollection $tagPhotosCollectionModel
      *
      * @return static
      */
     public function setTagPhotosCollectionModel($tagPhotosCollectionModel);
 
     /**
-     * @return AbstractPoint
+     * @return \romkaChev\yandexFotki\models\Point
      * @throws InvalidConfigException
      */
     public function getPointModel();
@@ -134,7 +141,7 @@ interface IFactory extends IYandexFotkiAccess
     public function setPointModel($pointModel);
 
     /**
-     * @return AbstractImage
+     * @return Image
      * @throws InvalidConfigException
      */
     public function getImageModel();
@@ -151,7 +158,7 @@ interface IFactory extends IYandexFotkiAccess
     //<editor-fold desc="Options">
 
     /**
-     * @return AbstractCreateAlbumOptions
+     * @return CreateAlbumOptions
      * @throws InvalidConfigException
      */
     public function getCreateAlbumOptions();
@@ -164,7 +171,7 @@ interface IFactory extends IYandexFotkiAccess
     public function setCreateAlbumOptions($createAlbumOptions);
 
     /**
-     * @return AbstractGetAlbumPhotosOptions
+     * @return \romkaChev\yandexFotki\models\options\GetAlbumPhotosOptions
      * @throws InvalidConfigException
      */
     public function getGetAlbumPhotosOptions();
@@ -176,7 +183,7 @@ interface IFactory extends IYandexFotkiAccess
     public function setGetAlbumPhotosOptions($getAlbumPhotosOptions);
 
     /**
-     * @return AbstractCreatePhotoOptions
+     * @return \romkaChev\yandexFotki\models\options\CreatePhotoOptions
      * @throws InvalidConfigException
      */
     public function getCreatePhotoOptions();
@@ -189,12 +196,12 @@ interface IFactory extends IYandexFotkiAccess
     public function setCreatePhotoOptions($createPhotoOptions);
 
     /**
-     * @return AbstractGetTagPhotosOptions
+     * @return \romkaChev\yandexFotki\models\options\GetTagPhotosOptions
      */
     public function getGetTagPhotosOptions();
 
     /**
-     * @param AbstractGetTagPhotosOptions $getTagPhotosOptions
+     * @param GetTagPhotosOptions $getTagPhotosOptions
      *
      * @return static
      */
@@ -215,6 +222,19 @@ interface IFactory extends IYandexFotkiAccess
      * @return static
      */
     public function setAddressBindingValidator($addressBindingValidator);
+
+    /**
+     * @return Validator
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function getAlbumValidator();
+
+    /**
+     * @param Validator $albumValidator
+     *
+     * @return static
+     */
+    public function setAlbumValidator($albumValidator);
 
     /**
      * @return Validator

@@ -10,19 +10,20 @@ namespace romkaChev\yandexFotki;
 
 
 use romkaChev\yandexFotki\interfaces\IFactory;
-use romkaChev\yandexFotki\interfaces\models\AbstractAddressBinding;
-use romkaChev\yandexFotki\interfaces\models\AbstractAlbum;
-use romkaChev\yandexFotki\interfaces\models\AbstractAlbumPhotosCollection;
-use romkaChev\yandexFotki\interfaces\models\AbstractAuthor;
-use romkaChev\yandexFotki\interfaces\models\AbstractImage;
-use romkaChev\yandexFotki\interfaces\models\AbstractPhoto;
-use romkaChev\yandexFotki\interfaces\models\AbstractPoint;
-use romkaChev\yandexFotki\interfaces\models\AbstractTag;
-use romkaChev\yandexFotki\interfaces\models\AbstractTagPhotosCollection;
-use romkaChev\yandexFotki\interfaces\models\options\AbstractCreateAlbumOptions;
-use romkaChev\yandexFotki\interfaces\models\options\AbstractCreatePhotoOptions;
-use romkaChev\yandexFotki\interfaces\models\options\AbstractGetAlbumPhotosOptions;
-use romkaChev\yandexFotki\interfaces\models\options\AbstractGetTagPhotosOptions;
+use romkaChev\yandexFotki\models\AddressBinding;
+use romkaChev\yandexFotki\models\Album;
+use romkaChev\yandexFotki\models\AlbumPhotosCollection;
+use romkaChev\yandexFotki\models\AlbumsCollection;
+use romkaChev\yandexFotki\models\Author;
+use romkaChev\yandexFotki\models\Image;
+use romkaChev\yandexFotki\models\options\CreateAlbumOptions;
+use romkaChev\yandexFotki\models\options\CreatePhotoOptions;
+use romkaChev\yandexFotki\models\options\GetAlbumPhotosOptions;
+use romkaChev\yandexFotki\models\options\GetTagPhotosOptions;
+use romkaChev\yandexFotki\models\Photo;
+use romkaChev\yandexFotki\models\Point;
+use romkaChev\yandexFotki\models\Tag;
+use romkaChev\yandexFotki\models\TagPhotosCollection;
 use romkaChev\yandexFotki\traits\YandexFotkiAccess;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
@@ -40,40 +41,44 @@ final class Factory extends Component implements IFactory
     use YandexFotkiAccess;
 
     //<editor-fold desc="Models">
-    /** @var AbstractAddressBinding */
+    /** @var \romkaChev\yandexFotki\models\AddressBinding */
     private $addressBindingModel;
-    /** @var AbstractAlbum */
+    /** @var Album */
     private $albumModel;
-    /** @var AbstractAlbumPhotosCollection */
+    /** @var \romkaChev\yandexFotki\models\AlbumsCollection */
+    private $albumsCollectionModel;
+    /** @var \romkaChev\yandexFotki\models\AlbumPhotosCollection */
     private $albumPhotosCollectionModel;
-    /** @var AbstractAuthor */
+    /** @var \romkaChev\yandexFotki\models\Author */
     private $authorModel;
-    /** @var AbstractPhoto */
+    /** @var \romkaChev\yandexFotki\models\Photo */
     private $photoModel;
-    /** @var AbstractTag */
+    /** @var Tag */
     private $tagModel;
-    /** @var AbstractTagPhotosCollection */
+    /** @var \romkaChev\yandexFotki\models\TagPhotosCollection */
     private $tagPhotosCollectionModel;
-    /** @var AbstractPoint */
+    /** @var \romkaChev\yandexFotki\models\Point */
     private $pointModel;
-    /** @var AbstractImage */
+    /** @var Image */
     private $imageModel;
     //</editor-fold>
 
     //<editor-fold desc="Options">
-    /** @var AbstractCreateAlbumOptions */
+    /** @var \romkaChev\yandexFotki\models\options\CreateAlbumOptions */
     private $createAlbumOptions;
-    /** @var AbstractGetAlbumPhotosOptions */
+    /** @var GetAlbumPhotosOptions */
     private $getAlbumPhotosOptions;
-    /** @var AbstractCreatePhotoOptions */
+    /** @var \romkaChev\yandexFotki\models\options\CreatePhotoOptions */
     private $createPhotoOptions;
-    /** @var AbstractGetTagPhotosOptions */
+    /** @var \romkaChev\yandexFotki\models\options\GetTagPhotosOptions */
     private $getTagPhotosOptions;
     //</editor-fold>
 
     //<editor-fold desc="Validators">
     /** @var Validator */
     private $addressBindingValidator;
+    /** @var Validator */
+    private $albumValidator;
     /** @var Validator */
     private $authorValidator;
     /** @var Validator */
@@ -91,7 +96,7 @@ final class Factory extends Component implements IFactory
      */
     public function getAddressBindingModel()
     {
-        $this->preProcessConfigurableItem('addressBindingModel', AbstractAddressBinding::className());
+        $this->preProcessConfigurableItem('addressBindingModel', AddressBinding::className());
 
         return clone $this->addressBindingModel;
     }
@@ -111,7 +116,7 @@ final class Factory extends Component implements IFactory
      */
     public function getAlbumModel()
     {
-        $this->preProcessConfigurableItem('albumModel', AbstractAlbum::className());
+        $this->preProcessConfigurableItem('albumModel', Album::className());
 
         return clone $this->albumModel;
     }
@@ -129,9 +134,29 @@ final class Factory extends Component implements IFactory
     /**
      * @inheritdoc
      */
+    public function getAlbumsCollectionModel()
+    {
+        $this->preProcessConfigurableItem('albumsCollectionModel', AlbumsCollection::className());
+
+        return $this->albumsCollectionModel;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setAlbumsCollectionModel($albumsCollectionModel)
+    {
+        $this->albumsCollectionModel = $albumsCollectionModel;
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getAlbumPhotosCollectionModel()
     {
-        $this->preProcessConfigurableItem('albumPhotosCollectionModel', AbstractAlbumPhotosCollection::className());
+        $this->preProcessConfigurableItem('albumPhotosCollectionModel', AlbumPhotosCollection::className());
 
         return clone $this->albumPhotosCollectionModel;
     }
@@ -151,7 +176,7 @@ final class Factory extends Component implements IFactory
      */
     public function getAuthorModel()
     {
-        $this->preProcessConfigurableItem('authorModel', AbstractAuthor::className());
+        $this->preProcessConfigurableItem('authorModel', Author::className());
 
         return clone $this->authorModel;
     }
@@ -171,7 +196,7 @@ final class Factory extends Component implements IFactory
      */
     public function getPhotoModel()
     {
-        $this->preProcessConfigurableItem('photoModel', AbstractPhoto::className());
+        $this->preProcessConfigurableItem('photoModel', Photo::className());
 
         return clone $this->photoModel;
     }
@@ -191,7 +216,7 @@ final class Factory extends Component implements IFactory
      */
     public function getTagModel()
     {
-        $this->preProcessConfigurableItem('tagModel', AbstractTag::className());
+        $this->preProcessConfigurableItem('tagModel', Tag::className());
 
         return clone $this->tagModel;
     }
@@ -211,7 +236,7 @@ final class Factory extends Component implements IFactory
      */
     public function getTagPhotosCollectionModel()
     {
-        $this->preProcessConfigurableItem('tagPhotosCollectionModel', AbstractTagPhotosCollection::className());
+        $this->preProcessConfigurableItem('tagPhotosCollectionModel', TagPhotosCollection::className());
 
         return $this->tagPhotosCollectionModel;
     }
@@ -231,7 +256,7 @@ final class Factory extends Component implements IFactory
      */
     public function getPointModel()
     {
-        $this->preProcessConfigurableItem('pointModel', AbstractPoint::className());
+        $this->preProcessConfigurableItem('pointModel', Point::className());
 
         return clone $this->pointModel;
     }
@@ -251,7 +276,7 @@ final class Factory extends Component implements IFactory
      */
     public function getImageModel()
     {
-        $this->preProcessConfigurableItem('imageModel', AbstractImage::className());
+        $this->preProcessConfigurableItem('imageModel', Image::className());
 
         return clone $this->imageModel;
     }
@@ -275,7 +300,7 @@ final class Factory extends Component implements IFactory
      */
     public function getCreateAlbumOptions()
     {
-        $this->preProcessConfigurableItem('createAlbumOptions', AbstractCreateAlbumOptions::className());
+        $this->preProcessConfigurableItem('createAlbumOptions', CreateAlbumOptions::className());
 
         return clone $this->createAlbumOptions;
     }
@@ -295,7 +320,7 @@ final class Factory extends Component implements IFactory
      */
     public function getGetAlbumPhotosOptions()
     {
-        $this->preProcessConfigurableItem('getAlbumPhotosOptions', AbstractGetAlbumPhotosOptions::className());
+        $this->preProcessConfigurableItem('getAlbumPhotosOptions', GetAlbumPhotosOptions::className());
 
         return $this->getAlbumPhotosOptions;
     }
@@ -315,7 +340,7 @@ final class Factory extends Component implements IFactory
      */
     public function getCreatePhotoOptions()
     {
-        $this->preProcessConfigurableItem('createPhotoOptions', AbstractCreatePhotoOptions::className());
+        $this->preProcessConfigurableItem('createPhotoOptions', CreatePhotoOptions::className());
 
         return clone $this->createPhotoOptions;
     }
@@ -335,7 +360,7 @@ final class Factory extends Component implements IFactory
      */
     public function getGetTagPhotosOptions()
     {
-        $this->preProcessConfigurableItem('getTagPhotosOptions', AbstractGetTagPhotosOptions::className());
+        $this->preProcessConfigurableItem('getTagPhotosOptions', GetTagPhotosOptions::className());
 
         return clone $this->getTagPhotosOptions;
     }
@@ -374,6 +399,28 @@ final class Factory extends Component implements IFactory
         return $this;
     }
 
+    /**
+     * @return Validator
+     */
+    public function getAlbumValidator()
+    {
+        $this->preProcessConfigurableItem('albumValidator', Validator::className());
+
+        return $this->albumValidator;
+    }
+
+    /**
+     * @param Validator $albumValidator
+     *
+     * @return static
+     */
+    public function setAlbumValidator($albumValidator)
+    {
+        $this->albumValidator = $albumValidator;
+
+        return $this;
+    }
+    
     /**
      * @inheritdoc
      */
