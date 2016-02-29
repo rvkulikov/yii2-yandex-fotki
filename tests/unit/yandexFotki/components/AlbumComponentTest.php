@@ -103,4 +103,10 @@ class AlbumComponentTest extends BaseTestCase
         $this->assertArraySubset($titles, ['testBatchCreate1_title', 'testBatchCreate2_title']);
         $this->assertArraySubset($summaries, ['testBatchCreate1_summary', 'testBatchCreate2_summary']);
     }
+
+    public function testTree()
+    {
+        $albumComponent = $this->getComponent()->getAlbums();
+        $albumComponent->tree();
+    }
 }

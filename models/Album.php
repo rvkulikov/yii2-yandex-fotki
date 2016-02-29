@@ -162,13 +162,25 @@ class Album extends AbstractModel implements LoadableWithData
     }
 
     /**
+     * @param Album $parent
+     */
+    public function setParent($parent)
+    {
+        $this->parent = $parent;
+    }
+
+    /**
      * @return Album[]
      */
     public function getChildren()
     {
         if (!$this->children) {
-            $component      = $this->getYandexFotki()->getAlbums();
-            $this->children = $component->batchGet($this->id);
+            $component = $this->getYandexFotki()->getAlbums();
+            $children  = $component->tree($this->id);
+            foreach ($children as $child) {
+                $child->setParent($this);
+            }
+            $this->children = $children;
         }
 
         return $this->children;
@@ -179,6 +191,10 @@ class Album extends AbstractModel implements LoadableWithData
      */
     public function setChildren($children)
     {
+        foreach ($children as $child) {
+            $child->setParent($this);
+        }
+        
         $this->children = $children;
     }
 
@@ -195,7 +211,7 @@ class Album extends AbstractModel implements LoadableWithData
          */
         return function ($array, $defaultValue) {
             $value = ArrayHelper::getValue($array, 'links.album');
-            preg_match('/.*\/users\/([^\/]*)\/album\/(?<albumId>[[^\/]*])/', $value, $matches);
+            preg_match('/.*\/users\/([^\/]*)\/album\/(?<albumId>[^\/]*)/', $value, $matches);
 
             return intval(ArrayHelper::getValue($matches, 'albumId')) ?: $defaultValue;
         };

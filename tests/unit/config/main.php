@@ -13,6 +13,7 @@ use romkaChev\yandexFotki\Factory;
 use romkaChev\yandexFotki\models\AddressBinding;
 use romkaChev\yandexFotki\models\Album;
 use romkaChev\yandexFotki\models\AlbumPhotosCollection;
+use romkaChev\yandexFotki\models\AlbumsCollection;
 use romkaChev\yandexFotki\models\Author;
 use romkaChev\yandexFotki\models\Image;
 use romkaChev\yandexFotki\models\options\CreateAlbumOptions;
@@ -67,6 +68,7 @@ return [
 
                 'addressBindingModel'        =>        AddressBinding::className(),
                 'albumModel'                 =>                 Album::className(),
+                'albumsCollectionModel'      =>      AlbumsCollection::className(),
                 'albumPhotosCollectionModel' => AlbumPhotosCollection::className(),
                 'authorModel'                =>                Author::className(),
                 'photoModel'                 =>                 Photo::className(),
@@ -78,7 +80,7 @@ return [
                 'createAlbumOptions'         =>    CreateAlbumOptions::className(),
                 'getAlbumPhotosOptions'      => GetAlbumPhotosOptions::className(),
                 'createPhotoOptions'         =>    CreatePhotoOptions::className(),
-                'getTagPhotoOptions'         =>   GetTagPhotosOptions::className(),
+                'getTagPhotosOptions'        =>   GetTagPhotosOptions::className(),
 
                 'addressBindingValidator'    => AddressBindingValidator::className(),
                 'albumValidator'             =>          AlbumValidator::className(),

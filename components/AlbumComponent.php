@@ -160,10 +160,14 @@ final class AlbumComponent extends Component implements IAlbumComponent
 
         } while ($collection->linkNext);
 
+        ksort($models);
+
         /** @var Album[][] $map */
         $map = ArrayHelper::index($models, 'id', function (Album $model) {
             return $model->parentId ?: '_root';
         });
+
+        ksort($map);
 
         $rootIds = ArrayHelper::getColumn(ArrayHelper::remove($map, '_root', []), 'id');
         foreach ($map as $parentId => $children) {

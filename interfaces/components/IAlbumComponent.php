@@ -64,7 +64,7 @@ interface IAlbumComponent extends IYandexFotkiAccess
      *
      * @return Album[]
      */
-    public function tree($id, GetAlbumsOptions $options = null);
+    public function tree($id = null, GetAlbumsOptions $options = null);
 
     /**
      * @param $ids
