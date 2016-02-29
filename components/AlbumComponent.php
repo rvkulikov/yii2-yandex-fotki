@@ -60,7 +60,7 @@ final class AlbumComponent extends Component implements IAlbumComponent
      */
     public function getPhotos($id, GetAlbumPhotosOptions $options = null)
     {
-        $options = $options ?: $options->createDefault();
+        $options = $options ?: GetAlbumPhotosOptions::createDefault();
 
         if (!$options->validate()) {
             throw new InvalidParamException(VarDumper::dumpAsString($options->getErrors()));
@@ -135,7 +135,7 @@ final class AlbumComponent extends Component implements IAlbumComponent
      */
     public function tree($id = null, GetAlbumsOptions $options = null)
     {
-        $options = $options ?: $options->createDefault();
+        $options = $options ?: GetAlbumsOptions::createDefault();
 
         if (!$options->validate()) {
             throw new InvalidParamException(VarDumper::dumpAsString($options->getErrors()));

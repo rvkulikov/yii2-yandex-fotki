@@ -56,7 +56,7 @@ final class TagComponent extends Component implements ITagComponent
     public function getPhotos($id, GetTagPhotosOptions $options = null)
     {
         $id      = urlencode($id);
-        $options = $options ?: $options->createDefault();
+        $options = $options ?: GetTagPhotosOptions::createDefault();
 
         if (!$options->validate()) {
             throw new InvalidParamException(VarDumper::dumpAsString($options->getErrors()));
