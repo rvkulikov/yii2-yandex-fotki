@@ -9,7 +9,6 @@
 namespace romkaChev\yandexFotki\models;
 
 use DateTime;
-use InvalidArgumentException;
 use romkaChev\yandexFotki\interfaces\LoadableWithData;
 use romkaChev\yandexFotki\interfaces\models\IAccess;
 use romkaChev\yandexFotki\interfaces\models\IImageSize;
@@ -229,14 +228,6 @@ class Photo extends AbstractModel implements IImageSize, IAccess, LoadableWithDa
      */
     public function setTags($tags)
     {
-        foreach ($tags as $index => $tag) {
-            $instance = Tag::className();
-
-            if (!$tag instanceof $instance) {
-                $type = get_class($tag);
-                throw new InvalidArgumentException("'tag' must be an instance of '{$instance}', '{$type}' given at index '{$index}'.");
-            }
-        }
         $this->tags = $tags;
     }
 }

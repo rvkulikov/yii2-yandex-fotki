@@ -211,6 +211,14 @@ class Tag extends AbstractModel implements LoadableWithData
     }
 
     /**
+     * @param Photo[] $photos
+     */
+    public function setPhotos($photos)
+    {
+        $this->photos = $photos;
+    }
+    
+    /**
      * @return \Closure
      */
     public function getIdParser()
