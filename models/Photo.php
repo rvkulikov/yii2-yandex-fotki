@@ -22,11 +22,9 @@ use romkaChev\yandexFotki\traits\parsers\TagsParser;
 use yii\helpers\ArrayHelper;
 
 /**
- * Interface IPhoto
+ * Class Photo
  *
- * @package romkaChev\yandexFotki\interfaces\models
- *
- * @property Tag[] $tags
+ * @package romkaChev\yandexFotki\models
  */
 class Photo extends AbstractModel implements IImageSize, IAccess, LoadableWithData
 {
@@ -84,19 +82,21 @@ class Photo extends AbstractModel implements IImageSize, IAccess, LoadableWithDa
      */
     public function rules()
     {
+        $factory = $this->getYandexFotki()->getFactory();
+
         return [
             ['urn', 'string'],
             ['id', 'integer'],
-            ['author', $this->getYandexFotki()->getFactory()->getAuthorValidator()],
+            ['author', $factory->getAuthorValidator()],
             ['title', 'string'],
             ['summary', 'string'],
             ['access', 'string'],
             ['isForAdult', 'boolean'],
             ['hideOriginal', 'boolean'],
             ['disableComments', 'boolean'],
-            ['images', 'each', 'rule' => [$this->getYandexFotki()->getFactory()->getImageValidator()]],
-            ['point', $this->getYandexFotki()->getFactory()->getPointValidator()],
-            ['addressBinding', $this->getYandexFotki()->getFactory()->getAddressBindingValidator()],
+            ['images', 'each', 'rule' => [$factory->getImageValidator()]],
+            ['point', $factory->getPointValidator()],
+            ['addressBinding', $factory->getAddressBindingValidator()],
             ['publishedAt', 'string'],
             ['updatedAt', 'string'],
             ['editedAt', 'url'],
@@ -106,7 +106,8 @@ class Photo extends AbstractModel implements IImageSize, IAccess, LoadableWithDa
             ['linkEditMedia', 'url'],
             ['linkAlbum', 'url'],
             ['albumId', 'integer'],
-            ['tags', 'safe']
+            ['album', $factory->getAlbumValidator()],
+            ['tags', 'each', 'rule' => [$factory->getTagValidator()]]
         ];
     }
 
@@ -163,7 +164,7 @@ class Photo extends AbstractModel implements IImageSize, IAccess, LoadableWithDa
          */
         return function ($array, $defaultValue) {
             $value = ArrayHelper::getValue($array, 'links.album');
-            preg_match('/.*\/users\/([^\/]*)\/album\/(?<albumId>[[^\/]*])/', $value, $matches);
+            preg_match('/.*\/users\/([^\/]*)\/album\/(?<albumId>[^\/]*)/', $value, $matches);
 
             return intval(ArrayHelper::getValue($matches, 'albumId')) ?: $defaultValue;
         };
@@ -188,6 +189,33 @@ class Photo extends AbstractModel implements IImageSize, IAccess, LoadableWithDa
         };
     }
 
+    /**
+     * @return Album
+     */
+    public function getAlbum()
+    {
+        if ($this->album) {
+            return $this->album;
+        }
+
+        if (!$this->albumId) {
+            return null;
+        }
+
+        $component   = $this->getYandexFotki()->getAlbums();
+        $this->album = $component->get($this->albumId);
+
+        return $this->album;
+    }
+
+    /**
+     * @param Album $album
+     */
+    public function setAlbum($album)
+    {
+        $this->album = $album;
+    }
+    
     /**
      * @return Tag[]
      */

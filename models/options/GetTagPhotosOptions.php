@@ -10,9 +10,9 @@ namespace romkaChev\yandexFotki\models\options;
 
 
 /**
- * Class AbstractGetTagPhotosOptions
+ * Class GetTagPhotosOptions
  *
- * @package romkaChev\yandexFotki\interfaces\models\options
+ * @package romkaChev\yandexFotki\models\options
  */
 class GetTagPhotosOptions extends PaginationOptions
 {

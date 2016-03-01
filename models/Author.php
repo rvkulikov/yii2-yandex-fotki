@@ -12,9 +12,9 @@ use romkaChev\yandexFotki\interfaces\LoadableWithData;
 use yii\helpers\ArrayHelper;
 
 /**
- * Class AbstractAuthor
+ * Class Author
  *
- * @package romkaChev\yandexFotki\interfaces\models
+ * @package romkaChev\yandexFotki\models
  */
 class Author extends AbstractModel implements LoadableWithData
 {

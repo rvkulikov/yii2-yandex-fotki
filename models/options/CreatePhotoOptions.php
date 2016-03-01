@@ -19,9 +19,9 @@ use yii\web\UploadedFile;
 /**
  * todo check is the password required for protected album
  *
- * Class AbstractCreatePhotoOptions
+ * Class CreatePhotoOptions
  *
- * @package romkaChev\yandexFotki\interfaces\models\options
+ * @package romkaChev\yandexFotki\models\options
  */
 class CreatePhotoOptions extends AbstractModel implements Linkable, IAccess
 {

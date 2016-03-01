@@ -13,9 +13,9 @@ use yii\helpers\ArrayHelper;
 use yii\web\Linkable;
 
 /**
- * Class AbstractCreateAlbumOptions
+ * Class CreateAlbumOptions
  *
- * @package romkaChev\yandexFotki\interfaces\models\options
+ * @package romkaChev\yandexFotki\models\options
  */
 class CreateAlbumOptions extends AbstractModel implements Linkable
 {
@@ -35,11 +35,11 @@ class CreateAlbumOptions extends AbstractModel implements Linkable
     {
         return [
             ['title', 'string'],
+            ['title', 'required'],
+            
             ['summary', 'string'],
             ['password', 'string'],
             ['parentId', 'integer'],
-
-            ['title', 'required']
         ];
     }
 

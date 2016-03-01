@@ -13,9 +13,9 @@ use romkaChev\yandexFotki\interfaces\models\IFeedAdapter;
 use romkaChev\yandexFotki\models\AbstractModel;
 
 /**
- * Class AbstractPaginationOptions
+ * Class PaginationOptions
  *
- * @package romkaChev\yandexFotki\interfaces\models\options
+ * @package romkaChev\yandexFotki\models\options
  *
  * @property-read string $sort
  */

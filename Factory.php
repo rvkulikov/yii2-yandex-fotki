@@ -87,6 +87,8 @@ final class Factory extends Component implements IFactory
     private $photoValidator;
     /** @var Validator */
     private $imageValidator;
+    /** @var Validator */
+    private $tagValidator;
     //</editor-fold>
 
     //<editor-fold desc="Models">
@@ -501,6 +503,28 @@ final class Factory extends Component implements IFactory
         return $this;
     }
 
+    /**
+     * @return Validator
+     */
+    public function getTagValidator()
+    {
+        $this->preProcessConfigurableItem('tagValidator', Validator::className());
+
+        return $this->tagValidator;
+    }
+
+    /**
+     * @param Validator $tagValidator
+     *
+     * @return static
+     */
+    public function setTagValidator($tagValidator)
+    {
+        $this->tagValidator = $tagValidator;
+
+        return $this;
+    }
+    
     //</editor-fold>
 
     /**

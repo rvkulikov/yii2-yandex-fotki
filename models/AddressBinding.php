@@ -13,9 +13,9 @@ use romkaChev\yandexFotki\traits\parsers\PointParser;
 use yii\helpers\ArrayHelper;
 
 /**
- * Class AbstractAddressBinding
+ * Class AddressBinding
  *
- * @package romkaChev\yandexFotki\interfaces\models
+ * @package romkaChev\yandexFotki\models
  */
 class AddressBinding extends AbstractModel implements LoadableWithData
 {
@@ -34,11 +34,9 @@ class AddressBinding extends AbstractModel implements LoadableWithData
     public function rules()
     {
         return [
-            //@formatter:off
             ['organizationId', 'integer'],
             ['address', 'string'],
             ['point', $this->getYandexFotki()->getFactory()->getPointValidator()],
-            //@formatter:on
         ];
     }
 

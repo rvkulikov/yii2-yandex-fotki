@@ -13,6 +13,11 @@ use romkaChev\yandexFotki\interfaces\IYandexFotkiAccess;
 use romkaChev\yandexFotki\traits\YandexFotkiAccess;
 use yii\base\Model;
 
+/**
+ * Class AbstractModel
+ *
+ * @package romkaChev\yandexFotki\models
+ */
 abstract class AbstractModel extends Model implements IYandexFotkiAccess
 {
     use YandexFotkiAccess;

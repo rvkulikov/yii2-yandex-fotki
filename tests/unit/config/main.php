@@ -30,6 +30,7 @@ use romkaChev\yandexFotki\validators\AuthorValidator;
 use romkaChev\yandexFotki\validators\ImageValidator;
 use romkaChev\yandexFotki\validators\PhotoValidator;
 use romkaChev\yandexFotki\validators\PointValidator;
+use romkaChev\yandexFotki\validators\TagValidator;
 use romkaChev\yandexFotki\YandexFotki;
 use yii\httpclient\Client;
 use yii\i18n\Formatter;
@@ -88,6 +89,7 @@ return [
                 'pointValidator'             =>          PointValidator::className(),
                 'photoValidator'             =>          PhotoValidator::className(),
                 'imageValidator'             =>          ImageValidator::className(),
+                'tagValidator'               =>            TagValidator::className(),
             ],
             //@formatter:on
         ],

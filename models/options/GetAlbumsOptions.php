@@ -10,9 +10,9 @@ namespace romkaChev\yandexFotki\models\options;
 
 
 /**
- * Class AbstractGetAlbumsOptions
+ * Class GetAlbumsOptions
  *
- * @package romkaChev\yandexFotki\interfaces\models\options
+ * @package romkaChev\yandexFotki\models\options
  */
 class GetAlbumsOptions extends PaginationOptions
 {

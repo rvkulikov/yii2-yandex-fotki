@@ -14,9 +14,9 @@ use romkaChev\yandexFotki\traits\parsers\CoordinatesParser;
 use yii\helpers\ArrayHelper;
 
 /**
- * Class AbstractPoint
+ * Class Point
  *
- * @package romkaChev\yandexFotki\interfaces\models
+ * @package romkaChev\yandexFotki\models
  */
 class Point extends AbstractModel implements LoadableWithData
 {

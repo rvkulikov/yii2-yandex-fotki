@@ -285,5 +285,18 @@ interface IFactory extends IYandexFotkiAccess
      */
     public function setImageValidator($imageValidator);
 
+    /**
+     * @return Validator
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function getTagValidator();
+
+    /**
+     * @param Validator $tagValidator
+     *
+     * @return static
+     */
+    public function setTagValidator($tagValidator);
+    
     //</editor-fold>
 }

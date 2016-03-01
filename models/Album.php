@@ -16,9 +16,9 @@ use romkaChev\yandexFotki\traits\parsers\DateParser;
 use yii\helpers\ArrayHelper;
 
 /**
- * Class AbstractAlbum
+ * Class Album
  *
- * @package romkaChev\yandexFotki\interfaces\models
+ * @package romkaChev\yandexFotki\models
  */
 class Album extends AbstractModel implements LoadableWithData
 {

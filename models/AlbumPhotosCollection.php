@@ -16,9 +16,9 @@ use romkaChev\yandexFotki\traits\parsers\PhotosParser;
 use yii\helpers\ArrayHelper;
 
 /**
- * Class AbstractAlbumPhotosCollection
+ * Class AlbumPhotosCollection
  *
- * @package romkaChev\yandexFotki\interfaces\models
+ * @package romkaChev\yandexFotki\models
  */
 class AlbumPhotosCollection extends AbstractModel implements LoadableWithData
 {

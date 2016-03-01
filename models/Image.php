@@ -14,9 +14,9 @@ use romkaChev\yandexFotki\interfaces\models\IImageSize;
 use yii\helpers\ArrayHelper;
 
 /**
- * Class AbstractImage
+ * Class Image
  *
- * @package romkaChev\yandexFotki\interfaces\models
+ * @package romkaChev\yandexFotki\models
  */
 class Image extends AbstractModel implements IImageSize, LoadableWithData
 {
