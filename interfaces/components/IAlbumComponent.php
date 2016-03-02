@@ -17,6 +17,7 @@ use romkaChev\yandexFotki\models\options\DeleteAlbumOptions;
 use romkaChev\yandexFotki\models\options\GetAlbumPhotosOptions;
 use romkaChev\yandexFotki\models\options\GetAlbumsOptions;
 use romkaChev\yandexFotki\models\options\UpdateAlbumOptions;
+use romkaChev\yandexFotki\models\Photo;
 
 /**
  * Interface IAlbumComponent
@@ -26,6 +27,8 @@ use romkaChev\yandexFotki\models\options\UpdateAlbumOptions;
 interface IAlbumComponent extends IYandexFotkiAccess
 {
     /**
+     * todo password
+     * 
      * @param int|string $id
      *
      * @return Album
@@ -33,23 +36,25 @@ interface IAlbumComponent extends IYandexFotkiAccess
     public function get($id);
 
     /**
-     * @param $ids
+     * todo password
+     *
+     * @param int[]|string[] $ids
      *
      * @return Album[]
      */
     public function batchGet($ids);
 
     /**
-     * @param int|string                                                  $id
-     * @param \romkaChev\yandexFotki\models\options\GetAlbumPhotosOptions $options
+     * @param int|string            $id
+     * @param GetAlbumPhotosOptions $options
      *
-     * @return \romkaChev\yandexFotki\models\Photo[]
+     * @return Photo[]
      */
     public function getPhotos($id, GetAlbumPhotosOptions $options = null);
 
     /**
-     * @param int                                                    $id
-     * @param \romkaChev\yandexFotki\models\options\GetAlbumsOptions $options
+     * @param int              $id
+     * @param GetAlbumsOptions $options
      *
      * @return Album[]
      */

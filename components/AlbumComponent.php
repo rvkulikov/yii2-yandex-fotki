@@ -17,7 +17,6 @@ use romkaChev\yandexFotki\models\options\DeleteAlbumOptions;
 use romkaChev\yandexFotki\models\options\GetAlbumPhotosOptions;
 use romkaChev\yandexFotki\models\options\GetAlbumsOptions;
 use romkaChev\yandexFotki\models\options\UpdateAlbumOptions;
-use romkaChev\yandexFotki\models\Photo;
 use romkaChev\yandexFotki\traits\YandexFotkiAccess;
 use yii\base\Component;
 use yii\base\InvalidParamException;
@@ -37,11 +36,7 @@ final class AlbumComponent extends Component implements IAlbumComponent
     use YandexFotkiAccess;
 
     /**
-     * todo password
-     *
-     * @param int|string $id
-     *
-     * @return \romkaChev\yandexFotki\models\Album
+     * @inheritdoc
      */
     public function get($id)
     {
@@ -56,8 +51,6 @@ final class AlbumComponent extends Component implements IAlbumComponent
     }
 
     /**
-     * todo password
-     *
      * @inheritdoc
      */
     public function batchGet($ids)
@@ -83,10 +76,7 @@ final class AlbumComponent extends Component implements IAlbumComponent
     }
 
     /**
-     * @param int|string                                                  $id
-     * @param \romkaChev\yandexFotki\models\options\GetAlbumPhotosOptions $options
-     *
-     * @return Photo[]
+     * @inheritdoc
      */
     public function getPhotos($id, GetAlbumPhotosOptions $options = null)
     {
@@ -136,7 +126,7 @@ final class AlbumComponent extends Component implements IAlbumComponent
             'limit'  => $options->limit
         ]);
 
-        /** @var \romkaChev\yandexFotki\models\Album[] $models */
+        /** @var Album[] $models */
         $models = [];
         do {
             $response = $request->send();
@@ -177,9 +167,7 @@ final class AlbumComponent extends Component implements IAlbumComponent
     }
 
     /**
-     * @param CreateAlbumOptions $options
-     *
-     * @return \romkaChev\yandexFotki\models\Album
+     * @inheritdoc
      */
     public function create(CreateAlbumOptions $options)
     {
@@ -227,9 +215,7 @@ final class AlbumComponent extends Component implements IAlbumComponent
     }
 
     /**
-     * @param UpdateAlbumOptions $options
-     *
-     * @return Album
+     * @inheritdoc
      */
     public function update(UpdateAlbumOptions $options)
     {
@@ -308,10 +294,7 @@ final class AlbumComponent extends Component implements IAlbumComponent
     }
 
     /**
-     * @param DeleteAlbumOptions[] $optionsArray
-     *
-     * @return boolean[]
-     * @throws DangerousDeleteOperationException
+     * @inheritdoc
      */
     public function batchDelete(array $optionsArray)
     {
