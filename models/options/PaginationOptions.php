@@ -61,7 +61,7 @@ class PaginationOptions extends AbstractModel implements IFeedAdapter
     }
 
     /**
-     * @inheritdoc
+     * @return static
      */
     public static function createDefault()
     {

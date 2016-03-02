@@ -9,7 +9,9 @@
 namespace romkaChev\yandexFotki\exceptions;
 
 
-class DangerousDeleteOperationException
+use yii\base\Exception;
+
+class DangerousDeleteOperationException extends Exception
 {
 
 }

@@ -9,11 +9,14 @@
 namespace romkaChev\yandexFotki\components;
 
 
+use romkaChev\yandexFotki\exceptions\DangerousDeleteOperationException;
 use romkaChev\yandexFotki\interfaces\components\IAlbumComponent;
 use romkaChev\yandexFotki\models\Album;
 use romkaChev\yandexFotki\models\options\CreateAlbumOptions;
+use romkaChev\yandexFotki\models\options\DeleteAlbumOptions;
 use romkaChev\yandexFotki\models\options\GetAlbumPhotosOptions;
 use romkaChev\yandexFotki\models\options\GetAlbumsOptions;
+use romkaChev\yandexFotki\models\options\UpdateAlbumOptions;
 use romkaChev\yandexFotki\models\Photo;
 use romkaChev\yandexFotki\traits\YandexFotkiAccess;
 use yii\base\Component;
@@ -53,6 +56,33 @@ final class AlbumComponent extends Component implements IAlbumComponent
     }
 
     /**
+     * todo password
+     *
+     * @inheritdoc
+     */
+    public function batchGet($ids)
+    {
+        $httpClient = $this->yandexFotki->getApiHttpClient();
+
+        /** @var Request[] $requests */
+        $requests = array_map(function ($id) use ($httpClient) {
+            return $httpClient->get("album/{$id}/", ['format' => 'json']);
+        }, $ids);
+
+        $responses = $httpClient->batchSend($requests);
+
+        /** @var Album[] $models */
+        $models = array_map(function (Response $response) {
+            $model = $this->yandexFotki->getFactory()->getAlbumModel();
+            $model->loadWithData($response->getData(), true);
+
+            return $model;
+        }, $responses);
+
+        return array_combine(ArrayHelper::getColumn($models, 'id'), $models);
+    }
+
+    /**
      * @param int|string                                                  $id
      * @param \romkaChev\yandexFotki\models\options\GetAlbumPhotosOptions $options
      *
@@ -87,47 +117,6 @@ final class AlbumComponent extends Component implements IAlbumComponent
         } while ($photosCollection->linkNext);
 
         return $models;
-    }
-
-    /**
-     * @param CreateAlbumOptions $options
-     *
-     * @return \romkaChev\yandexFotki\models\Album
-     */
-    public function create(CreateAlbumOptions $options)
-    {
-        if (!$options->validate()) {
-            throw new InvalidParamException(VarDumper::dumpAsString($options->getErrors()));
-        }
-
-        $httpClient = $this->yandexFotki->getApiHttpClient();
-        $request    = $httpClient->post("albums/", $options->toArray());
-        $response   = $request->send();
-
-        $album = $this->yandexFotki->getFactory()->getAlbumModel();
-        $album->loadWithData($response->getData(), true);
-
-        return $album;
-    }
-
-    /**
-     * @param mixed $options
-     *
-     * @return Album
-     */
-    public function update($options)
-    {
-        // TODO: Implement update() method.
-    }
-
-    /**
-     * @param mixed $data
-     *
-     * @return \romkaChev\yandexFotki\models\Album
-     */
-    public function delete($data)
-    {
-        // TODO: Implement delete() method.
     }
 
     /**
@@ -170,6 +159,7 @@ final class AlbumComponent extends Component implements IAlbumComponent
         ksort($map);
 
         $rootIds = ArrayHelper::getColumn(ArrayHelper::remove($map, '_root', []), 'id');
+
         foreach ($map as $parentId => $children) {
             $models[$parentId]->setChildren($children);
         }
@@ -187,30 +177,24 @@ final class AlbumComponent extends Component implements IAlbumComponent
     }
 
     /**
-     * todo password
+     * @param CreateAlbumOptions $options
      *
-     * @inheritdoc
+     * @return \romkaChev\yandexFotki\models\Album
      */
-    public function batchGet($ids)
+    public function create(CreateAlbumOptions $options)
     {
+        if (!$options->validate()) {
+            throw new InvalidParamException(VarDumper::dumpAsString($options->getErrors()));
+        }
+
         $httpClient = $this->yandexFotki->getApiHttpClient();
+        $request    = $httpClient->post("albums/", $options->toArray());
+        $response   = $request->send();
 
-        /** @var Request[] $requests */
-        $requests = array_map(function ($id) use ($httpClient) {
-            return $httpClient->get("album/{$id}/", ['format' => 'json']);
-        }, $ids);
+        $album = $this->yandexFotki->getFactory()->getAlbumModel();
+        $album->loadWithData($response->getData(), true);
 
-        $responses = $httpClient->batchSend($requests);
-
-        /** @var Album[] $models */
-        $models = array_map(function (Response $response) {
-            $model = $this->yandexFotki->getFactory()->getAlbumModel();
-            $model->loadWithData($response->getData(), true);
-
-            return $model;
-        }, $responses);
-
-        return array_combine(ArrayHelper::getColumn($models, 'id'), $models);
+        return $album;
     }
 
     /**
@@ -243,22 +227,120 @@ final class AlbumComponent extends Component implements IAlbumComponent
     }
 
     /**
-     * @param $data
+     * @param UpdateAlbumOptions $options
      *
-     * @return Album[]
+     * @return Album
      */
-    public function batchUpdate($data)
+    public function update(UpdateAlbumOptions $options)
     {
-        // TODO: Implement multiUpdate() method.
+        if (!$options->validate()) {
+            throw new InvalidParamException(VarDumper::dumpAsString($options->getErrors()));
+        }
+
+        $httpClient = $this->yandexFotki->getApiHttpClient();
+        $request    = $httpClient->put("album/{$options->id}/", $options->toArray());
+        $response   = $request->send();
+
+        $album = $this->yandexFotki->getFactory()->getAlbumModel();
+        $album->loadWithData($response->getData(), true);
+
+        return $album;
     }
 
     /**
-     * @param $data
-     *
-     * @return \romkaChev\yandexFotki\models\Album[]
+     * @inheritdoc
      */
-    public function batchDelete($data)
+    public function batchUpdate(array $optionsArray)
     {
-        // TODO: Implement multiDelete() method.
+        $httpClient = $this->yandexFotki->getApiHttpClient();
+
+        $requests = [];
+        foreach ($optionsArray as $options) {
+            if (!$options->validate()) {
+                throw new InvalidParamException(VarDumper::dumpAsString($options->getErrors()));
+            }
+
+            $requests[] = $httpClient->put("album/{$options->id}/", $options->toArray());
+        }
+
+        $responses = $httpClient->batchSend($requests);
+
+        $models = [];
+        foreach ($responses as $response) {
+            $model = $this->yandexFotki->getFactory()->getAlbumModel();
+            $model->loadWithData($response->getData(), true);
+
+            $models[] = $model;
+        };
+
+        return ArrayHelper::index($models, 'id');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function delete(DeleteAlbumOptions $options)
+    {
+        if (!$options->validate()) {
+            throw new InvalidParamException(VarDumper::dumpAsString($options->getErrors()));
+        }
+
+        if ($options->withPhotos == false) {
+            $optionsModel = $this->getYandexFotki()->getFactory()->getGetAlbumPhotosOptions();
+            $optionsModel->load([$optionsModel->formName() => ['password' => $options->password]]);
+
+            if (count($this->getPhotos($options->id, $optionsModel))) {
+                throw new DangerousDeleteOperationException();
+            }
+        }
+
+        if ($options->withAlbums == false) {
+            if (count($this->tree($options->id))) {
+                throw new DangerousDeleteOperationException();
+            }
+        }
+
+        $httpClient = $this->yandexFotki->getApiHttpClient();
+        $request    = $httpClient->delete("album/{$options->id}/");
+        $response   = $request->send();
+
+        return $response->isOk;
+    }
+
+    /**
+     * @param DeleteAlbumOptions[] $optionsArray
+     *
+     * @return boolean[]
+     * @throws DangerousDeleteOperationException
+     */
+    public function batchDelete(array $optionsArray)
+    {
+        $httpClient = $this->yandexFotki->getApiHttpClient();
+        $requests   = [];
+        foreach ($optionsArray as $options) {
+            if (!$options->validate()) {
+                throw new InvalidParamException(VarDumper::dumpAsString($options->getErrors()));
+            }
+
+            if ($options->withPhotos == false) {
+                $optionsModel = $this->getYandexFotki()->getFactory()->getGetAlbumPhotosOptions();
+                $optionsModel->load([$optionsModel->formName() => ['password' => $options->password]]);
+
+                if (count($this->getPhotos($options->id, $optionsModel))) {
+                    throw new DangerousDeleteOperationException();
+                }
+            }
+
+            if ($options->withAlbums == false) {
+                if (count($this->tree($options->id))) {
+                    throw new DangerousDeleteOperationException();
+                }
+            }
+            $requests[$options->id] = $httpClient->delete("album/{$options->id}/");
+
+        }
+        $responses = $httpClient->batchSend($requests);
+
+        return array_combine(array_keys($responses), ArrayHelper::getColumn($responses, 'isOk'));
     }
 }

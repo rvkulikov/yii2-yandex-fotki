@@ -9,11 +9,14 @@
 namespace romkaChev\yandexFotki\interfaces\components;
 
 
+use romkaChev\yandexFotki\exceptions\DangerousDeleteOperationException;
 use romkaChev\yandexFotki\interfaces\IYandexFotkiAccess;
 use romkaChev\yandexFotki\models\Album;
 use romkaChev\yandexFotki\models\options\CreateAlbumOptions;
+use romkaChev\yandexFotki\models\options\DeleteAlbumOptions;
 use romkaChev\yandexFotki\models\options\GetAlbumPhotosOptions;
 use romkaChev\yandexFotki\models\options\GetAlbumsOptions;
+use romkaChev\yandexFotki\models\options\UpdateAlbumOptions;
 
 /**
  * Interface IAlbumComponent
@@ -30,33 +33,19 @@ interface IAlbumComponent extends IYandexFotkiAccess
     public function get($id);
 
     /**
+     * @param $ids
+     *
+     * @return Album[]
+     */
+    public function batchGet($ids);
+
+    /**
      * @param int|string                                                  $id
      * @param \romkaChev\yandexFotki\models\options\GetAlbumPhotosOptions $options
      *
      * @return \romkaChev\yandexFotki\models\Photo[]
      */
     public function getPhotos($id, GetAlbumPhotosOptions $options = null);
-
-    /**
-     * @param CreateAlbumOptions $options
-     *
-     * @return Album
-     */
-    public function create(CreateAlbumOptions $options);
-
-    /**
-     * @param mixed $options
-     *
-     * @return Album
-     */
-    public function update($options);
-
-    /**
-     * @param mixed $data
-     *
-     * @return Album
-     */
-    public function delete($data);
 
     /**
      * @param int                                                    $id
@@ -67,11 +56,11 @@ interface IAlbumComponent extends IYandexFotkiAccess
     public function tree($id = null, GetAlbumsOptions $options = null);
 
     /**
-     * @param $ids
+     * @param CreateAlbumOptions $options
      *
-     * @return Album[]
+     * @return Album
      */
-    public function batchGet($ids);
+    public function create(CreateAlbumOptions $options);
 
     /**
      * @param CreateAlbumOptions[] $optionsArray
@@ -81,17 +70,32 @@ interface IAlbumComponent extends IYandexFotkiAccess
     public function batchCreate(array $optionsArray);
 
     /**
-     * @param $data
+     * @param UpdateAlbumOptions $options
      *
-     * @return \romkaChev\yandexFotki\models\Album[]
+     * @return Album
      */
-    public function batchUpdate($data);
+    public function update(UpdateAlbumOptions $options);
 
     /**
-     * @param $data
+     * @param UpdateAlbumOptions[] $optionsArray
      *
      * @return Album[]
      */
-    public function batchDelete($data);
+    public function batchUpdate(array $optionsArray);
 
+    /**
+     * @param DeleteAlbumOptions $options
+     *
+     * @return boolean
+     * @throws DangerousDeleteOperationException // todo message
+     */
+    public function delete(DeleteAlbumOptions $options);
+
+    /**
+     * @param DeleteAlbumOptions[] $optionsArray
+     *
+     * @return boolean[]
+     * @throws DangerousDeleteOperationException
+     */
+    public function batchDelete(array $optionsArray);
 }
