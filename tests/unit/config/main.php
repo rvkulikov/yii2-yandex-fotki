@@ -17,7 +17,9 @@ use romkaChev\yandexFotki\models\AlbumsCollection;
 use romkaChev\yandexFotki\models\Author;
 use romkaChev\yandexFotki\models\Image;
 use romkaChev\yandexFotki\models\options\album\CreateAlbumOptions;
+use romkaChev\yandexFotki\models\options\album\DeleteAlbumOptions;
 use romkaChev\yandexFotki\models\options\album\GetAlbumPhotosOptions;
+use romkaChev\yandexFotki\models\options\album\GetAlbumsOptions;
 use romkaChev\yandexFotki\models\options\photo\CreatePhotoOptions;
 use romkaChev\yandexFotki\models\options\tag\GetTagPhotosOptions;
 use romkaChev\yandexFotki\models\Photo;
@@ -79,7 +81,9 @@ return [
                 'imageModel'                 =>                   Image::className(),
 
                 'createAlbumOptions'         =>      CreateAlbumOptions::className(),
+                'deleteAlbumOptions'         =>      DeleteAlbumOptions::className(),
                 'getAlbumPhotosOptions'      =>   GetAlbumPhotosOptions::className(),
+                'getAlbumsOptions'           =>        GetAlbumsOptions::className(),
                 'createPhotoOptions'         =>      CreatePhotoOptions::className(),
                 'getTagPhotosOptions'        =>     GetTagPhotosOptions::className(),
 

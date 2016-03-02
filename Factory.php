@@ -17,7 +17,9 @@ use romkaChev\yandexFotki\models\AlbumsCollection;
 use romkaChev\yandexFotki\models\Author;
 use romkaChev\yandexFotki\models\Image;
 use romkaChev\yandexFotki\models\options\album\CreateAlbumOptions;
+use romkaChev\yandexFotki\models\options\album\DeleteAlbumOptions;
 use romkaChev\yandexFotki\models\options\album\GetAlbumPhotosOptions;
+use romkaChev\yandexFotki\models\options\album\GetAlbumsOptions;
 use romkaChev\yandexFotki\models\options\photo\CreatePhotoOptions;
 use romkaChev\yandexFotki\models\options\tag\GetTagPhotosOptions;
 use romkaChev\yandexFotki\models\Photo;
@@ -66,8 +68,12 @@ final class Factory extends Component implements IFactory
     //<editor-fold desc="Options">
     /** @var CreateAlbumOptions */
     private $createAlbumOptions;
+    /** @var DeleteAlbumOptions */
+    private $deleteAlbumOptions;
     /** @var GetAlbumPhotosOptions */
     private $getAlbumPhotosOptions;
+    /** @var GetAlbumsOptions */
+    private $getAlbumsOptions;
     /** @var CreatePhotoOptions */
     private $createPhotoOptions;
     /** @var GetTagPhotosOptions */
@@ -320,11 +326,31 @@ final class Factory extends Component implements IFactory
     /**
      * @inheritdoc
      */
+    public function getDeleteAlbumOptions()
+    {
+        $this->preProcessConfigurableItem('deleteAlbumOptions', DeleteAlbumOptions::className());
+
+        return clone $this->deleteAlbumOptions;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setDeleteAlbumOptions($deleteAlbumOptions)
+    {
+        $this->deleteAlbumOptions = $deleteAlbumOptions;
+
+        return $this;
+    }
+    
+    /**
+     * @inheritdoc
+     */
     public function getGetAlbumPhotosOptions()
     {
         $this->preProcessConfigurableItem('getAlbumPhotosOptions', GetAlbumPhotosOptions::className());
 
-        return $this->getAlbumPhotosOptions;
+        return clone $this->getAlbumPhotosOptions;
     }
 
     /**
@@ -333,6 +359,26 @@ final class Factory extends Component implements IFactory
     public function setGetAlbumPhotosOptions($getAlbumPhotosOptions)
     {
         $this->getAlbumPhotosOptions = $getAlbumPhotosOptions;
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getGetAlbumsOptions()
+    {
+        $this->preProcessConfigurableItem('getAlbumsOptions', GetAlbumsOptions::className());
+
+        return clone $this->getAlbumsOptions;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setGetAlbumsOptions($getAlbumsOptions)
+    {
+        $this->getAlbumsOptions = $getAlbumsOptions;
 
         return $this;
     }
