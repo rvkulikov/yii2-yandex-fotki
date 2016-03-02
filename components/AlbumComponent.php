@@ -336,11 +336,11 @@ final class AlbumComponent extends Component implements IAlbumComponent
                     throw new DangerousDeleteOperationException();
                 }
             }
-            $requests[$options->id] = $httpClient->delete("album/{$options->id}/");
 
+            $requests[$options->id] = $httpClient->delete("album/{$options->id}/");
         }
         $responses = $httpClient->batchSend($requests);
 
-        return array_combine(array_keys($responses), ArrayHelper::getColumn($responses, 'isOk'));
+        return ArrayHelper::getColumn($responses, 'isOk');
     }
 }
