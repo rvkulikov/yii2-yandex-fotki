@@ -16,10 +16,10 @@ use romkaChev\yandexFotki\models\AlbumPhotosCollection;
 use romkaChev\yandexFotki\models\AlbumsCollection;
 use romkaChev\yandexFotki\models\Author;
 use romkaChev\yandexFotki\models\Image;
-use romkaChev\yandexFotki\models\options\CreateAlbumOptions;
-use romkaChev\yandexFotki\models\options\CreatePhotoOptions;
-use romkaChev\yandexFotki\models\options\GetAlbumPhotosOptions;
-use romkaChev\yandexFotki\models\options\GetTagPhotosOptions;
+use romkaChev\yandexFotki\models\options\album\CreateAlbumOptions;
+use romkaChev\yandexFotki\models\options\album\GetAlbumPhotosOptions;
+use romkaChev\yandexFotki\models\options\photo\CreatePhotoOptions;
+use romkaChev\yandexFotki\models\options\tag\GetTagPhotosOptions;
 use romkaChev\yandexFotki\models\Photo;
 use romkaChev\yandexFotki\models\Point;
 use romkaChev\yandexFotki\models\Tag;
@@ -41,36 +41,36 @@ final class Factory extends Component implements IFactory
     use YandexFotkiAccess;
 
     //<editor-fold desc="Models">
-    /** @var \romkaChev\yandexFotki\models\AddressBinding */
+    /** @var AddressBinding */
     private $addressBindingModel;
     /** @var Album */
     private $albumModel;
-    /** @var \romkaChev\yandexFotki\models\AlbumsCollection */
+    /** @var AlbumsCollection */
     private $albumsCollectionModel;
-    /** @var \romkaChev\yandexFotki\models\AlbumPhotosCollection */
+    /** @var AlbumPhotosCollection */
     private $albumPhotosCollectionModel;
-    /** @var \romkaChev\yandexFotki\models\Author */
+    /** @var Author */
     private $authorModel;
-    /** @var \romkaChev\yandexFotki\models\Photo */
+    /** @var Photo */
     private $photoModel;
     /** @var Tag */
     private $tagModel;
-    /** @var \romkaChev\yandexFotki\models\TagPhotosCollection */
+    /** @var TagPhotosCollection */
     private $tagPhotosCollectionModel;
-    /** @var \romkaChev\yandexFotki\models\Point */
+    /** @var Point */
     private $pointModel;
     /** @var Image */
     private $imageModel;
     //</editor-fold>
 
     //<editor-fold desc="Options">
-    /** @var \romkaChev\yandexFotki\models\options\CreateAlbumOptions */
+    /** @var CreateAlbumOptions */
     private $createAlbumOptions;
     /** @var GetAlbumPhotosOptions */
     private $getAlbumPhotosOptions;
-    /** @var \romkaChev\yandexFotki\models\options\CreatePhotoOptions */
+    /** @var CreatePhotoOptions */
     private $createPhotoOptions;
-    /** @var \romkaChev\yandexFotki\models\options\GetTagPhotosOptions */
+    /** @var GetTagPhotosOptions */
     private $getTagPhotosOptions;
     //</editor-fold>
 

@@ -10,7 +10,7 @@ namespace romkaChev\yandexFotki\interfaces\components;
 
 
 use romkaChev\yandexFotki\interfaces\IYandexFotkiAccess;
-use romkaChev\yandexFotki\models\options\GetTagPhotosOptions;
+use romkaChev\yandexFotki\models\options\tag\GetTagPhotosOptions;
 use romkaChev\yandexFotki\models\Photo;
 use romkaChev\yandexFotki\models\Tag;
 
@@ -24,7 +24,7 @@ interface ITagComponent extends IYandexFotkiAccess
     /**
      * @param string $id
      *
-     * @return \romkaChev\yandexFotki\models\Tag
+     * @return Tag
      */
     public function get($id);
 
@@ -46,14 +46,14 @@ interface ITagComponent extends IYandexFotkiAccess
     /**
      * @param mixed $data
      *
-     * @return \romkaChev\yandexFotki\models\Tag
+     * @return Tag
      */
     public function delete($data);
 
     /**
      * @param $ids
      *
-     * @return \romkaChev\yandexFotki\models\Tag[]
+     * @return Tag[]
      */
     public function batchGet($ids);
 
@@ -67,7 +67,7 @@ interface ITagComponent extends IYandexFotkiAccess
     /**
      * @param $data
      *
-     * @return \romkaChev\yandexFotki\models\Tag[]
+     * @return Tag[]
      */
     public function batchDelete($data);
 }

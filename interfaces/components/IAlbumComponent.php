@@ -12,11 +12,11 @@ namespace romkaChev\yandexFotki\interfaces\components;
 use romkaChev\yandexFotki\exceptions\DangerousDeleteOperationException;
 use romkaChev\yandexFotki\interfaces\IYandexFotkiAccess;
 use romkaChev\yandexFotki\models\Album;
-use romkaChev\yandexFotki\models\options\CreateAlbumOptions;
-use romkaChev\yandexFotki\models\options\DeleteAlbumOptions;
-use romkaChev\yandexFotki\models\options\GetAlbumPhotosOptions;
-use romkaChev\yandexFotki\models\options\GetAlbumsOptions;
-use romkaChev\yandexFotki\models\options\UpdateAlbumOptions;
+use romkaChev\yandexFotki\models\options\album\CreateAlbumOptions;
+use romkaChev\yandexFotki\models\options\album\DeleteAlbumOptions;
+use romkaChev\yandexFotki\models\options\album\GetAlbumPhotosOptions;
+use romkaChev\yandexFotki\models\options\album\GetAlbumsOptions;
+use romkaChev\yandexFotki\models\options\album\UpdateAlbumOptions;
 use romkaChev\yandexFotki\models\Photo;
 
 /**
@@ -28,7 +28,7 @@ interface IAlbumComponent extends IYandexFotkiAccess
 {
     /**
      * todo password
-     * 
+     *
      * @param int|string $id
      *
      * @return Album

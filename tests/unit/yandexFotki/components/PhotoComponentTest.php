@@ -9,7 +9,7 @@
 namespace romkaChev\yandexFotki\tests\unit\yandexFotki\components;
 
 
-use romkaChev\yandexFotki\models\options\CreatePhotoOptions;
+use romkaChev\yandexFotki\models\options\photo\CreatePhotoOptions;
 use romkaChev\yandexFotki\tests\unit\BaseTestCase;
 use yii\helpers\ArrayHelper;
 
@@ -47,7 +47,7 @@ class PhotoComponentTest extends BaseTestCase
 
         $this->assertEquals('test.png', $model->title);
 
-        $tags = array_values(ArrayHelper::getColumn($model->tags, 'title'));
+        $tags = array_values(ArrayHelper::getColumn($model->getTags(), 'title'));
         sort($tags);
 
         $this->assertArraySubset($tags, ['test_create_1', 'test_create_2']);

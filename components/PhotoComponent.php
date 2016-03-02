@@ -10,7 +10,7 @@ namespace romkaChev\yandexFotki\components;
 
 
 use romkaChev\yandexFotki\interfaces\components\IPhotoComponent;
-use romkaChev\yandexFotki\models\options\CreatePhotoOptions;
+use romkaChev\yandexFotki\models\options\photo\CreatePhotoOptions;
 use romkaChev\yandexFotki\models\Photo;
 use romkaChev\yandexFotki\traits\YandexFotkiAccess;
 use yii\base\Component;
@@ -31,11 +31,7 @@ final class PhotoComponent extends Component implements IPhotoComponent
     use YandexFotkiAccess;
 
     /**
-     * todo password
-     *
-     * @param int|string $id
-     *
-     * @return Photo
+     * @inheritdoc
      */
     public function get($id)
     {
@@ -50,9 +46,7 @@ final class PhotoComponent extends Component implements IPhotoComponent
     }
 
     /**
-     * @param \romkaChev\yandexFotki\models\options\CreatePhotoOptions $options
-     *
-     * @return Photo
+     * @inheritdoc
      */
     public function create(CreatePhotoOptions $options)
     {

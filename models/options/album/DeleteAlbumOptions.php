@@ -6,7 +6,7 @@
  * Time: 13:06
  */
 
-namespace romkaChev\yandexFotki\models\options;
+namespace romkaChev\yandexFotki\models\options\album;
 
 
 use romkaChev\yandexFotki\models\AbstractModel;
@@ -14,7 +14,7 @@ use romkaChev\yandexFotki\models\AbstractModel;
 /**
  * Class DeleteAlbumOptions
  *
- * @package romkaChev\yandexFotki\models\options
+ * @package romkaChev\yandexFotki\models\options\album
  */
 class DeleteAlbumOptions extends AbstractModel
 {
@@ -44,21 +44,5 @@ class DeleteAlbumOptions extends AbstractModel
 
             ['password', 'string'],
         ];
-    }
-
-    /**
-     * @return static
-     */
-    public static function createDefault()
-    {
-        $model = new static();
-        $model->load([
-            $model->formName() => [
-                'withPhotos' => false,
-                'withAlbums' => false,
-            ]
-        ]);
-
-        return $model;
     }
 }

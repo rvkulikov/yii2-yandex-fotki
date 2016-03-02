@@ -2,23 +2,21 @@
 /**
  * Created by PhpStorm.
  * User: Roman
- * Date: 02.03.2016
- * Time: 13:00
+ * Date: 27.02.2016
+ * Time: 17:58
  */
 
-namespace romkaChev\yandexFotki\models\options;
-
+namespace romkaChev\yandexFotki\models\options\album;
 
 use romkaChev\yandexFotki\models\AbstractModel;
 use yii\helpers\ArrayHelper;
-use yii\web\Linkable;
 
 /**
- * Class AbstractSaveAlbumOptions
+ * Class CreateAlbumOptions
  *
- * @package romkaChev\yandexFotki\models\options
+ * @package romkaChev\yandexFotki\models\options\album
  */
-abstract class AbstractSaveAlbumOptions extends AbstractModel implements Linkable
+class CreateAlbumOptions extends AbstractModel
 {
 
     /** @var string */
@@ -30,6 +28,21 @@ abstract class AbstractSaveAlbumOptions extends AbstractModel implements Linkabl
     /** @var int */
     public $parentId;
 
+    /**
+     * @inheritdoc
+     */
+    public function rules()
+    {
+        return [
+            ['title', 'string', 'min' => 1],
+            ['title', 'required'],
+
+            ['summary', 'string'],
+            ['password', 'string'],
+            ['parentId', 'integer'],
+        ];
+    }
+    
     /**
      * @inheritdoc
      */

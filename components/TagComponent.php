@@ -10,7 +10,7 @@ namespace romkaChev\yandexFotki\components;
 
 
 use romkaChev\yandexFotki\interfaces\components\ITagComponent;
-use romkaChev\yandexFotki\models\options\GetTagPhotosOptions;
+use romkaChev\yandexFotki\models\options\tag\GetTagPhotosOptions;
 use romkaChev\yandexFotki\models\Photo;
 use romkaChev\yandexFotki\models\Tag;
 use romkaChev\yandexFotki\traits\YandexFotkiAccess;
@@ -132,7 +132,7 @@ final class TagComponent extends Component implements ITagComponent
     /**
      * @param $data
      *
-     * @return \romkaChev\yandexFotki\models\Tag[]
+     * @return Tag[]
      */
     public function batchUpdate($data)
     {

@@ -10,7 +10,7 @@ namespace romkaChev\yandexFotki\models;
 
 use DateTime;
 use romkaChev\yandexFotki\interfaces\LoadableWithData;
-use romkaChev\yandexFotki\models\options\GetAlbumPhotosOptions;
+use romkaChev\yandexFotki\models\options\album\GetAlbumPhotosOptions;
 use romkaChev\yandexFotki\traits\parsers\AuthorParser;
 use romkaChev\yandexFotki\traits\parsers\DateParser;
 use yii\helpers\ArrayHelper;

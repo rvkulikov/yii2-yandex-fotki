@@ -6,7 +6,7 @@
  * Time: 12:16
  */
 
-namespace romkaChev\yandexFotki\models\options;
+namespace romkaChev\yandexFotki\models\options\photo;
 
 
 use romkaChev\yandexFotki\interfaces\models\IAccess;
@@ -18,10 +18,10 @@ use yii\web\UploadedFile;
 
 /**
  * todo check is the password required for protected album
- *
+ * 
  * Class CreatePhotoOptions
  *
- * @package romkaChev\yandexFotki\models\options
+ * @package romkaChev\yandexFotki\models\options\photo
  */
 class CreatePhotoOptions extends AbstractModel implements Linkable, IAccess
 {

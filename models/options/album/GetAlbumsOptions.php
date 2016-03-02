@@ -6,13 +6,15 @@
  * Time: 22:18
  */
 
-namespace romkaChev\yandexFotki\models\options;
+namespace romkaChev\yandexFotki\models\options\album;
+
+use romkaChev\yandexFotki\models\options\PaginationOptions;
 
 
 /**
  * Class GetAlbumsOptions
  *
- * @package romkaChev\yandexFotki\models\options
+ * @package romkaChev\yandexFotki\models\options\album
  */
 class GetAlbumsOptions extends PaginationOptions
 {

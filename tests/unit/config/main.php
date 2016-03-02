@@ -16,10 +16,10 @@ use romkaChev\yandexFotki\models\AlbumPhotosCollection;
 use romkaChev\yandexFotki\models\AlbumsCollection;
 use romkaChev\yandexFotki\models\Author;
 use romkaChev\yandexFotki\models\Image;
-use romkaChev\yandexFotki\models\options\CreateAlbumOptions;
-use romkaChev\yandexFotki\models\options\CreatePhotoOptions;
-use romkaChev\yandexFotki\models\options\GetAlbumPhotosOptions;
-use romkaChev\yandexFotki\models\options\GetTagPhotosOptions;
+use romkaChev\yandexFotki\models\options\album\CreateAlbumOptions;
+use romkaChev\yandexFotki\models\options\album\GetAlbumPhotosOptions;
+use romkaChev\yandexFotki\models\options\photo\CreatePhotoOptions;
+use romkaChev\yandexFotki\models\options\tag\GetTagPhotosOptions;
 use romkaChev\yandexFotki\models\Photo;
 use romkaChev\yandexFotki\models\Point;
 use romkaChev\yandexFotki\models\Tag;
@@ -67,21 +67,21 @@ return [
             'factory'           => [
                 'class'                      => Factory::className(),
 
-                'addressBindingModel'        =>        AddressBinding::className(),
-                'albumModel'                 =>                 Album::className(),
-                'albumsCollectionModel'      =>      AlbumsCollection::className(),
-                'albumPhotosCollectionModel' => AlbumPhotosCollection::className(),
-                'authorModel'                =>                Author::className(),
-                'photoModel'                 =>                 Photo::className(),
-                'tagModel'                   =>                   Tag::className(),
-                'tagPhotosCollectionModel'   =>   TagPhotosCollection::className(),
-                'pointModel'                 =>                 Point::className(),
-                'imageModel'                 =>                 Image::className(),
+                'addressBindingModel'        =>          AddressBinding::className(),
+                'albumModel'                 =>                   Album::className(),
+                'albumsCollectionModel'      =>        AlbumsCollection::className(),
+                'albumPhotosCollectionModel' =>   AlbumPhotosCollection::className(),
+                'authorModel'                =>                  Author::className(),
+                'photoModel'                 =>                   Photo::className(),
+                'tagModel'                   =>                     Tag::className(),
+                'tagPhotosCollectionModel'   =>     TagPhotosCollection::className(),
+                'pointModel'                 =>                   Point::className(),
+                'imageModel'                 =>                   Image::className(),
 
-                'createAlbumOptions'         =>    CreateAlbumOptions::className(),
-                'getAlbumPhotosOptions'      => GetAlbumPhotosOptions::className(),
-                'createPhotoOptions'         =>    CreatePhotoOptions::className(),
-                'getTagPhotosOptions'        =>   GetTagPhotosOptions::className(),
+                'createAlbumOptions'         =>      CreateAlbumOptions::className(),
+                'getAlbumPhotosOptions'      =>   GetAlbumPhotosOptions::className(),
+                'createPhotoOptions'         =>      CreatePhotoOptions::className(),
+                'getTagPhotosOptions'        =>     GetTagPhotosOptions::className(),
 
                 'addressBindingValidator'    => AddressBindingValidator::className(),
                 'albumValidator'             =>          AlbumValidator::className(),

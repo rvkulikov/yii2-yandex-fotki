@@ -10,10 +10,17 @@ namespace romkaChev\yandexFotki\interfaces;
 
 
 use romkaChev\yandexFotki\models\AddressBinding;
+use romkaChev\yandexFotki\models\Album;
+use romkaChev\yandexFotki\models\AlbumPhotosCollection;
 use romkaChev\yandexFotki\models\AlbumsCollection;
+use romkaChev\yandexFotki\models\Author;
 use romkaChev\yandexFotki\models\Image;
-use romkaChev\yandexFotki\models\options\CreateAlbumOptions;
-use romkaChev\yandexFotki\models\options\GetTagPhotosOptions;
+use romkaChev\yandexFotki\models\options\album\CreateAlbumOptions;
+use romkaChev\yandexFotki\models\options\album\GetAlbumPhotosOptions;
+use romkaChev\yandexFotki\models\options\photo\CreatePhotoOptions;
+use romkaChev\yandexFotki\models\options\tag\GetTagPhotosOptions;
+use romkaChev\yandexFotki\models\Photo;
+use romkaChev\yandexFotki\models\Point;
 use romkaChev\yandexFotki\models\Tag;
 use romkaChev\yandexFotki\models\TagPhotosCollection;
 use yii\base\InvalidConfigException;
@@ -36,12 +43,13 @@ interface IFactory extends IYandexFotkiAccess
 
     /**
      * @param mixed $addressBindingModel
+     *
      * @return static
      */
     public function setAddressBindingModel($addressBindingModel);
 
     /**
-     * @return \romkaChev\yandexFotki\models\Album
+     * @return Album
      * @throws InvalidConfigException
      */
     public function getAlbumModel();
@@ -60,14 +68,14 @@ interface IFactory extends IYandexFotkiAccess
     public function getAlbumsCollectionModel();
 
     /**
-     * @param \romkaChev\yandexFotki\models\AlbumsCollection $albumsCollectionModel
+     * @param AlbumsCollection $albumsCollectionModel
      *
      * @return static
      */
     public function setAlbumsCollectionModel($albumsCollectionModel);
 
     /**
-     * @return \romkaChev\yandexFotki\models\AlbumPhotosCollection
+     * @return AlbumPhotosCollection
      * @throws InvalidConfigException
      */
     public function getAlbumPhotosCollectionModel();
@@ -80,7 +88,7 @@ interface IFactory extends IYandexFotkiAccess
     public function setAlbumPhotosCollectionModel($albumPhotosCollectionModel);
 
     /**
-     * @return \romkaChev\yandexFotki\models\Author
+     * @return Author
      * @throws InvalidConfigException
      */
     public function getAuthorModel();
@@ -93,13 +101,14 @@ interface IFactory extends IYandexFotkiAccess
     public function setAuthorModel($authorModel);
 
     /**
-     * @return \romkaChev\yandexFotki\models\Photo
+     * @return Photo
      * @throws InvalidConfigException
      */
     public function getPhotoModel();
 
     /**
      * @param mixed $photoModel
+     *
      * @return static
      */
     public function setPhotoModel($photoModel);
@@ -112,12 +121,13 @@ interface IFactory extends IYandexFotkiAccess
 
     /**
      * @param mixed $tagModel
+     *
      * @return static
      */
     public function setTagModel($tagModel);
 
     /**
-     * @return \romkaChev\yandexFotki\models\TagPhotosCollection
+     * @return TagPhotosCollection
      */
     public function getTagPhotosCollectionModel();
 
@@ -129,13 +139,14 @@ interface IFactory extends IYandexFotkiAccess
     public function setTagPhotosCollectionModel($tagPhotosCollectionModel);
 
     /**
-     * @return \romkaChev\yandexFotki\models\Point
+     * @return Point
      * @throws InvalidConfigException
      */
     public function getPointModel();
 
     /**
      * @param mixed $pointModel
+     *
      * @return static
      */
     public function setPointModel($pointModel);
@@ -171,19 +182,20 @@ interface IFactory extends IYandexFotkiAccess
     public function setCreateAlbumOptions($createAlbumOptions);
 
     /**
-     * @return \romkaChev\yandexFotki\models\options\GetAlbumPhotosOptions
+     * @return GetAlbumPhotosOptions
      * @throws InvalidConfigException
      */
     public function getGetAlbumPhotosOptions();
 
     /**
      * @param mixed $getAlbumPhotosOptions
+     *
      * @return static
      */
     public function setGetAlbumPhotosOptions($getAlbumPhotosOptions);
 
     /**
-     * @return \romkaChev\yandexFotki\models\options\CreatePhotoOptions
+     * @return CreatePhotoOptions
      * @throws InvalidConfigException
      */
     public function getCreatePhotoOptions();
@@ -196,7 +208,7 @@ interface IFactory extends IYandexFotkiAccess
     public function setCreatePhotoOptions($createPhotoOptions);
 
     /**
-     * @return \romkaChev\yandexFotki\models\options\GetTagPhotosOptions
+     * @return GetTagPhotosOptions
      */
     public function getGetTagPhotosOptions();
 
@@ -213,19 +225,20 @@ interface IFactory extends IYandexFotkiAccess
 
     /**
      * @return Validator
-     * @throws \yii\base\InvalidConfigException
+     * @throws InvalidConfigException
      */
     public function getAddressBindingValidator();
 
     /**
      * @param mixed $addressBindingValidator
+     *
      * @return static
      */
     public function setAddressBindingValidator($addressBindingValidator);
 
     /**
      * @return Validator
-     * @throws \yii\base\InvalidConfigException
+     * @throws InvalidConfigException
      */
     public function getAlbumValidator();
 
@@ -238,43 +251,46 @@ interface IFactory extends IYandexFotkiAccess
 
     /**
      * @return Validator
-     * @throws \yii\base\InvalidConfigException
+     * @throws InvalidConfigException
      */
     public function getAuthorValidator();
 
     /**
      * @param mixed $authorValidator
+     *
      * @return static
      */
     public function setAuthorValidator($authorValidator);
 
     /**
      * @return Validator
-     * @throws \yii\base\InvalidConfigException
+     * @throws InvalidConfigException
      */
     public function getPointValidator();
 
     /**
      * @param mixed $pointValidator
+     *
      * @return static
      */
     public function setPointValidator($pointValidator);
 
     /**
      * @return Validator
-     * @throws \yii\base\InvalidConfigException
+     * @throws InvalidConfigException
      */
     public function getPhotoValidator();
 
     /**
      * @param mixed $photoValidator
+     *
      * @return static
      */
     public function setPhotoValidator($photoValidator);
 
     /**
      * @return Validator
-     * @throws \yii\base\InvalidConfigException
+     * @throws InvalidConfigException
      */
     public function getImageValidator();
 
@@ -287,7 +303,7 @@ interface IFactory extends IYandexFotkiAccess
 
     /**
      * @return Validator
-     * @throws \yii\base\InvalidConfigException
+     * @throws InvalidConfigException
      */
     public function getTagValidator();
 
@@ -297,6 +313,6 @@ interface IFactory extends IYandexFotkiAccess
      * @return static
      */
     public function setTagValidator($tagValidator);
-    
+
     //</editor-fold>
 }

@@ -6,13 +6,15 @@
  * Time: 19:47
  */
 
-namespace romkaChev\yandexFotki\models\options;
+namespace romkaChev\yandexFotki\models\options\tag;
+
+use romkaChev\yandexFotki\models\options\PaginationOptions;
 
 
 /**
  * Class GetTagPhotosOptions
  *
- * @package romkaChev\yandexFotki\models\options
+ * @package romkaChev\yandexFotki\models\options\tag
  */
 class GetTagPhotosOptions extends PaginationOptions
 {
