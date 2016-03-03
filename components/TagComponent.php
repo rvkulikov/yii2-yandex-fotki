@@ -10,7 +10,9 @@ namespace romkaChev\yandexFotki\components;
 
 
 use romkaChev\yandexFotki\interfaces\components\ITagComponent;
+use romkaChev\yandexFotki\models\options\tag\DeleteTagOptions;
 use romkaChev\yandexFotki\models\options\tag\GetTagPhotosOptions;
+use romkaChev\yandexFotki\models\options\tag\UpdateTagOptions;
 use romkaChev\yandexFotki\models\Photo;
 use romkaChev\yandexFotki\models\Tag;
 use romkaChev\yandexFotki\traits\YandexFotkiAccess;
@@ -45,6 +47,31 @@ final class TagComponent extends Component implements ITagComponent
         $tag->loadWithData($response->getData(), true);
 
         return $tag;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function batchGet($ids)
+    {
+        $httpClient = $this->yandexFotki->getApiHttpClient();
+
+        /** @var Request[] $requests */
+        $requests = array_map(function ($id) use ($httpClient) {
+            return $httpClient->get("tag/{$id}/", ['format' => 'json']);
+        }, $ids);
+
+        $responses = $httpClient->batchSend($requests);
+
+        $models = [];
+        foreach ($responses as $response) {
+            $model = $this->yandexFotki->getFactory()->getTagModel();
+            $model->loadWithData($response->getData(), true);
+
+            $models[] = $model;
+        };
+
+        return ArrayHelper::index($models, 'id');
     }
 
     /**
@@ -85,36 +112,45 @@ final class TagComponent extends Component implements ITagComponent
     }
 
     /**
-     * @param mixed $options
+     * @param UpdateTagOptions $options
      *
      * @return Tag
      */
-    public function update($options)
+    public function update(UpdateTagOptions $options)
     {
-        // TODO: Implement update() method.
+        if (!$options->validate()) {
+            throw new InvalidParamException(VarDumper::dumpAsString($options->getErrors()));
+        }
+
+        $httpClient = $this->yandexFotki->getApiHttpClient();
+
+        $request = $httpClient->put("tag/{$options->id}", $options->toArray());
+
+        $response = $request->send();
+
+        $model = $this->yandexFotki->getFactory()->getTagModel();
+        $model->loadWithData($response->getData(), true);
+
+        return $model;
     }
 
     /**
-     * @param mixed $data
+     * @param UpdateTagOptions[] $optionsArray
      *
-     * @return Tag
+     * @return Tag[]
      */
-    public function delete($data)
-    {
-        // TODO: Implement delete() method.
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function batchGet($ids)
+    public function batchUpdate(array $optionsArray)
     {
         $httpClient = $this->yandexFotki->getApiHttpClient();
 
-        /** @var Request[] $requests */
-        $requests = array_map(function ($id) use ($httpClient) {
-            return $httpClient->get("tag/{$id}/", ['format' => 'json']);
-        }, $ids);
+        $requests = [];
+        foreach ($optionsArray as $options) {
+            if (!$options->validate()) {
+                throw new InvalidParamException(VarDumper::dumpAsString($options->getErrors()));
+            }
+
+            $requests[] = $httpClient->put("tag/{$options->id}/", $options->toArray());
+        }
 
         $responses = $httpClient->batchSend($requests);
 
@@ -130,22 +166,41 @@ final class TagComponent extends Component implements ITagComponent
     }
 
     /**
-     * @param $data
+     * @param DeleteTagOptions $options
      *
-     * @return Tag[]
+     * @return boolean
      */
-    public function batchUpdate($data)
+    public function delete(DeleteTagOptions $options)
     {
-        // TODO: Implement batchUpdate() method.
+        if (!$options->validate()) {
+            throw new InvalidParamException(VarDumper::dumpAsString($options->getErrors()));
+        }
+
+        $httpClient = $this->yandexFotki->getApiHttpClient();
+        $request    = $httpClient->delete("tag/{$options->id}/");
+        $response   = $request->send();
+
+        return $response->isOk;
     }
 
     /**
-     * @param $data
+     * @param DeleteTagOptions[] $optionsArray
      *
-     * @return Tag[]
+     * @return boolean[]
      */
-    public function batchDelete($data)
+    public function batchDelete(array $optionsArray)
     {
-        // TODO: Implement batchDelete() method.
+        $httpClient = $this->yandexFotki->getApiHttpClient();
+        $requests   = [];
+        foreach ($optionsArray as $options) {
+            if (!$options->validate()) {
+                throw new InvalidParamException(VarDumper::dumpAsString($options->getErrors()));
+            }
+
+            $requests[$options->id] = $httpClient->delete("tag/{$options->id}/");
+        }
+        $responses = $httpClient->batchSend($requests);
+
+        return ArrayHelper::getColumn($responses, 'isOk');
     }
 }

@@ -24,7 +24,9 @@ use romkaChev\yandexFotki\models\options\album\UpdateAlbumOptions;
 use romkaChev\yandexFotki\models\options\photo\CreatePhotoOptions;
 use romkaChev\yandexFotki\models\options\photo\DeletePhotoOptions;
 use romkaChev\yandexFotki\models\options\photo\UpdatePhotoOptions;
+use romkaChev\yandexFotki\models\options\tag\DeleteTagOptions;
 use romkaChev\yandexFotki\models\options\tag\GetTagPhotosOptions;
+use romkaChev\yandexFotki\models\options\tag\UpdateTagOptions;
 use romkaChev\yandexFotki\models\Photo;
 use romkaChev\yandexFotki\models\Point;
 use romkaChev\yandexFotki\models\Tag;
@@ -94,6 +96,8 @@ return [
                 'deletePhotoOptions'         =>      DeletePhotoOptions::className(),
                 
                 'getTagPhotosOptions'        =>     GetTagPhotosOptions::className(),
+                'updateTagOptions'           =>        UpdateTagOptions::className(),
+                'deleteTagOptions'           =>        DeleteTagOptions::className(),
 
                 'addressBindingValidator'    => AddressBindingValidator::className(),
                 'albumValidator'             =>          AlbumValidator::className(),

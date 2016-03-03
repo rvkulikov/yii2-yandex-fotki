@@ -23,7 +23,9 @@ use romkaChev\yandexFotki\models\options\album\UpdateAlbumOptions;
 use romkaChev\yandexFotki\models\options\photo\CreatePhotoOptions;
 use romkaChev\yandexFotki\models\options\photo\DeletePhotoOptions;
 use romkaChev\yandexFotki\models\options\photo\UpdatePhotoOptions;
+use romkaChev\yandexFotki\models\options\tag\DeleteTagOptions;
 use romkaChev\yandexFotki\models\options\tag\GetTagPhotosOptions;
+use romkaChev\yandexFotki\models\options\tag\UpdateTagOptions;
 use romkaChev\yandexFotki\models\Photo;
 use romkaChev\yandexFotki\models\Point;
 use romkaChev\yandexFotki\models\Tag;
@@ -286,6 +288,30 @@ interface IFactory extends IYandexFotkiAccess
      */
     public function setGetTagPhotosOptions($getTagPhotosOptions);
 
+    /**
+     * @return UpdateTagOptions
+     */
+    public function getUpdateTagOptions();
+
+    /**
+     * @param mixed $updateTagOptions
+     *
+     * @return static
+     */
+    public function setUpdateTagOptions($updateTagOptions);
+
+    /**
+     * @return DeleteTagOptions
+     */
+    public function getDeleteTagOptions();
+
+    /**
+     * @param mixed $deleteTagOptions
+     *
+     * @return static
+     */
+    public function setDeleteTagOptions($deleteTagOptions);
+    
     //</editor-fold>
 
     //<editor-fold desc="Validators">

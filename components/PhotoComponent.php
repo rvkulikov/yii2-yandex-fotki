@@ -147,7 +147,7 @@ final class PhotoComponent extends Component implements IPhotoComponent
 
         $httpClient = $this->yandexFotki->getApiHttpClient();
 
-        $request = $httpClient->put("photos/{$options->id}", $options->toArray());
+        $request = $httpClient->put("photo/{$options->id}", $options->toArray());
 
         $response = $request->send();
 
@@ -170,7 +170,7 @@ final class PhotoComponent extends Component implements IPhotoComponent
                 throw new InvalidParamException(VarDumper::dumpAsString($options->getErrors()));
             }
 
-            $requests[] = $httpClient->put("photos/{$options->id}/", $options->toArray());
+            $requests[] = $httpClient->put("photo/{$options->id}/", $options->toArray());
         }
 
         $responses = $httpClient->batchSend($requests);
@@ -196,7 +196,7 @@ final class PhotoComponent extends Component implements IPhotoComponent
         }
 
         $httpClient = $this->yandexFotki->getApiHttpClient();
-        $request    = $httpClient->delete("photos/{$options->id}/");
+        $request    = $httpClient->delete("photo/{$options->id}/");
         $response   = $request->send();
 
         return $response->isOk;
@@ -214,7 +214,7 @@ final class PhotoComponent extends Component implements IPhotoComponent
                 throw new InvalidParamException(VarDumper::dumpAsString($options->getErrors()));
             }
 
-            $requests[$options->id] = $httpClient->delete("photos/{$options->id}/");
+            $requests[$options->id] = $httpClient->delete("photo/{$options->id}/");
         }
         $responses = $httpClient->batchSend($requests);
 

@@ -24,7 +24,9 @@ use romkaChev\yandexFotki\models\options\album\UpdateAlbumOptions;
 use romkaChev\yandexFotki\models\options\photo\CreatePhotoOptions;
 use romkaChev\yandexFotki\models\options\photo\DeletePhotoOptions;
 use romkaChev\yandexFotki\models\options\photo\UpdatePhotoOptions;
+use romkaChev\yandexFotki\models\options\tag\DeleteTagOptions;
 use romkaChev\yandexFotki\models\options\tag\GetTagPhotosOptions;
+use romkaChev\yandexFotki\models\options\tag\UpdateTagOptions;
 use romkaChev\yandexFotki\models\Photo;
 use romkaChev\yandexFotki\models\Point;
 use romkaChev\yandexFotki\models\Tag;
@@ -89,6 +91,10 @@ final class Factory extends Component implements IFactory
 
     /** @var GetTagPhotosOptions */
     private $getTagPhotosOptions;
+    /** @var UpdateTagOptions */
+    private $updateTagOptions;
+    /** @var DeleteTagOptions */
+    private $deleteTagOptions;
     //</editor-fold>
 
     //<editor-fold desc="Validators">
@@ -500,6 +506,50 @@ final class Factory extends Component implements IFactory
         return $this;
     }
 
+    /**
+     * @return UpdateTagOptions
+     */
+    public function getUpdateTagOptions()
+    {
+        $this->preProcessConfigurableItem('updateTagOptions', UpdateTagOptions::className());
+
+        return clone $this->updateTagOptions;
+    }
+
+    /**
+     * @param mixed $updateTagOptions
+     *
+     * @return static
+     */
+    public function setUpdateTagOptions($updateTagOptions)
+    {
+        $this->updateTagOptions = $updateTagOptions;
+
+        return $this;
+    }
+
+    /**
+     * @return DeleteTagOptions
+     */
+    public function getDeleteTagOptions()
+    {
+        $this->preProcessConfigurableItem('deleteTagOptions', DeleteTagOptions::className());
+
+        return clone $this->deleteTagOptions;
+    }
+
+    /**
+     * @param mixed $deleteTagOptions
+     *
+     * @return static
+     */
+    public function setDeleteTagOptions($deleteTagOptions)
+    {
+        $this->deleteTagOptions = $deleteTagOptions;
+
+        return $this;
+    }
+    
     //</editor-fold>
 
     //<editor-fold desc="Validators">
