@@ -2,8 +2,8 @@
 /**
  * Created by PhpStorm.
  * User: Roman
- * Date: 28.02.2016
- * Time: 12:16
+ * Date: 03.03.2016
+ * Time: 16:00
  */
 
 namespace romkaChev\yandexFotki\models\options\photo;
@@ -13,42 +13,32 @@ use romkaChev\yandexFotki\interfaces\models\IAccess;
 use romkaChev\yandexFotki\models\AbstractModel;
 use romkaChev\yandexFotki\models\Tag;
 use yii\helpers\ArrayHelper;
-use yii\web\Linkable;
-use yii\web\UploadedFile;
 
 /**
- * todo check is the password required for protected album
- * 
- * Class CreatePhotoOptions
+ * Class UpdatePhotoOptions
  *
  * @package romkaChev\yandexFotki\models\options\photo
  */
-class CreatePhotoOptions extends AbstractModel implements Linkable, IAccess
+class UpdatePhotoOptions extends AbstractModel implements IAccess
 {
-    /** @var string */
-    public $image;
+    /** @var int */
+    public $id;
     /** @var string */
     public $title;
     /** @var string */
     public $summary;
     /** @var boolean */
-    public $hideOriginal;
-    /** @var boolean */
     public $isForAdult;
     /** @var boolean */
     public $disableComments;
+    /** @var boolean */
+    public $hideOriginal;
     /** @var string */
     public $access;
-    /** @var string */
-    public $tags;
-    /** @var string */
-    public $pubChannel;
-    /** @var string */
-    public $appPlatform;
-    /** @var string */
-    public $appVersion;
     /** @var int */
     public $albumId;
+    /** @var string */
+    public $tags;
 
     /**
      * @inheritdoc
@@ -57,14 +47,12 @@ class CreatePhotoOptions extends AbstractModel implements Linkable, IAccess
     {
         return [
             //@formatter:off
+            ['id', 'integer'],
+            ['id', 'required'],
+
             ['title', 'string', 'min' => 1],
-            ['title', 'default', 'value' => function(){return $this->defaultTitle();}],
 
             ['summary', 'string'],
-
-            ['image', 'filter', 'filter' => function($value){return $this->filterImage($value);}],
-            ['image', 'safe'],
-            ['image', 'required'],
 
             ['hideOriginal',    'boolean'],
             ['isForAdult',      'boolean'],
@@ -76,65 +64,8 @@ class CreatePhotoOptions extends AbstractModel implements Linkable, IAccess
             ['tags', 'string'],
 
             ['albumId', 'integer'],
-            
-            ['pubChannel',  'string'],
-            ['pubChannel',  'default', 'value' => function(){return $this->defaultPubChannel();}],
-
-            ['appPlatform', 'string'],
-            ['appPlatform', 'default', 'value' => function(){return $this->defaultAppPlatform();}],
-
-            ['appVersion',  'string'],
-            ['appVersion',  'default', 'value' => function(){return $this->defaultAppVersion();}],
             //@formatter:on
         ];
-    }
-
-    /**
-     * @return string
-     */
-    public function defaultTitle()
-    {
-        return $this->image instanceof UploadedFile
-            ? $this->image->name
-            : basename($this->image);
-    }
-
-    /**
-     * @return string
-     */
-    public function defaultPubChannel()
-    {
-        return $this->getYandexFotki()->getPubChannel();
-    }
-
-    /**
-     * @return string
-     */
-    public function defaultAppPlatform()
-    {
-        return $this->getYandexFotki()->getAppPlatform();
-    }
-
-    /**
-     * @return string
-     */
-    public function defaultAppVersion()
-    {
-        return $this->getYandexFotki()->getAppVersion();
-    }
-
-    /**
-     * @param string|UploadedFile $value
-     *
-     * @return string
-     */
-    public function filterImage($value)
-    {
-        if ($value instanceof UploadedFile) {
-            return $value->tempName;
-        }
-
-        return $value;
     }
 
     /**
@@ -167,12 +98,10 @@ class CreatePhotoOptions extends AbstractModel implements Linkable, IAccess
         $data['hide_original']    = ArrayHelper::remove($data, 'hideOriginal');
         $data['xxx']              = ArrayHelper::remove($data, 'isForAdult');
         $data['disable_comments'] = ArrayHelper::remove($data, 'disableComments');
-        $data['pub_channel']      = ArrayHelper::remove($data, 'pubChannel');
-        $data['app_platform']     = ArrayHelper::remove($data, 'appPlatform');
-        $data['app_version']      = ArrayHelper::remove($data, 'appVersion');
 
         unset($data['_links']);
         unset($data['albumId']);
+        unset($data['id']);
 
         $data = array_filter($data);
 

@@ -20,7 +20,10 @@ use romkaChev\yandexFotki\models\options\album\CreateAlbumOptions;
 use romkaChev\yandexFotki\models\options\album\DeleteAlbumOptions;
 use romkaChev\yandexFotki\models\options\album\GetAlbumPhotosOptions;
 use romkaChev\yandexFotki\models\options\album\GetAlbumsOptions;
+use romkaChev\yandexFotki\models\options\album\UpdateAlbumOptions;
 use romkaChev\yandexFotki\models\options\photo\CreatePhotoOptions;
+use romkaChev\yandexFotki\models\options\photo\DeletePhotoOptions;
+use romkaChev\yandexFotki\models\options\photo\UpdatePhotoOptions;
 use romkaChev\yandexFotki\models\options\tag\GetTagPhotosOptions;
 use romkaChev\yandexFotki\models\Photo;
 use romkaChev\yandexFotki\models\Point;
@@ -66,16 +69,24 @@ final class Factory extends Component implements IFactory
     //</editor-fold>
 
     //<editor-fold desc="Options">
-    /** @var CreateAlbumOptions */
-    private $createAlbumOptions;
-    /** @var DeleteAlbumOptions */
-    private $deleteAlbumOptions;
-    /** @var GetAlbumPhotosOptions */
-    private $getAlbumPhotosOptions;
     /** @var GetAlbumsOptions */
     private $getAlbumsOptions;
+    /** @var GetAlbumPhotosOptions */
+    private $getAlbumPhotosOptions;
+    /** @var CreateAlbumOptions */
+    private $createAlbumOptions;
+    /** @var UpdateAlbumOptions */
+    private $updateAlbumOptions;
+    /** @var DeleteAlbumOptions */
+    private $deleteAlbumOptions;
+
     /** @var CreatePhotoOptions */
     private $createPhotoOptions;
+    /** @var UpdatePhotoOptions */
+    private $updatePhotoOptions;
+    /** @var DeletePhotoOptions */
+    private $deletePhotoOptions;
+
     /** @var GetTagPhotosOptions */
     private $getTagPhotosOptions;
     //</editor-fold>
@@ -306,43 +317,23 @@ final class Factory extends Component implements IFactory
     /**
      * @inheritdoc
      */
-    public function getCreateAlbumOptions()
+    public function getGetAlbumsOptions()
     {
-        $this->preProcessConfigurableItem('createAlbumOptions', CreateAlbumOptions::className());
+        $this->preProcessConfigurableItem('getAlbumsOptions', GetAlbumsOptions::className());
 
-        return clone $this->createAlbumOptions;
+        return clone $this->getAlbumsOptions;
     }
 
     /**
      * @inheritdoc
      */
-    public function setCreateAlbumOptions($createAlbumOptions)
+    public function setGetAlbumsOptions($getAlbumsOptions)
     {
-        $this->createAlbumOptions = $createAlbumOptions;
+        $this->getAlbumsOptions = $getAlbumsOptions;
 
         return $this;
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function getDeleteAlbumOptions()
-    {
-        $this->preProcessConfigurableItem('deleteAlbumOptions', DeleteAlbumOptions::className());
-
-        return clone $this->deleteAlbumOptions;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setDeleteAlbumOptions($deleteAlbumOptions)
-    {
-        $this->deleteAlbumOptions = $deleteAlbumOptions;
-
-        return $this;
-    }
-    
     /**
      * @inheritdoc
      */
@@ -366,22 +357,63 @@ final class Factory extends Component implements IFactory
     /**
      * @inheritdoc
      */
-    public function getGetAlbumsOptions()
+    public function getCreateAlbumOptions()
     {
-        $this->preProcessConfigurableItem('getAlbumsOptions', GetAlbumsOptions::className());
+        $this->preProcessConfigurableItem('createAlbumOptions', CreateAlbumOptions::className());
 
-        return clone $this->getAlbumsOptions;
+        return clone $this->createAlbumOptions;
     }
 
     /**
      * @inheritdoc
      */
-    public function setGetAlbumsOptions($getAlbumsOptions)
+    public function setCreateAlbumOptions($createAlbumOptions)
     {
-        $this->getAlbumsOptions = $getAlbumsOptions;
+        $this->createAlbumOptions = $createAlbumOptions;
 
         return $this;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getUpdateAlbumOptions()
+    {
+        $this->preProcessConfigurableItem('updateAlbumOptions', UpdateAlbumOptions::className());
+
+        return clone $this->updateAlbumOptions;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setUpdateAlbumOptions($updateAlbumOptions)
+    {
+        $this->updateAlbumOptions = $updateAlbumOptions;
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getDeleteAlbumOptions()
+    {
+        $this->preProcessConfigurableItem('deleteAlbumOptions', DeleteAlbumOptions::className());
+
+        return clone $this->deleteAlbumOptions;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setDeleteAlbumOptions($deleteAlbumOptions)
+    {
+        $this->deleteAlbumOptions = $deleteAlbumOptions;
+
+        return $this;
+    }
+
 
     /**
      * @inheritdoc
@@ -402,6 +434,51 @@ final class Factory extends Component implements IFactory
 
         return $this;
     }
+
+    /**
+     * @return UpdatePhotoOptions
+     */
+    public function getUpdatePhotoOptions()
+    {
+        $this->preProcessConfigurableItem('updatePhotoOptions', UpdatePhotoOptions::className());
+
+        return clone $this->updatePhotoOptions;
+    }
+
+    /**
+     * @param UpdatePhotoOptions $updatePhotoOptions
+     *
+     * @return static
+     */
+    public function setUpdatePhotoOptions($updatePhotoOptions)
+    {
+        $this->updatePhotoOptions = $updatePhotoOptions;
+
+        return $this;
+    }
+
+    /**
+     * @return DeletePhotoOptions
+     */
+    public function getDeletePhotoOptions()
+    {
+        $this->preProcessConfigurableItem('deletePhotoOptions', DeletePhotoOptions::className());
+
+        return clone $this->deletePhotoOptions;
+    }
+
+    /**
+     * @param DeletePhotoOptions $deletePhotoOptions
+     *
+     * @return static
+     */
+    public function setDeletePhotoOptions($deletePhotoOptions)
+    {
+        $this->deletePhotoOptions = $deletePhotoOptions;
+
+        return $this;
+    }
+
 
     /**
      * @inheritdoc

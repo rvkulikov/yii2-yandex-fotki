@@ -20,7 +20,10 @@ use romkaChev\yandexFotki\models\options\album\CreateAlbumOptions;
 use romkaChev\yandexFotki\models\options\album\DeleteAlbumOptions;
 use romkaChev\yandexFotki\models\options\album\GetAlbumPhotosOptions;
 use romkaChev\yandexFotki\models\options\album\GetAlbumsOptions;
+use romkaChev\yandexFotki\models\options\album\UpdateAlbumOptions;
 use romkaChev\yandexFotki\models\options\photo\CreatePhotoOptions;
+use romkaChev\yandexFotki\models\options\photo\DeletePhotoOptions;
+use romkaChev\yandexFotki\models\options\photo\UpdatePhotoOptions;
 use romkaChev\yandexFotki\models\options\tag\GetTagPhotosOptions;
 use romkaChev\yandexFotki\models\Photo;
 use romkaChev\yandexFotki\models\Point;
@@ -80,11 +83,16 @@ return [
                 'pointModel'                 =>                   Point::className(),
                 'imageModel'                 =>                   Image::className(),
 
-                'createAlbumOptions'         =>      CreateAlbumOptions::className(),
-                'deleteAlbumOptions'         =>      DeleteAlbumOptions::className(),
-                'getAlbumPhotosOptions'      =>   GetAlbumPhotosOptions::className(),
                 'getAlbumsOptions'           =>        GetAlbumsOptions::className(),
+                'getAlbumPhotosOptions'      =>   GetAlbumPhotosOptions::className(),
+                'createAlbumOptions'         =>      CreateAlbumOptions::className(),
+                'updateAlbumOptions'         =>      UpdateAlbumOptions::className(),
+                'deleteAlbumOptions'         =>      DeleteAlbumOptions::className(),
+                
                 'createPhotoOptions'         =>      CreatePhotoOptions::className(),
+                'updatePhotoOptions'         =>      UpdatePhotoOptions::className(),
+                'deletePhotoOptions'         =>      DeletePhotoOptions::className(),
+                
                 'getTagPhotosOptions'        =>     GetTagPhotosOptions::className(),
 
                 'addressBindingValidator'    => AddressBindingValidator::className(),

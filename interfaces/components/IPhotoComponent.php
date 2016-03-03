@@ -11,6 +11,8 @@ namespace romkaChev\yandexFotki\interfaces\components;
 
 use romkaChev\yandexFotki\interfaces\IYandexFotkiAccess;
 use romkaChev\yandexFotki\models\options\photo\CreatePhotoOptions;
+use romkaChev\yandexFotki\models\options\photo\DeletePhotoOptions;
+use romkaChev\yandexFotki\models\options\photo\UpdatePhotoOptions;
 use romkaChev\yandexFotki\models\Photo;
 
 /**
@@ -37,20 +39,22 @@ interface IPhotoComponent extends IYandexFotkiAccess
     public function create(CreatePhotoOptions $options);
 
     /**
-     * @param mixed $options
+     * @param UpdatePhotoOptions $options
      *
      * @return Photo
      */
-    public function update($options);
+    public function update(UpdatePhotoOptions $options);
 
     /**
-     * @param mixed $data
+     * @param DeletePhotoOptions $options
      *
-     * @return Photo
+     * @return boolean
      */
-    public function delete($data);
+    public function delete(DeletePhotoOptions $options);
 
     /**
+     * todo password
+     * 
      * @param $ids
      *
      * @return Photo[]
@@ -65,16 +69,16 @@ interface IPhotoComponent extends IYandexFotkiAccess
     public function batchCreate(array $optionsArray);
 
     /**
-     * @param $data
+     * @param UpdatePhotoOptions[] $optionsArray
      *
      * @return Photo[]
      */
-    public function batchUpdate($data);
+    public function batchUpdate(array $optionsArray);
 
     /**
-     * @param $data
+     * @param DeletePhotoOptions[] $optionsArray
      *
-     * @return Photo[]
+     * @return boolean[]
      */
-    public function batchDelete($data);
+    public function batchDelete(array $optionsArray);
 }

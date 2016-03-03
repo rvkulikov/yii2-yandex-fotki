@@ -19,7 +19,10 @@ use romkaChev\yandexFotki\models\options\album\CreateAlbumOptions;
 use romkaChev\yandexFotki\models\options\album\DeleteAlbumOptions;
 use romkaChev\yandexFotki\models\options\album\GetAlbumPhotosOptions;
 use romkaChev\yandexFotki\models\options\album\GetAlbumsOptions;
+use romkaChev\yandexFotki\models\options\album\UpdateAlbumOptions;
 use romkaChev\yandexFotki\models\options\photo\CreatePhotoOptions;
+use romkaChev\yandexFotki\models\options\photo\DeletePhotoOptions;
+use romkaChev\yandexFotki\models\options\photo\UpdatePhotoOptions;
 use romkaChev\yandexFotki\models\options\tag\GetTagPhotosOptions;
 use romkaChev\yandexFotki\models\Photo;
 use romkaChev\yandexFotki\models\Point;
@@ -171,29 +174,16 @@ interface IFactory extends IYandexFotkiAccess
     //<editor-fold desc="Options">
 
     /**
-     * @return CreateAlbumOptions
-     * @throws InvalidConfigException
+     * @return GetAlbumsOptions
      */
-    public function getCreateAlbumOptions();
+    public function getGetAlbumsOptions();
 
     /**
-     * @param mixed $createAlbumOptions
+     * @param GetAlbumsOptions $getAlbumsOptions
      *
      * @return static
      */
-    public function setCreateAlbumOptions($createAlbumOptions);
-
-    /**
-     * @return DeleteAlbumOptions
-     */
-    public function getDeleteAlbumOptions();
-
-    /**
-     * @param DeleteAlbumOptions $deleteAlbumOptions
-     *
-     * @return static
-     */
-    public function setDeleteAlbumOptions($deleteAlbumOptions);
+    public function setGetAlbumsOptions($getAlbumsOptions);
 
     /**
      * @return GetAlbumPhotosOptions
@@ -209,17 +199,43 @@ interface IFactory extends IYandexFotkiAccess
     public function setGetAlbumPhotosOptions($getAlbumPhotosOptions);
 
     /**
-     * @return GetAlbumsOptions
+     * @return CreateAlbumOptions
+     * @throws InvalidConfigException
      */
-    public function getGetAlbumsOptions();
+    public function getCreateAlbumOptions();
 
     /**
-     * @param GetAlbumsOptions $getAlbumsOptions
+     * @param mixed $createAlbumOptions
      *
      * @return static
      */
-    public function setGetAlbumsOptions($getAlbumsOptions);
+    public function setCreateAlbumOptions($createAlbumOptions);
+
+    /**
+     * @return UpdateAlbumOptions
+     */
+    public function getUpdateAlbumOptions();
+
+    /**
+     * @param mixed $updateAlbumOptions
+     *
+     * @return static
+     */
+    public function setUpdateAlbumOptions($updateAlbumOptions);
     
+    /**
+     * @return DeleteAlbumOptions
+     */
+    public function getDeleteAlbumOptions();
+
+    /**
+     * @param DeleteAlbumOptions $deleteAlbumOptions
+     *
+     * @return static
+     */
+    public function setDeleteAlbumOptions($deleteAlbumOptions);
+
+
     /**
      * @return CreatePhotoOptions
      * @throws InvalidConfigException
@@ -232,7 +248,32 @@ interface IFactory extends IYandexFotkiAccess
      * @return static
      */
     public function setCreatePhotoOptions($createPhotoOptions);
+    
+    /**
+     * @return UpdatePhotoOptions
+     */
+    public function getUpdatePhotoOptions();
 
+    /**
+     * @param UpdatePhotoOptions $updatePhotoOptions
+     *
+     * @return static
+     */
+    public function setUpdatePhotoOptions($updatePhotoOptions);
+
+    /**
+     * @return DeletePhotoOptions
+     */
+    public function getDeletePhotoOptions();
+
+    /**
+     * @param DeletePhotoOptions $deletePhotoOptions
+     *
+     * @return static
+     */
+    public function setDeletePhotoOptions($deletePhotoOptions);  
+    
+    
     /**
      * @return GetTagPhotosOptions
      */
