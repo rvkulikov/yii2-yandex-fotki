@@ -10,6 +10,7 @@ use yii\db\ActiveRecord;
  *
  * @package romkaChev\yandexFotki\models
  *
+ * @property-read string  $id
  * @property-read string  $href
  * @property-read integer $height
  * @property-read integer $width

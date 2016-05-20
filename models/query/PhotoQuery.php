@@ -1,6 +1,4 @@
 <?php
-
-
 namespace romkaChev\yandexFotki\models\query;
 
 

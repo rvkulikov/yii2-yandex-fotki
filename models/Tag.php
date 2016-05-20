@@ -11,8 +11,8 @@ use yii\db\ActiveRecord;
  *
  * @package romkaChev\yandexFotki\models
  *
+ * @property-read string   $title
  * @property-read string   $urn
- * @property-read integer  $title
  * @property-read DateTime $updatedAt
  *
  *
