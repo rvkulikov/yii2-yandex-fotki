@@ -12,15 +12,14 @@ use yii\db\ActiveRecord;
  * @package romkaChev\yandexFotki\models
  *
  * @property-read integer  $id
- * @property-read string   $urn
- * @property-read DateTime $publishedAt
- * @property-read DateTime $updatedAte
- * @property-read DateTime $editedAt
  * @property integer       $parentId
  * @property string        $title
  * @property string        $summary
- * @property boolean       $isProtected
+ * @property-read DateTime $publishedAt
+ * @property-read DateTime $updatedAt
+ * @property-read DateTime $editedAt
  *
+ * @property-read string   $urn
  * @property-read Author   $author
  * @property-read Photo[]  $photos
  * @property-read Album    $parent

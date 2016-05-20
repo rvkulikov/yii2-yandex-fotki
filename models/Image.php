@@ -10,12 +10,14 @@ use yii\db\ActiveRecord;
  *
  * @package romkaChev\yandexFotki\models
  *
- * @property-read string  $id
- * @property-read string  $href
- * @property-read integer $height
- * @property-read integer $width
- * @property-read integer $byteSize
- * @property-read string  $size
+ * @property-read string    $id
+ * @property-read string    $sizeId
+ * @property-read integer   $width
+ * @property-read integer   $height
+ * @property-read integer   $byteSize
+ * @property-read string    $href
+ *
+ * @property-read ImageSize $size
  *
  * @author  Roman Kulikov <flinnraider@yandex.ru>
  * @since   2.0
