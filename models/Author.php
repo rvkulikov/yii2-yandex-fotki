@@ -2,6 +2,7 @@
 namespace romkaChev\yandexFotki\models;
 
 
+use romkaChev\yandexFotki\models\query\AuthorQuery;
 use yii\db\ActiveRecord;
 
 /**
@@ -26,6 +27,15 @@ class Author extends ActiveRecord
     public static function tableName()
     {
         return 'yandex_fotki__author';
+    }
+
+    /**
+     * @inheritdoc
+     * @return AuthorQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new AuthorQuery(get_called_class());
     }
 
     /**

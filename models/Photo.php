@@ -3,6 +3,7 @@ namespace romkaChev\yandexFotki\models;
 
 
 use DateTime;
+use romkaChev\yandexFotki\models\query\PhotoQuery;
 use yii\db\ActiveRecord;
 
 /**
@@ -42,6 +43,15 @@ class Photo extends ActiveRecord
     public static function tableName()
     {
         return 'yandex_fotki__photo';
+    }
+
+    /**
+     * @inheritdoc
+     * @return PhotoQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new PhotoQuery(get_called_class());
     }
 
     /**

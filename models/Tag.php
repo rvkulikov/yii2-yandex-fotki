@@ -3,6 +3,7 @@ namespace romkaChev\yandexFotki\models;
 
 
 use DateTime;
+use romkaChev\yandexFotki\models\query\TagQuery;
 use yii\db\ActiveRecord;
 
 /**
@@ -29,6 +30,15 @@ class Tag extends ActiveRecord
     public static function tableName()
     {
         return 'yandex_fotki__tag';
+    }
+
+    /**
+     * @inheritdoc
+     * @return TagQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new TagQuery(get_called_class());
     }
 
     /**

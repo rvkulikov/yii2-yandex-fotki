@@ -2,6 +2,7 @@
 namespace romkaChev\yandexFotki\models;
 
 
+use romkaChev\yandexFotki\models\query\ImageQuery;
 use yii\db\ActiveRecord;
 
 /**
@@ -26,6 +27,15 @@ class Image extends ActiveRecord
     public static function tableName()
     {
         return 'yandex_fotki__image';
+    }
+
+    /**
+     * @inheritdoc
+     * @return ImageQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new ImageQuery(get_called_class());
     }
 
     /**
