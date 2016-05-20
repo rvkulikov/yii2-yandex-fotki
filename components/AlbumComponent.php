@@ -20,6 +20,7 @@ use romkaChev\yandexFotki\models\options\album\UpdateAlbumOptions;
 use romkaChev\yandexFotki\traits\YandexFotkiAccess;
 use yii\base\Component;
 use yii\base\InvalidParamException;
+use yii\caching\Cache;
 use yii\helpers\ArrayHelper;
 use yii\helpers\VarDumper;
 use yii\httpclient\Request;
@@ -35,10 +36,37 @@ final class AlbumComponent extends Component implements IAlbumComponent
 
     use YandexFotkiAccess;
 
+    public $albumKeyPattern       = 'urn:yandex:fotki:{login}:album:{id}';
+    public $albumPhotosKeyPattern = 'urn:yandex:fotki:{login}:album:{id}:photos';
+
+    /**
+     * @var Cache
+     */
+    public $cache;
+    /**
+     * @var int
+     */
+    public $cacheExpires;
+
     /**
      * @inheritdoc
      */
     public function get($id)
+    {
+        $key = $this->getAlbumKey($id);
+
+        if (($model = $this->cache->get($key)) === false) {
+            $model = $this->getInternal($id);
+            $this->cache->set($key, $model, $this->cacheExpires);
+        }
+
+        return $model;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getInternal($id)
     {
         $httpClient = $this->yandexFotki->getApiHttpClient();
         $request    = $httpClient->get("album/{$id}/", ['format' => 'json']);
@@ -54,6 +82,38 @@ final class AlbumComponent extends Component implements IAlbumComponent
      * @inheritdoc
      */
     public function batchGet($ids)
+    {
+        $idsMap = [];
+        foreach ($ids as $id) {
+            $idsMap[$this->getAlbumKey($id)] = $id;
+        }
+
+        $models  = $this->cache->multiGet(array_keys($idsMap));
+        $newKeys = array_keys(array_filter($models, function ($value) {
+            return !$value;
+        }));
+
+        if (empty($newKeys)) {
+            return $models;
+        }
+
+        $newIds    = array_intersect_key($idsMap, array_flip($newKeys));
+        $newModels = $this->batchGetInternal($newIds);
+
+        foreach ($newModels as $id => $model) {
+            $key = $this->getAlbumKey($id);
+            $this->cache->set($key, $model, $this->cacheExpires);
+        }
+
+        $models = ArrayHelper::merge($models, $newModels);
+
+        return $models;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function batchGetInternal($ids)
     {
         $httpClient = $this->yandexFotki->getApiHttpClient();
 
@@ -79,6 +139,21 @@ final class AlbumComponent extends Component implements IAlbumComponent
      * @inheritdoc
      */
     public function getPhotos($id, GetAlbumPhotosOptions $options = null)
+    {
+        $key = $this->getAlbumPhotosKey($id);
+
+        if (($models = $this->cache->get($key)) === false) {
+            $models = $this->getPhotosInternal($id, $options);
+            $this->cache->set($key, $models, $this->cacheExpires);
+        }
+
+        return $models;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getPhotosInternal($id, GetAlbumPhotosOptions $options = null)
     {
         $options = $options ?: GetAlbumPhotosOptions::createDefault();
 
@@ -325,5 +400,33 @@ final class AlbumComponent extends Component implements IAlbumComponent
         $responses = $httpClient->batchSend($requests);
 
         return ArrayHelper::getColumn($responses, 'isOk');
+    }
+
+    /**
+     * @param int|string $id
+     * @param string     $login
+     *
+     * @return string
+     */
+    public function getAlbumKey($id, $login = null)
+    {
+        return strtr($this->albumKeyPattern, [
+            '{id}'    => $id,
+            '{login}' => $login ?: $this->getYandexFotki()->getLogin()
+        ]);
+    }
+
+    /**
+     * @param int|string $id
+     * @param string     $login
+     *
+     * @return string
+     */
+    public function getAlbumPhotosKey($id, $login = null)
+    {
+        return strtr($this->albumPhotosKeyPattern, [
+            '{id}'    => $id,
+            '{login}' => $login ?: $this->getYandexFotki()->getLogin()
+        ]);
     }
 }

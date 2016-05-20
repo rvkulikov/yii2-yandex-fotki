@@ -170,11 +170,13 @@ class Album extends AbstractModel implements LoadableWithData
     }
 
     /**
+     * @param bool $loadIfEmpty
+     *
      * @return Album[]
      */
-    public function getChildren()
+    public function getChildren($loadIfEmpty = true)
     {
-        if (!$this->children) {
+        if (!$this->children && $loadIfEmpty) {
             $component = $this->getYandexFotki()->getAlbums();
             $children  = $component->tree($this->id);
             foreach ($children as $child) {
