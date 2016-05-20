@@ -30,5 +30,29 @@ use yii\db\ActiveRecord;
  */
 class Album extends ActiveRecord
 {
+    /**
+     * @inheritdoc
+     */
+    public static function tableName()
+    {
+        return 'yandex_fotki__album';
+    }
 
+    /**
+     * @inheritDoc
+     * @return Album|null ActiveRecord instance matching the condition, or `null` if nothing matches.
+     */
+    public static function findOne($condition)
+    {
+        return parent::findOne($condition);
+    }
+
+    /**
+     * @inheritDoc
+     * @return Album[] an array of ActiveRecord instances, or an empty array if nothing matches.
+     */
+    public static function findAll($condition)
+    {
+        return parent::findAll($condition);
+    }
 }

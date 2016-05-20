@@ -20,5 +20,29 @@ use yii\db\ActiveRecord;
  */
 class Author extends ActiveRecord
 {
+    /**
+     * @inheritdoc
+     */
+    public static function tableName()
+    {
+        return 'yandex_fotki__author';
+    }
 
+    /**
+     * @inheritDoc
+     * @return Author|null ActiveRecord instance matching the condition, or `null` if nothing matches.
+     */
+    public static function findOne($condition)
+    {
+        return parent::findOne($condition);
+    }
+
+    /**
+     * @inheritDoc
+     * @return Author[] an array of ActiveRecord instances, or an empty array if nothing matches.
+     */
+    public static function findAll($condition)
+    {
+        return parent::findAll($condition);
+    }
 }
