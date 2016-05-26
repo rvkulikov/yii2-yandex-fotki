@@ -4,7 +4,7 @@ use yii\db\Migration;
 /**
  * Handles the creation for table `yandex_fotki__image_size`.
  */
-class m160520_123102_create_yandex_fotki__image_size extends Migration
+class m160520_123152_create_yandex_fotki__image_size extends Migration
 {
     /**
      * @inheritdoc
