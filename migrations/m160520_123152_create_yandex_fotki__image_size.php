@@ -18,7 +18,7 @@ class m160520_123152_create_yandex_fotki__image_size extends Migration
         }
 
         $this->createTable('yandex_fotki__image_size', [
-            'id' => $this->string(8)->notNull() . ' PRIMARY KEY',
+            'id' => $this->string(4)->notNull() . ' PRIMARY KEY',
         ], $tableOptions);
 
         $this->batchInsert('yandex_fotki__image_size', ['id'], [

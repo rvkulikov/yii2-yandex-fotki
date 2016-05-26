@@ -1,7 +1,9 @@
 <?php
 namespace romkaChev\yandexFotki\commands;
 
+use romkaChev\yandexFotki\components\sync\console\HardSyncConsole;
 use romkaChev\yandexFotki\components\sync\HardSync;
+use romkaChev\yandexFotki\components\sync\SyncInterface;
 use romkaChev\yandexFotki\Module;
 use yii\console\Controller;
 
@@ -18,9 +20,19 @@ class MaintenanceController extends Controller
     /** @var Module */
     public $module;
 
-    public function actionSync()
+    public function getComponentsMap()
     {
-        $syncComponent = new HardSync([
+        return [
+            'hard'         => HardSync::className(),
+            'hard-console' => HardSyncConsole::className()
+        ];
+    }
+
+    public function actionSync($component)
+    {
+        /** @var SyncInterface $syncComponent */
+        $syncComponent = \Yii::createObject([
+            'class'      => $this->getComponentsMap()[$component],
             'db'         => $this->module->db,
             'formatter'  => $this->module->formatter,
             'httpClient' => $this->module->httpClient,

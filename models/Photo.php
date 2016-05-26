@@ -11,20 +11,19 @@ use yii\db\ActiveRecord;
  *
  * @package romkaChev\yandexFotki\models
  *
- * @property-read integer  $id
- * @property integer       $authorId
- * @property integer       $albumId
- * @property string        $accessId
- * @property integer       $ordinalPosition
- * @property string        $title
- * @property string        $summary
- * @property boolean       $isAdultsOnly
- * @property boolean       $isOriginalHidden
- * @property boolean       $isCommentsDisabled
- * @property float         $latitude
- * @property float         $longitude
- * @property-read DateTime $publishedAt
- * @property-read DateTime $updatedAt
+ * @property-read integer     $id
+ * @property integer          $authorId
+ * @property integer          $albumId
+ * @property string           $accessId
+ * @property string           $title
+ * @property string           $summary
+ * @property boolean          $isAdultsOnly
+ * @property boolean          $isOriginalHidden
+ * @property boolean          $isCommentsDisabled
+ * @property float            $latitude
+ * @property float            $longitude
+ * @property-read DateTime    $publishedAt
+ * @property-read DateTime    $updatedAt
  * @property-read DateTime    $editedAt
  *
  * @property-read PhotoAccess $access

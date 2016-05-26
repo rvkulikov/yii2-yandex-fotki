@@ -16,6 +16,7 @@ use yii\db\ActiveRecord;
  * @property integer       $parentId
  * @property string        $title
  * @property string        $summary
+ * @property string        $imageCount
  * @property-read DateTime $publishedAt
  * @property-read DateTime $updatedAt
  * @property-read DateTime $editedAt

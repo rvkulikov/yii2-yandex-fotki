@@ -20,11 +20,11 @@ class m160520_123153_create_yandex_fotki__image extends Migration
         $this->createTable('yandex_fotki__image', [
             'id'       => $this->primaryKey(),
             'photoId'  => $this->integer(),
-            'sizeId'   => $this->string(8)->notNull(),
+            'sizeId'   => $this->string(4)->notNull(),
             'width'    => $this->integer(),
             'height'   => $this->integer(),
             'byteSize' => $this->integer(),
-            'href'     => $this->string(),
+            'href'     => $this->string(80),
         ], $tableOptions);
 
         $this->createIndex('photoId', 'yandex_fotki__image', 'photoId');

@@ -18,8 +18,7 @@ class m160520_123137_create_yandex_fotki__tag extends Migration
         }
 
         $this->createTable('yandex_fotki__tag', [
-            'id'        => $this->string(64)->notNull() . ' PRIMARY KEY',
-            'updatedAt' => $this->dateTime(),
+            'id' => $this->string(64)->notNull() . ' PRIMARY KEY'
         ], $tableOptions);
     }
 

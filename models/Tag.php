@@ -2,7 +2,6 @@
 namespace romkaChev\yandexFotki\models;
 
 
-use DateTime;
 use romkaChev\yandexFotki\models\query\TagQuery;
 use yii\db\ActiveRecord;
 
@@ -12,7 +11,6 @@ use yii\db\ActiveRecord;
  * @package romkaChev\yandexFotki\models
  *
  * @property-read string   $id
- * @property-read DateTime $updatedAt
  *
  * @property-read string   $urn
  * @property-read Author   $author

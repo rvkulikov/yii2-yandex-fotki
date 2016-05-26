@@ -23,6 +23,7 @@ class m160520_123145_create_yandex_fotki__album extends Migration
             'parentId'    => $this->integer(),
             'title'       => $this->string(255),
             'summary'     => $this->string(8192),
+            'imageCount'  => $this->integer(),
             'publishedAt' => $this->dateTime(),
             'updatedAt'   => $this->dateTime(),
             'editedAt'    => $this->dateTime(),

@@ -18,7 +18,7 @@ class m160520_123149_create_yandex_fotki__photo_access extends Migration
         }
 
         $this->createTable('yandex_fotki__photo_access', [
-            'id' => $this->string(8)->notNull() . ' PRIMARY KEY',
+            'id' => $this->string(7)->notNull() . ' PRIMARY KEY',
         ], $tableOptions);
 
         $this->batchInsert('yandex_fotki__photo_access', ['id'], [
