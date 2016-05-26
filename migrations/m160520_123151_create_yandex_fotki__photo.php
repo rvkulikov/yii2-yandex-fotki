@@ -19,6 +19,7 @@ class m160520_123151_create_yandex_fotki__photo extends Migration
 
         $this->createTable('yandex_fotki__photo', [
             'id'                 => $this->primaryKey(),
+            'authorId'           => $this->integer(),
             'albumId'            => $this->integer(),
             'accessId'           => $this->string(8)->notNull(),
             'ordinalPosition'    => $this->integer(),
@@ -35,9 +36,18 @@ class m160520_123151_create_yandex_fotki__photo extends Migration
         ], $tableOptions);
 
         //@formatter:off
+        $this->createIndex('authorId', 'yandex_fotki__photo', 'authorId');
         $this->createIndex('albumId',  'yandex_fotki__photo', 'albumId');
         $this->createIndex('accessId', 'yandex_fotki__photo', 'accessId');
         //@formatter:on
+
+        $this->addForeignKey(
+            'yandex_fotki__photo___albumId___yandex_fotki__author___id',
+            'yandex_fotki__photo',
+            'authorId',
+            'yandex_fotki__author',
+            'id'
+        );
 
         $this->addForeignKey(
             'yandex_fotki__photo___albumId___yandex_fotki__album___id',
@@ -62,11 +72,13 @@ class m160520_123151_create_yandex_fotki__photo extends Migration
     public function safeDown()
     {
         //@formatter:off
-        $this->dropForeignKey('yandex_fotki__photo___albumId___yandex_fotki__photo_access___id', 'yandex_fotki__photo');
+        $this->dropForeignKey('yandex_fotki__photo___albumId___yandex_fotki__author___id',       'yandex_fotki__photo');
         $this->dropForeignKey('yandex_fotki__photo___albumId___yandex_fotki__album___id',        'yandex_fotki__photo');
+        $this->dropForeignKey('yandex_fotki__photo___albumId___yandex_fotki__photo_access___id', 'yandex_fotki__photo');
 
-        $this->dropIndex('accessId', 'yandex_fotki__photo');
+        $this->dropIndex('authorId', 'yandex_fotki__photo');
         $this->dropIndex('albumId',  'yandex_fotki__photo');
+        $this->dropIndex('accessId', 'yandex_fotki__photo');
         //@formatter:on
 
         $this->dropTable('yandex_fotki__photo');

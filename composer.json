@@ -13,7 +13,7 @@
   "require": {
     "yiisoft/yii2": "~2.0.0",
     "yiisoft/yii2-httpclient": "~2.0.0",
-    "league/geotools": "~0.7.0"
+    "voskobovich/yii2-many-many-behavior": "~3.0.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^4"

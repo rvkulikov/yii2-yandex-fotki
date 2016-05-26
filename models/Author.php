@@ -10,7 +10,7 @@ use yii\db\ActiveRecord;
  *
  * @package romkaChev\yandexFotki\models
  *
- * @property-read integer $uid
+ * @property-read integer $id
  * @property-read string  $name
  *
  * @property Album[]      $albums

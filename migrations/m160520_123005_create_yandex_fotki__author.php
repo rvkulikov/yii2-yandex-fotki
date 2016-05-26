@@ -18,7 +18,7 @@ class m160520_123005_create_yandex_fotki__author extends Migration
         }
 
         $this->createTable('yandex_fotki__author', [
-            'uid'  => $this->primaryKey(),
+            'id'   => $this->primaryKey(),
             'name' => $this->string(),
         ], $tableOptions);
     }

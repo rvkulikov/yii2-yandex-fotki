@@ -12,6 +12,7 @@ use yii\db\ActiveRecord;
  * @package romkaChev\yandexFotki\models
  *
  * @property-read integer  $id
+ * @property integer       $authorId
  * @property integer       $parentId
  * @property string        $title
  * @property string        $summary

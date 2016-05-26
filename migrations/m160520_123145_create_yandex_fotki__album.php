@@ -19,6 +19,7 @@ class m160520_123145_create_yandex_fotki__album extends Migration
 
         $this->createTable('yandex_fotki__album', [
             'id'          => $this->primaryKey(),
+            'authorId'    => $this->integer(),
             'parentId'    => $this->integer(),
             'title'       => $this->string(255),
             'summary'     => $this->string(8192),
@@ -27,7 +28,16 @@ class m160520_123145_create_yandex_fotki__album extends Migration
             'editedAt'    => $this->dateTime(),
         ], $tableOptions);
 
+        $this->createIndex('authorId', 'yandex_fotki__album', 'authorId');
         $this->createIndex('parentId', 'yandex_fotki__album', 'parentId');
+
+        $this->addForeignKey(
+            'yandex_fotki__album___authorId___yandex_fotki__author___id',
+            'yandex_fotki__album',
+            'authorId',
+            'yandex_fotki__author',
+            'id'
+        );
 
         $this->addForeignKey(
             'yandex_fotki__album___parentId___yandex_fotki__album___id',
@@ -43,7 +53,10 @@ class m160520_123145_create_yandex_fotki__album extends Migration
      */
     public function safeDown()
     {
+        $this->dropForeignKey('yandex_fotki__album___authorId___yandex_fotki__author___id', 'yandex_fotki__album');
         $this->dropForeignKey('yandex_fotki__album___parentId___yandex_fotki__album___id', 'yandex_fotki__album');
+
+        $this->dropIndex('authorId', 'yandex_fotki__album');
         $this->dropIndex('parentId', 'yandex_fotki__album');
 
         $this->dropTable('yandex_fotki__album');
