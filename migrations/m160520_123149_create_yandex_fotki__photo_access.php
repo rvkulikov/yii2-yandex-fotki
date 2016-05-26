@@ -22,9 +22,9 @@ class m160520_123149_create_yandex_fotki__photo_access extends Migration
         ], $tableOptions);
 
         $this->batchInsert('yandex_fotki__photo_access', ['id'], [
-            'public',
-            'friends',
-            'private',
+            ['public'],
+            ['friends'],
+            ['private'],
         ]);
     }
 

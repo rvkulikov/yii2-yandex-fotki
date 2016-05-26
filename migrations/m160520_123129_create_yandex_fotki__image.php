@@ -26,7 +26,7 @@ class m160520_123129_create_yandex_fotki__image extends Migration
             'href'     => $this->string(),
         ], $tableOptions);
 
-        $this->createIndex('size', 'yandex_fotki__image', 'size');
+        $this->createIndex('sizeId', 'yandex_fotki__image', 'sizeId');
 
         $this->addForeignKey(
             'yandex_fotki__image___sizeId___yandex_fotki__image_size___id',
@@ -43,7 +43,7 @@ class m160520_123129_create_yandex_fotki__image extends Migration
     public function safeDown()
     {
         $this->dropForeignKey('yandex_fotki__image___sizeId___yandex_fotki__image_size___id', 'yandex_fotki__image');
-        $this->dropIndex('size', 'yandex_fotki__image');
+        $this->dropIndex('sizeId', 'yandex_fotki__image');
 
         $this->dropTable('yandex_fotki__image');
     }

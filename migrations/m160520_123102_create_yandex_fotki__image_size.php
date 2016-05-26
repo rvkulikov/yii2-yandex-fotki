@@ -22,18 +22,18 @@ class m160520_123102_create_yandex_fotki__image_size extends Migration
         ], $tableOptions);
 
         $this->batchInsert('yandex_fotki__image_size', ['id'], [
-            'XXXS',
-            'XXS',
-            'XS',
-            'S',
-            'M',
-            'L',
-            'XL',
-            'XXL',
-            'XXXL',
-            'X4L',
-            'X5L',
-            'orig',
+            ['XXXS'],
+            ['XXS'],
+            ['XS'],
+            ['S'],
+            ['M'],
+            ['L'],
+            ['XL'],
+            ['XXL'],
+            ['XXXL'],
+            ['X4L'],
+            ['X5L'],
+            ['orig'],
         ]);
     }
 

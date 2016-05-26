@@ -57,7 +57,7 @@ class m160520_143644_create_yandex_fotki__photo___yandex_fotki__image___pivot ex
         $this->dropForeignKey('yandex_fotki__photo___yandex_fotki__image___pivot___imageId', 'yandex_fotki__photo___yandex_fotki__image___pivot');
 
         $this->dropIndex('photoId', 'yandex_fotki__photo___yandex_fotki__image___pivot');
-        $this->dropIndex('tagId',   'yandex_fotki__photo___yandex_fotki__image___pivot');
+        $this->dropIndex('imageId', 'yandex_fotki__photo___yandex_fotki__image___pivot');
         //@formatter:on
 
         $this->dropTable('yandex_fotki__photo___yandex_fotki__image___pivot');
