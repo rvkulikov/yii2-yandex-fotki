@@ -26,7 +26,7 @@ class PhotoTag extends ActiveRecord
      */
     public static function tableName()
     {
-        return 'yandex_fotki__photo___yandex_fotki__image___pivot';
+        return 'yandex_fotki__photo___yandex_fotki__tag___pivot';
     }
 
     /**

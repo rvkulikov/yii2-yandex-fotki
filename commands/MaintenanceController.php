@@ -1,6 +1,8 @@
 <?php
 namespace romkaChev\yandexFotki\commands;
 
+use romkaChev\yandexFotki\components\sync\HardSync;
+use romkaChev\yandexFotki\Module;
 use yii\console\Controller;
 
 /**
@@ -13,5 +15,17 @@ use yii\console\Controller;
  */
 class MaintenanceController extends Controller
 {
+    /** @var Module */
+    public $module;
 
+    public function actionSync()
+    {
+        $syncComponent = new HardSync([
+            'db'         => $this->module->db,
+            'formatter'  => $this->module->formatter,
+            'httpClient' => $this->module->httpClient,
+        ]);
+
+        $syncComponent->sync();
+    }
 }

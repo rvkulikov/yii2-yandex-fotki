@@ -5,10 +5,17 @@ $params = array_merge(
 );
 
 return [
-    'id'                  => 'test-app',
-    'basePath'            => dirname(__DIR__),
-    'controllerNamespace' => 'app\commands',
-    'components'          => [
+    'id'         => 'test-app',
+    'basePath'   => dirname(__DIR__),
+    'bootstrap'  => ['fotki'],
+    'modules'    => [
+        'fotki' => [
+            'class'      => 'romkaChev\yandexFotki\Module',
+            'login'      => null,
+            'oauthToken' => null
+        ],
+    ],
+    'components' => [
         'log' => [
             'targets' => [
                 [
@@ -25,5 +32,5 @@ return [
             'charset'  => null,
         ],
     ],
-    'params'              => $params,
+    'params'     => $params,
 ];
