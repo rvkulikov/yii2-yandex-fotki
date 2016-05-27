@@ -16,11 +16,20 @@ use yii\helpers\Console;
 class HardSyncConsole extends HardSync
 {
 
-    private $_albumsDone  = 0;
-    private $_albumsTotal = 0;
+    private $_albumsDone     = 0;
+    private $_albumsTotal    = 0;
+    private $_albumsTotalWas = 0;
 
     private $_photosDone  = 0;
     private $_photosTotal = 0;
+
+    public function sync()
+    {
+        $this->_albumsTotalWas = Album::find()->count('id') ?: 0;
+
+        parent::sync();
+    }
+
 
     /**
      * @inheritdoc
@@ -28,7 +37,7 @@ class HardSyncConsole extends HardSync
     protected function syncAlbums()
     {
         Console::stdout("\n\n");
-        Console::startProgress(0, 0, 'Sync albums', 80);
+        Console::startProgress(0, $this->_albumsTotalWas, 'Sync albums', 80);
 
         $httpClient = $this->httpClient;
         $request    = $httpClient->get("albums/rupdated/", ['format' => 'json', 'limit' => $this->perPage]);
@@ -43,10 +52,14 @@ class HardSyncConsole extends HardSync
             $request  = $httpClient->get($linkNext);
 
             $this->_albumsDone += count($rawAlbums);
-            $this->_albumsTotal = $this->_albumsDone;
 
-            if ($linkNext) {
-                $this->_albumsTotal += 100;
+            if ($this->_albumsDone > $this->_albumsTotalWas) {
+                $this->_albumsTotal = $this->_albumsDone;
+                if ($linkNext) {
+                    $this->_albumsTotal += 100;
+                }
+            } else {
+                $this->_albumsTotal = $this->_albumsTotalWas;
             }
 
             Console::updateProgress($this->_albumsDone, $this->_albumsTotal);
