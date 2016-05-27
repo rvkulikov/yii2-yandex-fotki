@@ -36,7 +36,6 @@ class HardSyncConsole extends HardSync
      */
     protected function syncAlbums()
     {
-        Console::stdout("\n\n");
         Console::startProgress(0, $this->_albumsTotalWas, 'Sync albums', 80);
 
         $httpClient = $this->httpClient;
@@ -67,7 +66,6 @@ class HardSyncConsole extends HardSync
         } while ($linkNext);
 
         Console::endProgress();
-        Console::stdout("\n\n");
     }
 
     /**
@@ -75,7 +73,6 @@ class HardSyncConsole extends HardSync
      */
     protected function syncPhotos()
     {
-        Console::stdout("\n\n");
         Console::startProgress(0, 100, 'Sync photos', 80);
 
         $httpClient = $this->httpClient;
@@ -107,6 +104,5 @@ class HardSyncConsole extends HardSync
         } while ($linkNext);
 
         Console::endProgress();
-        Console::stdout("\n\n");
     }
 }
