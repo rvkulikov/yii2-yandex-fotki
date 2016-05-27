@@ -57,7 +57,7 @@ class m160520_123151_create_yandex_fotki__photo extends Migration
         );
 
         $this->addForeignKey(
-            'yandex_fotki__photo___albumId___yandex_fotki__photo_access___id',
+            'yandex_fotki__photo___accessId___yandex_fotki__photo_access___id',
             'yandex_fotki__photo',
             'accessId',
             'yandex_fotki__photo_access',
@@ -71,9 +71,9 @@ class m160520_123151_create_yandex_fotki__photo extends Migration
     public function safeDown()
     {
         //@formatter:off
-        $this->dropForeignKey('yandex_fotki__photo___authorId___yandex_fotki__author___id',      'yandex_fotki__photo');
-        $this->dropForeignKey('yandex_fotki__photo___albumId___yandex_fotki__album___id',        'yandex_fotki__photo');
-        $this->dropForeignKey('yandex_fotki__photo___albumId___yandex_fotki__photo_access___id', 'yandex_fotki__photo');
+        $this->dropForeignKey('yandex_fotki__photo___authorId___yandex_fotki__author___id',       'yandex_fotki__photo');
+        $this->dropForeignKey('yandex_fotki__photo___albumId___yandex_fotki__album___id',         'yandex_fotki__photo');
+        $this->dropForeignKey('yandex_fotki__photo___accessId___yandex_fotki__photo_access___id', 'yandex_fotki__photo');
 
         $this->dropIndex('authorId', 'yandex_fotki__photo');
         $this->dropIndex('albumId',  'yandex_fotki__photo');
