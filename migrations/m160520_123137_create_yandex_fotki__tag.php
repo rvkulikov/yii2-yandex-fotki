@@ -18,8 +18,19 @@ class m160520_123137_create_yandex_fotki__tag extends Migration
         }
 
         $this->createTable('yandex_fotki__tag', [
-            'id' => $this->string(64)->notNull() . ' PRIMARY KEY'
+            'id'       => $this->string(64)->notNull() . ' PRIMARY KEY',
+            'authorId' => $this->integer(),
         ], $tableOptions);
+
+        $this->createIndex('authorId', 'yandex_fotki__tag', 'authorId');
+
+        $this->addForeignKey(
+            'yandex_fotki__tag___authorId___yandex_fotki__author___id',
+            'yandex_fotki__tag',
+            'authorId',
+            'yandex_fotki__author',
+            'id'
+        );
     }
 
     /**
@@ -27,6 +38,9 @@ class m160520_123137_create_yandex_fotki__tag extends Migration
      */
     public function safeDown()
     {
+        $this->dropForeignKey('yandex_fotki__tag___authorId___yandex_fotki__author___id', 'yandex_fotki__tag');
+        $this->dropIndex('authorId', 'yandex_fotki__tag');
+
         $this->dropTable('yandex_fotki__tag');
     }
 }

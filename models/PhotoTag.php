@@ -55,4 +55,20 @@ class PhotoTag extends ActiveRecord
     {
         return parent::findAll($condition);
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPhoto()
+    {
+        return $this->hasOne(Photo::className(), ['id' => 'photoId']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTag()
+    {
+        return $this->hasOne(Tag::className(), ['id' => 'tagId']);
+    }
 }

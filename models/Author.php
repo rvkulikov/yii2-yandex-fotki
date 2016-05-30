@@ -55,4 +55,32 @@ class Author extends ActiveRecord
     {
         return parent::findAll($condition);
     }
+
+    /**
+     * @return array
+     */
+    public function rules()
+    {
+        return [
+            //@formatter:off
+            'name' => ['name', 'unique'],
+            //@formatter:on
+        ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAlbums()
+    {
+        return $this->hasOne(Album::className(), ['authorId' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPhotos()
+    {
+        return $this->hasOne(Photo::className(), ['authorId' => 'id']);
+    }
 }

@@ -55,4 +55,25 @@ class Tag extends ActiveRecord
     {
         return parent::findAll($condition);
     }
+
+    public function getUrn()
+    {
+
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPhotoTags()
+    {
+        return $this->hasMany(PhotoTag::className(), ['tagId' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTags()
+    {
+        return $this->hasMany(Tag::className(), ['id' => 'tagId'])->via('photoTags');
+    }
 }

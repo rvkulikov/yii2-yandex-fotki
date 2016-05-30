@@ -11,6 +11,7 @@ use yii\db\ActiveRecord;
  * @package romkaChev\yandexFotki\models
  *
  * @property-read string    $id
+ * @property-read string    $photoId
  * @property-read string    $sizeId
  * @property-read integer   $width
  * @property-read integer   $height
@@ -18,6 +19,7 @@ use yii\db\ActiveRecord;
  * @property-read string    $href
  *
  * @property-read ImageSize $size
+ * @property-read Photo     $photo
  *
  * @author  Roman Kulikov <flinnraider@yandex.ru>
  * @since   2.0
@@ -57,5 +59,43 @@ class Image extends ActiveRecord
     public static function findAll($condition)
     {
         return parent::findAll($condition);
+    }
+
+    /**
+     * @return array
+     */
+    public function rules()
+    {
+        return [
+            //@formatter:off
+            'photoId' => ['photoId', 'exists', 'targetClass' =>     Photo::className(), 'targetAttribute' => 'id'],
+             'sizeId' => [ 'sizeId', 'exists', 'targetClass' => ImageSize::className(), 'targetAttribute' => 'id'],
+
+            'title'   => ['title',   'string', 'max' =>  255],
+            'summary' => ['summary', 'string', 'max' => 8192],
+
+            'width'    => ['width',    'integer'],
+            'height'   => ['height',   'integer'],
+            'byteSize' => ['byteSize', 'integer'],
+
+            'href' => ['url'],
+            //@formatter:on
+        ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSize()
+    {
+        return $this->hasOne(ImageSize::className(), ['id' => 'sizeId']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPhoto()
+    {
+        return $this->hasOne(Photo::className(), ['id' => 'photoId']);
     }
 }

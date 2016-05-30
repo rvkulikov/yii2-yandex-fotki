@@ -159,7 +159,9 @@ class HardSync extends Component implements SyncInterface
 
         $timeZone = new DateTimeZone($this->formatter->timeZone);
         foreach ($rawPhotos as $rawPhoto) {
-            $photoId = $this->parsePhotoIdFromUrn(ArrayHelper::getValue($rawPhoto, 'id'));
+            $photoId  = $this->parsePhotoIdFromUrn(ArrayHelper::getValue($rawPhoto, 'id'));
+            $authorId = ArrayHelper::getValue($rawPhoto, 'authors.0.uid');
+
             if (($stringCoordinates = ArrayHelper::getValue($rawPhoto, 'geo.coordinates', null)) !== null) {
                 $coordinates = array_map('floatval', explode(' ', $stringCoordinates));
             } else {
@@ -186,6 +188,7 @@ class HardSync extends Component implements SyncInterface
                 $tagsBatch[] = [
                     //@formatter:off
                     /* 'id'      => */ $tagId,
+                    /* 'photoId' => */ $authorId,
                     /* 'photoId' => */ $photoId,
                     //@formatter:on
                 ];
@@ -194,7 +197,7 @@ class HardSync extends Component implements SyncInterface
             $rows[] = array_values([
                 //@formatter:off
                 /* 'id'                 => */ $photoId,
-                /* 'authorId'           => */ ArrayHelper::getValue($rawPhoto, 'authors.0.uid'),
+                /* 'authorId'           => */ $authorId,
                 /* 'albumId'            => */ $this->parseAlbumIdFromLink(ArrayHelper::getValue($rawPhoto, 'links.album')),
                 /* 'accessId'           => */ ArrayHelper::getValue($rawPhoto, 'access'),
                 /* 'title'              => */ ArrayHelper::getValue($rawPhoto, 'title'),
@@ -277,32 +280,41 @@ class HardSync extends Component implements SyncInterface
     protected function processTagsBatch($rawTags)
     {
         $columns = [
-            'id'
+            'id',
+            'authorId',
         ];
 
         $availableIds = Tag::find()->select(['id'])->column();
 
-        $ids = ArrayHelper::getColumn($rawTags, '0');
-        $ids = array_unique($ids, SORT_REGULAR);
-        $ids = array_diff($ids, $availableIds);
-        $ids = ArrayHelper::getColumn($ids, function ($id) {
-            return [$id];
-        });
+        $rows = array_map(function ($rawTag) use ($availableIds) {
+            if (in_array($rawTag['id'], $availableIds)) {
+                return null;
+            }
 
+            return [$rawTag[0], $rawTag[1]];
+        }, $rawTags);
+
+        $rows = array_filter($rows);
+        $rows = array_unique($rows, SORT_REGULAR);
+        
         if (!empty($ids)) {
             $transaction = $this->db->beginTransaction();
             $this->db->createCommand()->setSql("SET foreign_key_checks = 0")->execute();
-            $this->db->createCommand()->batchInsert(Tag::tableName(), $columns, $ids)->execute();
+            $this->db->createCommand()->batchInsert(Tag::tableName(), $columns, $rows)->execute();
             $this->db->createCommand()->setSql("SET foreign_key_checks = 1")->execute();
             $transaction->commit();
         }
 
         $columns = ['tagId', 'photoId'];
 
+        $rows = array_map(function ($rawTag) {
+            return [$rawTag[0], $rawTag[2]];
+        }, $rawTags);
+
         if (count($rawTags)) {
             $transaction = $this->db->beginTransaction();
             $this->db->createCommand()->setSql("SET foreign_key_checks = 0")->execute();
-            $this->db->createCommand()->batchInsert(PhotoTag::tableName(), $columns, $rawTags)->execute();
+            $this->db->createCommand()->batchInsert(PhotoTag::tableName(), $columns, $rows)->execute();
             $this->db->createCommand()->setSql("SET foreign_key_checks = 1")->execute();
             $transaction->commit();
         }

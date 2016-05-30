@@ -26,8 +26,8 @@ use yii\db\ActiveRecord;
  * @property-read DateTime    $updatedAt
  * @property-read DateTime    $editedAt
  *
- * @property-read PhotoAccess $access
  * @property-read string      $urn
+ * @property-read PhotoAccess $access
  * @property-read Author      $author
  * @property-read Image[]     $images
  * @property-read Album       $album
@@ -71,5 +71,58 @@ class Photo extends ActiveRecord
     public static function findAll($condition)
     {
         return parent::findAll($condition);
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrn()
+    {
+        return "urn:yandex:fotki:{$this->author->name}:photo:{$this->id}";
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAccess()
+    {
+        return $this->hasOne(PhotoAccess::className(), ['id' => 'accessId']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAuthor()
+    {
+        return $this->hasOne(Author::className(), ['id' => 'authorId']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getImages()
+    {
+        return $this->hasMany(Image::className(), ['photoId' => 'id']);
+    }
+
+    public function getAlbum()
+    {
+        return $this->hasOne(Album::className(), ['id' => 'albumId']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPhotoTags()
+    {
+        return $this->hasMany(PhotoTag::className(), ['photoId' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTags()
+    {
+        return $this->hasMany(Tag::className(), ['id' => 'tagId'])->via('photoTags');
     }
 }
