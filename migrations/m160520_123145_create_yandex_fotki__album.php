@@ -37,7 +37,9 @@ class m160520_123145_create_yandex_fotki__album extends Migration
             'yandex_fotki__album',
             'authorId',
             'yandex_fotki__author',
-            'id'
+            'id',
+            'CASCADE',
+            'CASCADE'
         );
 
         $this->addForeignKey(
@@ -45,7 +47,9 @@ class m160520_123145_create_yandex_fotki__album extends Migration
             'yandex_fotki__album',
             'parentId',
             'yandex_fotki__album',
-            'id'
+            'id',
+            'CASCADE',
+            'CASCADE'
         );
     }
 

@@ -29,7 +29,9 @@ class m160520_123137_create_yandex_fotki__tag extends Migration
             'yandex_fotki__tag',
             'authorId',
             'yandex_fotki__author',
-            'id'
+            'id',
+            'CASCADE',
+            'CASCADE'
         );
     }
 

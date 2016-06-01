@@ -287,7 +287,7 @@ class HardSync extends Component implements SyncInterface
         $availableIds = Tag::find()->select(['id'])->column();
 
         $rows = array_map(function ($rawTag) use ($availableIds) {
-            if (in_array($rawTag['id'], $availableIds)) {
+            if (in_array($rawTag[0], $availableIds)) {
                 return null;
             }
 
@@ -296,8 +296,8 @@ class HardSync extends Component implements SyncInterface
 
         $rows = array_filter($rows);
         $rows = array_unique($rows, SORT_REGULAR);
-        
-        if (!empty($ids)) {
+
+        if (!empty($rows)) {
             $transaction = $this->db->beginTransaction();
             $this->db->createCommand()->setSql("SET foreign_key_checks = 0")->execute();
             $this->db->createCommand()->batchInsert(Tag::tableName(), $columns, $rows)->execute();

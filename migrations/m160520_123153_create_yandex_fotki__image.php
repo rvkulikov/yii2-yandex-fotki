@@ -35,7 +35,9 @@ class m160520_123153_create_yandex_fotki__image extends Migration
             'yandex_fotki__image',
             'photoId',
             'yandex_fotki__photo',
-            'id'
+            'id',
+            'CASCADE',
+            'CASCADE'
         );
 
         $this->addForeignKey(
@@ -43,7 +45,9 @@ class m160520_123153_create_yandex_fotki__image extends Migration
             'yandex_fotki__image',
             'sizeId',
             'yandex_fotki__image_size',
-            'id'
+            'id',
+            'CASCADE',
+            'CASCADE'
         );
     }
 

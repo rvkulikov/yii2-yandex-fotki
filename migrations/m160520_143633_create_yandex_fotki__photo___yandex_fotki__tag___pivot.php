@@ -35,7 +35,9 @@ class m160520_143633_create_yandex_fotki__photo___yandex_fotki__tag___pivot exte
             'yandex_fotki__photo___yandex_fotki__tag___pivot',
             'photoId',
             'yandex_fotki__photo',
-            'id'
+            'id',
+            'CASCADE',
+            'CASCADE'
         );
 
         $this->addForeignKey(
@@ -43,7 +45,9 @@ class m160520_143633_create_yandex_fotki__photo___yandex_fotki__tag___pivot exte
             'yandex_fotki__photo___yandex_fotki__tag___pivot',
             'tagId',
             'yandex_fotki__tag',
-            'id'
+            'id',
+            'CASCADE',
+            'CASCADE'
         );
     }
 
