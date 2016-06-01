@@ -3,8 +3,10 @@ namespace romkaChev\yandexFotki\models;
 
 
 use DateTime;
+use romkaChev\yandexFotki\components\api\AlbumsComponent;
 use romkaChev\yandexFotki\models\query\AlbumQuery;
 use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
 
 /**
  * Class Album
@@ -32,6 +34,14 @@ use yii\db\ActiveRecord;
  */
 class Album extends ActiveRecord
 {
+    const SCENARIO_INSERT = 'insert';
+    const SCENARIO_UPDATE = 'update';
+
+    /** @var string */
+    public $login;
+    /** @var string */
+    public $oauthToken;
+
     /**
      * @inheritdoc
      */
@@ -74,19 +84,70 @@ class Album extends ActiveRecord
     {
         return [
             //@formatter:off
+            ['login',      'string'],
+            ['oauthToken', 'string'],
+
             'authorId' => ['authorId', 'exists', 'targetClass' => Author::className(), 'targetAttribute' => 'id'],
             'parentId' => ['parentId', 'exists', 'targetClass' =>  Album::className(), 'targetAttribute' => 'id', 'skipOnEmpty' => true],
 
-            'title'   => ['title',   'string', 'max' =>  255],
-            'summary' => ['summary', 'string', 'max' => 8192],
+            'title'   => ['title',   'string', 'min' => 1, 'max' =>  255],
+            'summary' => ['summary', 'string',             'max' => 8192],
 
             'imageCount' => ['imageCount', 'integer'],
 
             'publishedAt' => ['publishedAt', 'safe'],
             'updatedAt'   => ['updatedAt',   'safe'],
             'editedAt'    => ['editedAt',    'safe'],
+
+            ['login',      'required', 'on' => [self::SCENARIO_INSERT, self::SCENARIO_UPDATE]],
+            ['oauthToken', 'required', 'on' => [self::SCENARIO_INSERT, self::SCENARIO_UPDATE]],
+            ['authorId',   'required', 'on' => [self::SCENARIO_INSERT                       ]],
+            ['title',      'required', 'on' => [self::SCENARIO_INSERT                       ]],
             //@formatter:on
         ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            /** @var AlbumsComponent $albumsComponent */
+            $albumsComponent = \Yii::createObject(AlbumsComponent::className());
+            $timeZone        = \Yii::$app->timeZone;
+
+            if ($insert) {
+                $rawAlbum = $albumsComponent->create($this);
+            } else {
+                $rawAlbum = $albumsComponent->update($this);
+            }
+
+            $this->publishedAt = (new DateTime(ArrayHelper::getValue($rawAlbum, 'published'), $timeZone))->format('Y-m-d H:i:s');
+            $this->updatedAt   = (new DateTime(ArrayHelper::getValue($rawAlbum, 'updated'), $timeZone))->format('Y-m-d H:i:s');
+            $this->editedAt    = (new DateTime(ArrayHelper::getValue($rawAlbum, 'edited'), $timeZone))->format('Y-m-d H:i:s');
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function beforeDelete()
+    {
+        if (parent::beforeDelete()) {
+            /** @var AlbumsComponent $albumsComponent */
+            $albumsComponent = \Yii::createObject(AlbumsComponent::className());
+
+            $albumsComponent->delete($this);
+
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
