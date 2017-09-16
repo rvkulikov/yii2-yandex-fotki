@@ -1,13 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Roman
- * Date: 02.06.2016
- * Time: 0:05
- */
-
 namespace romkaChev\yandexFotki\components\api;
-
 
 use romkaChev\yandexFotki\formatters\JsonFormatter;
 use romkaChev\yandexFotki\models\Album;
@@ -18,6 +10,8 @@ use yii\httpclient\Client;
  * Class AlbumsComponent
  *
  * @package romkaChev\yandexFotki\components\api
+ *
+ * @author  Kulikov Roman <r.v.kulikov@yandex.ru>
  */
 class AlbumsComponent extends Component
 {

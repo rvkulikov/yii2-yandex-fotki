@@ -61,7 +61,7 @@ class Album extends ActiveRecord
 
     /**
      * @inheritDoc
-     * @return Album|null ActiveRecord instance matching the condition, or `null` if nothing matches.
+     * @return Album|ActiveRecord|null ActiveRecord instance matching the condition, or `null` if nothing matches.
      */
     public static function findOne($condition)
     {
@@ -70,7 +70,7 @@ class Album extends ActiveRecord
 
     /**
      * @inheritDoc
-     * @return Album[] an array of ActiveRecord instances, or an empty array if nothing matches.
+     * @return Album[]|static[] an array of ActiveRecord instances, or an empty array if nothing matches.
      */
     public static function findAll($condition)
     {
@@ -87,17 +87,17 @@ class Album extends ActiveRecord
             ['login',      'string'],
             ['oauthToken', 'string'],
 
-            'authorId' => ['authorId', 'exists', 'targetClass' => Author::className(), 'targetAttribute' => 'id'],
-            'parentId' => ['parentId', 'exists', 'targetClass' =>  Album::className(), 'targetAttribute' => 'id', 'skipOnEmpty' => true],
+            ['authorId', 'exists', 'targetClass' => Author::className(), 'targetAttribute' => 'id'],
+            ['parentId', 'exists', 'targetClass' =>  Album::className(), 'targetAttribute' => 'id', 'skipOnEmpty' => true],
 
-            'title'   => ['title',   'string', 'min' => 1, 'max' =>  255],
-            'summary' => ['summary', 'string',             'max' => 8192],
+            ['title',   'string', 'min' => 1, 'max' =>  255],
+            ['summary', 'string',             'max' => 8192],
 
-            'imageCount' => ['imageCount', 'integer'],
+            ['imageCount', 'integer'],
 
-            'publishedAt' => ['publishedAt', 'safe'],
-            'updatedAt'   => ['updatedAt',   'safe'],
-            'editedAt'    => ['editedAt',    'safe'],
+            ['publishedAt', 'safe'],
+            ['updatedAt',   'safe'],
+            ['editedAt',    'safe'],
 
             ['login',      'required', 'on' => [self::SCENARIO_INSERT, self::SCENARIO_UPDATE]],
             ['oauthToken', 'required', 'on' => [self::SCENARIO_INSERT, self::SCENARIO_UPDATE]],
